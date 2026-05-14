@@ -1,0 +1,106 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center mt-3">
+            <img src="/assets/img/base-station-icon-1.png" alt="icon" height="40px" width="auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item not-bredcrumb mt-4">
+                        <a [routerLink]="'../../'" class="card-header title-content mb-0 ml-2"
+                                style="font-size: 20px; font-weight: 500; color: #1d609d;">
+                            Gateways SS7
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" style="margin-top: 22px; color: #7B3031; font-size: 18px;" aria-current="page">
+                        <label class="mt-1">
+                            {{ gatewaySs7 ? gatewaySs7.name : '' }}
+                        </label>
+                    </li>
+                </ol>
+            </nav>
+          
+        </div>
+    </div>
+    <div class="mt-5">
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label class="title-content mb-0 ml-2 bg-white"
+                        style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                        General Configuration
+                    </label>
+                    <p class="ms-2">
+                        Manage general settings.
+                    </p>
+                </div>
+                <a [routerLink]="['./general']" class="btn btn-sm btn-red me-2 mt-4">
+                    View
+                </a>
+            </div>
+        </div>
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label class="title-content mb-0 ml-2 bg-white"
+                        style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                        M3UA
+                    </label>
+                    <p class="ms-2">
+                        Manage TCP/SCTP associations, Application Servers and Routers.
+                    </p>
+                </div>
+                <a [routerLink]="'./m3ua'" class="btn btn-sm btn-red me-2 mt-4">
+                    View
+                </a>
+            </div>
+        </div>
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label class="title-content mb-0 ml-2 bg-white"
+                        style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                        SCCP
+                    </label>
+                    <p class="ms-2">
+                        Manage SAP, RSP, RSS, Addresses and Rules.
+                    </p>
+                </div>
+                <a [routerLink]="'./sccp'" class="btn btn-sm btn-red me-2 mt-4">
+                    View
+                </a>
+            </div>
+        </div>
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label class="title-content mb-0 ml-2 bg-white"
+                        style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                        TCAP + MAP
+                    </label>
+                    <p class="ms-2">
+                        Manage TCAP settings.
+                    </p>
+                </div>
+                <a [routerLink]="'./tcap-map'" class="btn btn-sm btn-red me-2 mt-4">
+                    View
+                </a>
+            </div>
+        </div>
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white" *ngIf="gatewaySs7?.home_routing">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <label class="title-content mb-0 ml-2 bg-white"
+                        style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                        HR
+                    </label>
+                    <p class="ms-2">
+                        Manage Home Routing settings.
+                    </p>
+                </div>
+                <a [routerLink]="'./home-routing'" class="btn btn-sm btn-red me-2 mt-4">
+                    View
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

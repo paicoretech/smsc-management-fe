@@ -1,0 +1,136 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center  mt-3">
+          <img src="/assets/img/broadcast.png" alt="icon" height="40px" width="auto">
+          <label class="card-header title-content mb-0 ml-2" style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+            Broadcast SMS
+          </label>
+        </div>
+        <div>
+          <a type="button" class="btn btn-red mt-3" routerLink="./add" style="margin-right: 10px;" *ngIf="canOperate">
+            <i class='bx bx-plus'></i>
+            Create
+          </a>
+          <button type="button" class="btn btn-red mt-3" (click)="refresh()">
+            <i class='bx bx-refresh'></i>
+          </button>
+        </div>
+      </div>
+      <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+        <div class="table-responsive mt-4">
+          <table id="tableBroadcast" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Start Datetime</th>
+                <th>Max Execution Datetime</th>
+                <th>Task Name</th>
+                <th>Total Messages</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Log</th>
+                <th class="align-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data; let i = index">
+                <td>{{ item?.broadcast_id }}</td>
+                <td class="align-middle">{{ getDate(item?.start_datetime || '') }}</td>
+                <td class="align-middle">{{ getDate(item?.max_execution_datetime || '') }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.total_message }}</td>
+                <td class="align-middle">
+                  <span>
+                    {{ item?.status }}
+                    <i *ngIf="item?.status === 'REJECTED' || item?.status === 'CANCELED' || item?.status === 'FAILED'"
+                      class='bx bxs-error-circle' 
+                      (click)="showErrorStatus(item?.comment)" 
+                      [title]="item?.status">
+                    </i>
+                  </span>
+                </td>
+                <td class="align-middle">{{ item?.created_by_username || 'Unknown' }}</td>
+                  <td class="align-middle">
+                  <button 
+                    class="btn btn-sm btn-red me-2" 
+                    title="Download" 
+                    (click)="downloadFile(item)" 
+                    [disabled]="item.status !== 'COMPLETED' || downloading[item.broadcast_id] || !canOperate"
+                    [style.opacity]="downloading[item.broadcast_id] ? 1 : null"
+                  >
+                    <ng-container *ngIf="downloading[item.broadcast_id]; else downloadIcon">
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </ng-container>
+                    <ng-template #downloadIcon>
+                      <i class="bx bx-download"></i>
+                    </ng-template>
+                  </button>
+                </td>
+                <td class="align-center">
+                  <button type="button" class="btn btn-sm btn-red me-2" title="View Details"
+                          (click)="goToView(item.broadcast_id)">
+                    <i class='bx bx-show'></i>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-red me-2" title="Edit record"
+                          (click)="goToEdit(item.broadcast_id)"
+                          [disabled]="!canOperate">
+                    <i class='bx bxs-pencil'></i>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-red me-2" title="Show Statistics"
+                          (click)="showModal(item.broadcast_id)"
+                          [disabled]="item.status === 'DRAFT'">
+                    <i class='bx bx-bar-chart-alt-2'></i>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-red me-2" title="Clone Broadcast"
+                          (click)="onCloneBroadcast(item)"
+                          [disabled]="invalidDuplicateStatus.includes(item.status) || !canOperate">
+                    <i class='bx bx-copy'></i>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-red me-2" title="Delete record"
+                          (click)="onDeleteBroadcast(item)"
+                          [disabled]="!canDelete(item)">
+                    <i class='bx bxs-trash-alt'></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalBroadcastStatistics" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel"
+aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-statistics [setId]="broadcastId" (closeModal)="onCloseModal()"></app-statistics>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalStartBroadcast" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onConfirmBroadcastAction($event)"></app-modal-delete>
+  </div>
+</div>
+
+<div class="modal fade" id="modalActionStatus" tabindex="-1" aria-labelledby="modalActionStatus" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5" id="modalActionStatus">Broadcast Status</h5>
+        <button type="button" class="btn btn-close-modal" data-bs-dismiss="modal">X</button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-error d-flex align-items-center" role="alert">
+          <i class="bx bxs-error-circle me-2" style="font-size: 2rem;"></i>
+          <div>
+            <strong>Comment:</strong> {{ messageShow }} <br>  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

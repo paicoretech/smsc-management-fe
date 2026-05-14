@@ -1,0 +1,27 @@
+<div class="card ps-3 pe-3 pb-4 mt-2 bg-white" style="min-height: 500px;">
+    <div class="card-header bg-white" style="display: flex; align-items: center; justify-content: space-between;">
+        <i class='bx bxs-bar-chart-alt-2' style="color: #7B3031"></i>
+        <p class="title-content-tab">User Sms Summary</p>
+    </div>
+    <div class="table-responsive mt-2">
+        <table id="table-user-sms" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Received</th>
+                    <th>Sent DLR</th>
+                    <th>DLR TPS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data; let i = index">
+                    <td>{{ item.user }}</td>
+                    <td>{{ item.received }}</td>
+                    <td>{{ item.sent_dlr }}</td>
+                    <td>{{ item.dlr_tps }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

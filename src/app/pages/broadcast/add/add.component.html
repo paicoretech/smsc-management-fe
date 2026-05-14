@@ -1,0 +1,429 @@
+<div class="content-wrapper ps-2 pe-2 pt-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img src="/assets/img/broadcast.png" alt="icon" height="40px" width="auto">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a [routerLink]="'/pages/broadcast'" class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d;">
+                Broadcast SMS
+              </a>
+            </li>
+            <li class="breadcrumb-item active" style="margin-top: 22px; color: #7B3031; font-size: 18px;"
+              aria-current="page">
+              <label class="mt-1">
+                {{ isEdit ? 'Edit Broadcast SMS' : 'Create Broadcast SMS' }}
+              </label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <br>
+    <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+      <input type="text" hidden id="id" formControlName="id" />
+
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+          <h4 class="fw-bold">Broadcast Settings</h4>
+          <button class="btn btn-red" [disabled]="form.invalid || !disabled" type="submit" *ngIf="!isEdit">
+            Save Changes
+          </button>
+          <button class="btn btn-red" [disabled]="form.invalid || !disabled" type="submit" *ngIf="showBtnEdit">
+            Update Changes
+          </button>
+        </div>
+      </div>
+
+      <!-- File Upload -->
+      <div class="col-12">
+
+        <div class="row mt-2">
+
+          <!-- Choose File -->
+          <div class="col-md-4">
+            <input type="file" id="upload" hidden (change)="handleFileChange($event)" />
+            <label for="upload" id="file-label" class="choose-file">Choose file</label>
+            <div id="file-name" class="file-name">{{ fileName || 'No file chosen' }}</div>
+
+            <div *ngIf="isUploadingFile" class="progress mt-2">
+              <div class="progress-bar" role="progressbar" style="background-color: #7B3031 !important;"
+                [ngStyle]="{ 'width.%': uploadProgress }" [attr.aria-valuenow]="uploadProgress" aria-valuemin="0"
+                aria-valuemax="100">
+                {{ uploadProgress }}%
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group row mb-2">
+              <label for="delimiter" class="col-sm-6 label">File Delimiter</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="delimiter" formControlName="selectedDelimiter">
+                  <option value=",">Comma (,)</option>
+                  <option value="|">Pipe (|)</option>
+                  <option value=";">Semicolon (;)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" id="hasHeader" formControlName="hasHeader" />
+                <label for="hasHeader" class="form-check-label">File has header</label>
+              </div>
+
+              <button type="button" class="btn btn-outline-dark" (click)="analyzeFile()" [disabled]="!fileName">
+                Analyze
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Basic Settings -->
+      <h5 class="fw-bold border-bottom pb-1 mb-3">Basic Settings</h5>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group row mb-3">
+              <label for="network_id" class="col-sm-6 label">Service Provider</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="network_id" formControlName="network_id">
+                  @for (item of serviceProviderList; track $index) {
+                  <option value="{{ item.network_id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('network_id')">the field is required</span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label for="name" class="col-sm-6 label">Name</label>
+              <div class="col-sm-6">
+                <input type="text" class="form-control" id="name" formControlName="name" />
+                <span class="text-danger mt-2" *ngIf="validInput('name')">the field is required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group row mb-3">
+              <label for="sender_id" class="col-sm-6 label">Sender Id</label>
+              <div class="col-sm-6">
+                <ng-select
+                  [items]="allowedSenderIds"
+                  [clearable]="true"
+                  placeholder="Select a Sender ID"
+                  formControlName="sender_id"
+                  (change)="onChangeSender()">
+                </ng-select>
+                <small class="text-danger" *ngIf="allowedSenderIds.length === 0">
+                  You have no Sender IDs assigned. Contact an administrator before creating a broadcast.
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group row mb-3">
+              <label for="description" class="col-sm-4 label">Description</label>
+              <div class="col-sm-8">
+                <textarea class="form-control" id="description" formControlName="description" rows="3"></textarea>
+                <span class="text-danger mt-2" *ngIf="validInput('description')">the field is required</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Advanced Settings -->
+      <div class="d-flex align-items-center border-bottom pb-1 mb-3">
+        <h5 class="fw-bold mb-0 me-2">Advanced Settings</h5>
+        <div class="form-check form-switch m-0">
+          <input type="checkbox" class="form-check-input" id="toggleAdvancedSettings" [checked]="showAdvancedSettings"
+            (change)="toggleAdvancedSettings()" />
+        </div>
+      </div>
+
+
+      <div class="col-12" *ngIf="showAdvancedSettings">
+        <div class="row">
+          <div class="col-md-4">
+
+            <div class="form-group row mb-3">
+              <label for="source_addr_ton" class="col-sm-6 label">Source Address TON</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="source_addr_ton" formControlName="source_addr_ton">
+                  @for (item of tonCatalog; track $index) {
+                  <option value="{{ item.id }}">{{ item.description }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('source_addr_ton')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label for="source_addr_npi" class="col-sm-6 label">Source Address NPI</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="source_addr_npi" formControlName="source_addr_npi">
+                  @for (item of npiCatalog; track $index) {
+                  <option value="{{ item.id }}">{{ item.description }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('source_addr_npi')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+            <div class="form-group row mb-3">
+              <label for="dest_addr_ton" class="col-sm-6 label">Destination Address TON</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="dest_addr_ton" formControlName="dest_addr_ton">
+                  @for (item of tonCatalog; track $index) {
+                  <option value="{{ item.id }}">{{ item.description }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('dest_addr_ton')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label for="dest_addr_npi" class="col-sm-6 label">Destination Address NPI</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="dest_addr_npi" formControlName="dest_addr_npi">
+                  @for (item of npiCatalog; track $index) {
+                  <option value="{{ item.id }}">{{ item.description }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('dest_addr_npi')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+
+            <div class="form-group row mb-2">
+              <label for="data_coding" class="col-sm-6 label">Data Coding</label>
+              <div class="col-sm-6">
+                <select class="form-select" id="data_coding" formControlName="data_coding">
+                  @for (item of encodingList; track $index) {
+                  <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('data_coding')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label for="request_dlr" class="col-sm-6 label">Request DLR</label>
+              <div class="col-sm-6 d-flex align-items-center">
+                <input type="checkbox" class="form-check-input me-2" id="request_dlr" formControlName="request_dlr" />
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Column Mapping -->
+      <h4 class="fw-bold">Column Mapping</h4>
+      <p class="text-muted d-flex align-items-start flex-column m-0" style="font-size: 0.9rem;">
+        <span>
+          <i class='bx bx-info-circle me-1' style="color: #7B3031;"></i>
+          - Only the Recipient parameter is mandatory and must be mapped from the template.
+        </span>
+        <span class="ms-4">
+          - Other columns can be used in the message content without needing to be mapped.
+        </span>
+        <span class="ms-4">
+          - Mapping the Sender parameter is only necessary if a default sender is not specified in the Broadcast's Basic
+          Settings section.
+        </span>
+      </p>
+      <hr class="mt-1 mb-3">
+
+
+      <div class="col-12">
+        <div class="table-responsive" style="max-height: 450px; overflow-y: auto; border: 1px solid #dee2e6;">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="min-width: 150px;">Column</th>
+                <th style="min-width: 200px;">Preview</th>
+                <th style="min-width: 200px;">Parameter</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="fileColumns.length; else emptyMessage">
+              <tr *ngFor="let col of fileColumns; let i = index;">
+                <td>{{ col }}</td>
+                <td>{{ filePreview[i] || '' }}</td>
+                <td>
+                  <ng-select class="m-1" [items]="messageEventFieldsGrouped" bindLabel="label" bindValue="key" groupBy="group"
+                    [clearable]="true" placeholder="Select..." (change)="onMappingChange($event, col, i)" appendTo="body" [formControlName]="col">
+                  </ng-select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ng-template #emptyMessage>
+            <tbody>
+              <tr>
+                <td colspan="3" class="text-center text-muted py-3">
+                  No columns to display. Please analyze a file to preview its content.
+                </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Message Configuration -->
+      <h4 class="fw-bold border-bottom pb-1 mb-3 mt-4">Message Configuration</h4>
+      <div class="row mt-2">
+        <div class="col-5">
+          <!-- device -->
+          <div class="device-preview-container">
+            <!-- Sender number preview -->
+            <div class="device-sender">
+              {{ senderId || '00000000' }}
+            </div>
+
+            <!-- Message bubble preview -->
+            <div class="device-message-bubble">
+              {{ messagePreview || 'This is a message preview.' }}
+            </div>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="form-group row mb-3">
+            <label class="col-sm-3 label"></label>
+            <div class="col-sm-4">
+              <select class="form-select" formControlName="selectedVariable" (change)="insertVariable()">
+                <option [ngValue]="null">-- Select variable --</option>
+                <option *ngFor="let col of fileColumns" [value]="col">{{ col }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-3">
+            <label for="message_template" class="col-sm-3 label">Message</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="message_template" formControlName="message_template"
+                (input)="onMessageTemplateChange()" rows="6">
+                </textarea>
+              <span class="text-danger mt-2" *ngIf="validInput('message_template')">the field is required</span>
+            </div>
+          </div>
+          <br />
+          <h6 class="fw-bold mb-4">Real test configuration</h6>
+          <div class="form-group row">
+            <label for="message_template" class="col-sm-3 label">Testing number</label>
+            <div class="col-sm-9 d-flex align-items-center gap-2">
+              <input type="text" class="form-control" id="destination_addr" formControlName="destination_addr" />
+              <button class="btn btn-red" (click)="sendTest()" type="button"
+                [disabled]="!isSendButtonEnabled()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Setting -->
+      <h4 class="fw-bold border-bottom pb-1 mb-3 mt-4">Schedule Setting</h4>
+      <div class="col-12 mb-5">
+        <div class="row">
+          <div class="col-5">
+            <div class="form-check form-switch mb-3 p-0">
+              <input type="checkbox" class="form-check-input" id="is_immediate" formControlName="is_immediate"
+                (change)="onExecutionTypeChange()" />
+              <label class="form-check-label me-2" for="is_immediate">
+                Immediate execution
+              </label>
+            </div>
+          </div>
+          <div class="col-7">
+            <div *ngIf="form.get('is_immediate')?.value">
+              <div class="d-flex flex-column">
+                <div class="d-flex gap-2 align-items-center">
+                  <select class="form-select" formControlName="execution_hours" style="width: 70px;">
+                    <option *ngFor="let hour of [].constructor(24); let i = index" [value]="i">
+                      {{ i < 10 ? '0' + i : i }} </option>
+                  </select>
+                  <span>:</span>
+                  <select class="form-select" formControlName="execution_minutes" style="width: 70px;">
+                    <option *ngFor="let minute of [].constructor(60); let i = index" [value]="i">
+                      {{ i < 10 ? '0' + i : i }} </option>
+                  </select>
+
+                  <i class='bx bx-info-circle bx-sm text-primary' style="cursor: pointer; color: #7B3031 !important;"
+                    (click)="showInfo = !showInfo" title="Click to view more info">
+                  </i>
+                  <div *ngIf="showInfo" class="mt-1">
+                    <small class="text-muted">
+                      Time (hours and minutes) available to send the messages in this broadcast.
+                    </small>
+                  </div>
+                </div>
+
+                <!-- Info Message -->
+              </div>
+
+              <div class="offset-sm-4 col-sm-7">
+                <span class="text-danger mt-2" *ngIf="validInput('execution_hours') || validInput('execution_minutes')">
+                  both fields are required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!form.get('is_immediate')?.value">
+          <div class="col-6">
+            <div class="form-group row mb-3">
+              <label for="start_datetime" class="col-sm-4 label">Start Date</label>
+              <div class="col-sm-8">
+                <input type="datetime-local" class="form-control" id="start_datetime" formControlName="start_datetime"
+                  [value]="(form.get('start_datetime')?.value | date:'yyyy-MM-ddTHH:mm')" />
+                <span class="text-danger mt-2" *ngIf="validInput('start_datetime')">the field is required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row mb-3">
+              <label for="max_execution_datetime" class="col-sm-5 label">Max Execution Date</label>
+              <div class="col-sm-7">
+                <input type="datetime-local" class="form-control" id="max_execution_datetime"
+                  formControlName="max_execution_datetime"
+                  [value]="(form.get('max_execution_datetime')?.value | date:'yyyy-MM-ddTHH:mm')" />
+                <span class="text-danger mt-2" *ngIf="validInput('max_execution_datetime')">the field is required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+    </form>
+  </div>
+</div>

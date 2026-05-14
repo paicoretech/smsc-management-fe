@@ -1,0 +1,102 @@
+<div class="filter-panel">
+  <div class="d-flex justify-content-end mb-2">
+    <button type="button" class="btn btn-close-modal" (click)="onClose()">X</button>
+  </div>
+  <div class="p-3 border-bottom pt-0">
+    <div class="d-flex justify-content-between align-items-center">
+      <h6 class="mb-0">Filters</h6>
+      <button type="button" class="btn btn-link p-0 m-0 text-uppercase fw-bold"
+              style="font-size: 0.75rem; color: #7B3031;"
+              (click)="resetFilters()">Reset Filters</button>
+    </div>
+  </div>
+
+
+  <div class="p-3">
+    <form [formGroup]="filtersForm">
+      <div class="mb-3">
+        <label>Start Date</label>
+        <input type="datetime-local" class="form-control" formControlName="start_datetime" step="1" (change)="onDateTimeChange('start')"/>
+      </div>
+      <div class="mb-3">
+        <label>End Date</label>
+        <input type="datetime-local"class="form-control" formControlName="end_datetime" step="1" (change)="onDateTimeChange('end')"
+        />
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Sender (From)</label>
+        <input type="text" class="form-control" formControlName="source_addr" />
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Destination (To)</label>
+        <input type="text" class="form-control" formControlName="destination_addr" />
+      </div>
+      <div class="mb-3">
+        <label>Account</label>
+        <ng-select [items]="originNetworkList" bindLabel="name" bindValue="network_id" formControlName="origin_network" [multiple]="true" placeholder="Select accounts">
+        </ng-select>
+      </div>
+      <div class="mb-3">
+        <label>Destination Gateway</label>
+        <ng-select [items]="destinationNetworkList" bindLabel="name" bindValue="network_id" formControlName="destination_network" [multiple]="true" placeholder="Select gateways">
+        </ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Status</label>
+        <ng-select [items]="['SUCCESS', 'FAILED']" bindLabel="" bindValue="" formControlName="status" placeholder="ALL" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3">
+        <label>Message Type</label>
+        <ng-select [items]="['MESSAGE', 'DELIVER']" bindLabel="" bindValue="" formControlName="message_type" placeholder="ALL" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Origination Type</label>
+        <ng-select [items]="['GW', 'SP']" bindLabel="" bindValue="" formControlName="origin_type" placeholder="ALL" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Destination Type</label>
+        <ng-select [items]="['GW', 'SP']" bindLabel="" bindValue="" formControlName="destination_type" placeholder="ALL" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Origination Protocol</label>
+        <ng-select [items]="['HTTP', 'SMPP', 'SS7']" bindLabel="" bindValue="" formControlName="origin_protocol" [multiple]="true"  placeholder="Select origination protocol" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Destination Protocol</label>
+        <ng-select [items]="['HTTP', 'SMPP', 'SS7']" bindLabel="" bindValue="" formControlName="destination_protocol" [multiple]="true"  placeholder="Select destination protocol" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3">
+        <label>{{ hideAdvancedFilters ? 'Campaign' : 'Broadcast'}}</label>
+        <ng-select
+          [items]="broadcastNameList" bindLabel="name" bindValue="id" formControlName="broadcast_filter_id" [multiple]="true" placeholder="Select broadcasts" [clearable]="true">
+        </ng-select>
+      </div>
+      <div class="mb-3">
+        <label>User</label>
+        <ng-select
+          [items]="broadcastUserList" bindLabel="name" bindValue="id" formControlName="broadcast_filter_user" [multiple]="true" placeholder="Select users" [clearable]="true">
+        </ng-select>
+      </div>
+
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>Registered Delivery</label>
+        <div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="registered_delivery" [value]="1" />
+            <label class="form-check-label">Yes</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="registered_delivery" [value]="0" />
+            <label class="form-check-label">No</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" formControlName="registered_delivery" [value]="null" />
+            <label class="form-check-label">ALL</label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-red w-100" (click)="applyFilters()">Apply</button>
+    </form>
+  </div>
+</div>

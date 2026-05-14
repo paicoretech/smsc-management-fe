@@ -1,0 +1,416 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close(false)">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="name" class="col-sm-5 label">Name</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="name" formControlName="name"
+                  [class.is-invalid]="validInput('name')">
+                <span class="text-danger mt-2" *ngIf="validInput('name')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="digits" class="col-sm-5 label">Global Tittle Digits</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="digits" formControlName="digits"
+                  [class.is-invalid]="validInput('digits')">
+                <span class="text-danger mt-2" *ngIf="validInput('digits')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="calling_point_code" class="col-sm-5 label">Calling Point Code</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="calling_point_code" formControlName="calling_point_code"
+                  [class.is-invalid]="validInput('calling_point_code')">
+                <span class="text-danger mt-2" *ngIf="validInput('calling_point_code')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('calling_point_code')">
+                  {{ getPatternMessage('calling_point_code') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="mask" class="col-sm-5 label">Mask</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="mask" formControlName="mask"
+                  [class.is-invalid]="validInput('mask')" (input)="onMaskInput($event)">
+                <span class="text-danger mt-2" *ngIf="validInput('mask')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="rule_type" class="col-sm-5 label">Rule Type</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="rule_type" name="rule_type" formControlName="rule_type">
+                <option *ngFor="let item of ruleTypes; let i = index" [value]="item.id">{{ item.name }}</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('rule_type')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="calling_ssn" class="col-sm-5 label">Calling SSN</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <input type="text" class="form-control" id="calling_ssn" formControlName="calling_ssn"
+                  [class.is-invalid]="validInput('calling_ssn')">
+              <span class="text-danger mt-2" *ngIf="validInput('calling_ssn')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('calling_ssn')">
+                {{ getPatternMessage('calling_ssn') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="ai" class="col-sm-5 label">Address Indicator</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="ai" formControlName="ai"
+                  [class.is-invalid]="validInput('ai')">
+                <span class="text-danger mt-2" *ngIf="validInput('ai')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="primary_address" class="col-sm-5 label">Primary Address</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="primary_address" name="primary_address" formControlName="primary_address">
+                <option value="">UNDEFINED</option>
+                <option *ngFor="let item of listAddresses; let i = index" [value]="item.id">{{ item.name }}</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('primary_address')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('primary_address')">
+                {{ getPatternMessage('primary_address') }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="calling_translator_type" class="col-sm-5 label">Calling translation Type</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <input type="text" class="form-control" id="calling_translator_type" formControlName="calling_translator_type"
+                  [class.is-invalid]="validInput('calling_translator_type')">
+              <span class="text-danger mt-2" *ngIf="validInput('calling_translator_type')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('calling_translator_type')">
+                {{ getPatternMessage('calling_translator_type') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="pc" class="col-sm-5 label">Point Code</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="pc" formControlName="pc"
+                  [class.is-invalid]="validInput('pc')">
+                <span class="text-danger mt-2" *ngIf="validInput('pc')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('pc')">
+                  {{ getPatternMessage('pc') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="secondary_address" class="col-sm-5 label">Secondary Address</label>
+              <div class="col-sm-7">
+                <select class="form-select" id="secondary_address" name="secondary_address" formControlName="secondary_address">
+                  <option value="">UNDEFINED</option>
+                  <option *ngFor="let item of listAddresses; let i = index" [value]="item.id">{{ item.name }}</option>
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('secondary_address')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('secondary_address')">
+                  {{ getPatternMessage('secondary_address') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="calling_numbering_plan" class="col-sm-5 label">Calling Numbering Plan</label>
+              <div class="col-sm-7">
+                <!-- <input type="text" class="form-control" id="calling_numbering_plan"
+                  formControlName="calling_numbering_plan" [class.is-invalid]="validInput('calling_numbering_plan')"> -->
+                <select class="form-select" id="calling_numbering_plan" name="calling_numbering_plan" formControlName="calling_numbering_plan">
+                  @for (item of numberingPlanList; track $index) {
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('calling_numbering_plan')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('calling_numbering_plan')">
+                  {{ getPatternMessage('calling_numbering_plan') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="ssn" class="col-sm-5 label">SSN</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="ssn" formControlName="ssn"
+                  [class.is-invalid]="validInput('ssn')">
+                <span class="text-danger mt-2" *ngIf="validInput('ssn')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('ssn')">
+                  {{ getPatternMessage('ssn') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="load_sharing_algorithm" class="col-sm-5 label">Load Sharing Algorithm</label>
+              <div class="col-sm-7">
+                <select class="form-select" id="load_sharing_algorithm" name="load_sharing_algorithm" formControlName="load_sharing_algorithm">
+                  <option *ngFor="let item of sharingAlgorithms; let i = index" [value]="item.id">{{ item.name }}</option>
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('load_sharing_algorithm')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('load_sharing_algorithm')">
+                  {{ getPatternMessage('load_sharing_algorithm') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="calling_nature_address" class="col-sm-5 label">Calling Nature of Address</label>
+              <div class="col-sm-7">
+                <!-- <input type="text" class="form-control" id="calling_nature_address"
+                  formControlName="calling_nature_address" [class.is-invalid]="validInput('calling_nature_address')"> -->
+                <select class="form-select" id="calling_nature_address" name="calling_nature_address" formControlName="calling_nature_address">
+                  @for (item of naturaOfAddressList; track $index) {
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('calling_nature_address')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('calling_nature_address')">
+                  {{ getPatternMessage('calling_nature_address') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="tt" class="col-sm-5 label">Translation Type</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="tt" formControlName="tt"
+                  [class.is-invalid]="validInput('tt')">
+                <span class="text-danger mt-2" *ngIf="validInput('tt')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('tt')">
+                  {{ getPatternMessage('tt') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="new_calling_party_address" class="col-sm-5 label">New Calling Party Address</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <input type="text" class="form-control" id="new_calling_party_address"
+                  formControlName="new_calling_party_address"
+                  [class.is-invalid]="validInput('new_calling_party_address')">
+              <span class="text-danger mt-2" *ngIf="validInput('new_calling_party_address')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('new_calling_party_address')">
+                {{ getPatternMessage('new_calling_party_address') }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="ccalling_global_title_digits" class="col-sm-5 label">Calling Global Tittle Digits</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="ccalling_global_title_digits"
+                  formControlName="ccalling_global_title_digits"
+                  [class.is-invalid]="validInput('ccalling_global_title_digits')">
+                <span class="text-danger mt-2" *ngIf="validInput('ccalling_global_title_digits')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="numbering_plan" class="col-sm-5 label">Numbering Plan</label>
+              <div class="col-sm-7">
+                <!-- <input type="text" class="form-control" id="numbering_plan" formControlName="numbering_plan"
+                  [class.is-invalid]="validInput('numbering_plan')"> -->
+                <select class="form-select" id="numbering_plan" name="numbering_plan" formControlName="numbering_plan">
+                  @for (item of numberingPlanList; track $index) {
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('numbering_plan')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('numbering_plan')">
+                  {{ getPatternMessage('numbering_plan') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="original_type" class="col-sm-5 label">Origination Type</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="original_type" name="original_type" formControlName="original_type">
+                <option *ngFor="let item of originationTypes; let i = index" [value]="item.id">{{ item.name }}</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('original_type')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('original_type')">
+                {{ getPatternMessage('original_type') }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="nature_of_address" class="col-sm-5 label">Nature of Address</label>
+              <div class="col-sm-7">
+                <select class="form-select" id="nature_of_address" name="nature_of_address" formControlName="nature_of_address">
+                  @for (item of naturaOfAddressList; track $index) {
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('nature_of_address')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('nature_of_address')">
+                  {{ getPatternMessage('nature_of_address') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="calling_address_indicator" class="col-sm-5 label">Calling Address Indicator</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="calling_address_indicator"
+                  formControlName="calling_address_indicator"
+                  [class.is-invalid]="validInput('calling_address_indicator')">
+                <span class="text-danger mt-2" *ngIf="validInput('calling_address_indicator')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('calling_address_indicator')">
+                  {{ getPatternMessage('calling_address_indicator') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+          <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

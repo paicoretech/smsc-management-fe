@@ -1,0 +1,371 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">
+        X
+      </button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="save()"
+      class="row g-3 d-flex justify-content-center"
+    >
+      <input type="number" hidden id="id" name="id" formControlName="id" />
+
+      <div class="row">
+        <div class="col-md-1 col-sm-12 col-xs-12"></div>
+        <div class="col-md-5 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2 mt-2">
+            <label for="event_type" class="col-sm-3 label">Event Type</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                id="event_type"
+                name="event_type"
+                formControlName="event_type"
+              >
+                <option value="message" selected>Message</option>
+                <option value="dlr">DLR</option>
+                <option value="response_message">Response Mensage</option>
+                <option value="response_dlr">Response DLR</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('event_type')">
+                the field is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2 mt-2">
+            <label for="direction" class="col-sm-3 label">Direction</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                id="direction"
+                name="direction"
+                formControlName="direction"
+              >
+                <option value="input" selected>Input</option>
+                <option value="output">Output</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('direction')">
+                the field is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2 mt-2">
+            <label for="body_type" class="col-sm-3 label">Body Type</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                id="body_type"
+                name="body_type"
+                formControlName="body_type"
+                (change)="onChangeBodyType($event)"
+              >
+                <option value="JSON" selected>JSON</option>
+                <option value="XML">XML</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('body_type')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-5 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2 mt-2" *ngIf="showPath">
+            <label for="path" class="col-sm-4 label">SMSC Path</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="path"
+                name="path"
+                formControlName="path"
+                [class.is-invalid]="validInput('path')"
+                placeholder="/message/mo"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('path')">
+                the field is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2 mt-2">
+            <label for="gateway_id" class="col-sm-4 label">Gateway</label>
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                id="gateway_id"
+                formControlName="gateway_id"
+              >
+                <option value="">Select a gateway</option>
+                @for (item of httpGateways; track $index) {
+                <option value="{{ item.network_id }}">
+                  {{ item.network_id + "|" + item.name }}
+                </option>
+                }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('gateway_id')">
+                the field is required
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2 mt-2">
+            <label for="unused" class="col-sm-4 label">Default Template</label>
+            <div class="col-sm-2">
+              <div class="form-check form-switch" style="padding-left: 0px">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="default_template"
+                  name="default_template"
+                  formControlName="default_template"
+                  style="width: 60px !important"
+                  (change)="onChangeDefaultTemplate($event)"
+                />
+              </div>
+            </div>
+
+            <div class="col-sm-1"></div>
+
+            <label
+              for="unused"
+              class="col-sm-3 label"
+              *ngIf="activeProxy"
+              >Active Proxy</label
+            >
+            <div class="col-sm-2" *ngIf="activeProxy">
+              <div class="form-check form-switch" style="padding-left: 0px">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="use_proxy"
+                  name="use_proxy"
+                  formControlName="use_proxy"
+                  style="width: 60px !important"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-1 col-sm-12 col-xs-12"></div>
+      </div>
+
+      <div class="accordion" id="accordionFilters">
+        <!-- Template -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button
+              class="accordion-button custom-accordion-header collapsed"
+              type="button"
+              (click)="accordionA = !accordionA"
+              [class.collapsed]="!accordionA"
+              [attr.aria-expanded]="accordionA"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-controls="collapseOne"
+              [attr.aria-expanded]="accordionA ? 'true' : 'false'"
+            >
+              Template
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            class="accordion-collapse collapse"
+            aria-labelledby="collapseOne"
+            [ngClass]="{ show: accordionA }"
+          >
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                  <div
+                    class="card"
+                    style="
+                      top: 8px;
+                      height: 500px;
+                      max-height: 500px;
+                      --bs-card-spacer-y: 0px;
+                    "
+                  >
+                    <div class="card-header">Body Template String</div>
+                    <div
+                      class="card-body"
+                      style="padding-left: 0%; padding-right: 0%; margin: 0px"
+                    >
+                      <textarea
+                        class="form-control"
+                        id="template"
+                        name="template"
+                        formControlName="template"
+                        [class.is-invalid]="validInput('template')"
+                        style="height: 100%; resize: none"
+                        placeholder="insert payload here..."
+                        (input)="onTemplateChange()"
+                      ></textarea>
+
+                      <span
+                        class="text-danger mt-2"
+                        *ngIf="validInput('template')"
+                      >
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="col-md-2 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center"
+                >
+                  <button
+                    class="btn btn-red mt-2"
+                    type="button"
+                    (click)="transformPayload()"
+                  >
+                    Transform
+                  </button>
+                </div>
+
+                <div class="col-md-5 col-sm-12 col-xs-12">
+                  <div
+                    class="card"
+                    style="
+                      top: 8px;
+                      height: 500px;
+                      max-height: 500px;
+                      --bs-card-spacer-y: 0px;
+                    "
+                  >
+                    <div class="card-header">View Body Tree</div>
+                    <div
+                      class="card-body"
+                      style="
+                        padding-left: 0%;
+                        padding-right: 0%;
+                        overflow: auto;
+                      "
+                    >
+                      <pre
+                        class="language-json"
+                        style="
+                          height: 100%;
+                          width: 100%;
+                          max-height: 100%;
+                          margin: 0%;
+                          background-color: transparent;
+                        "
+                      ><code #codeElement>{{ template }}</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Http Headers -->
+        <div class="accordion-item" *ngIf="isOutput">
+          <h2 class="accordion-header" id="headingTwo">
+            <button
+              class="accordion-button custom-accordion-header collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-controls="collapseTwo"
+              [attr.aria-expanded]="accordionB ? 'true' : 'false'"
+            >
+              HTTP Headers
+            </button>
+          </h2>
+          <div
+            id="collapseTwo"
+            class="accordion-collapse collapse"
+            aria-labelledby="headingTwo"
+            [ngClass]="{ show: accordionB }"
+          >
+            <div class="accordion-body">
+
+              <div formArrayName="callback_headers_http" class="row mt-4">
+                <div class="col-md-6">
+                  <div class="card">
+                    <form [formGroup]="formTarget" class="row mt-3 mb-2 d-flex justify-content-center">
+                      <h6 class="modal-title text-center mx-auto mb-2">HTTP Headers</h6>
+  
+                      <div class="form-group row mb-2">
+                        <label for="header_name" class="col-sm-6 label">Header Name</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="header_name" formControlName="header_name"
+                            [class.is-invalid]="validInput('header_name')">
+                        </div>
+                      </div>
+  
+                      <div class="form-group row mb-2">
+                        <label for="header_value" class="col-sm-6 label">Header Value</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="header_value" formControlName="header_value"
+                            [class.is-invalid]="validInput('header_value')">
+                        </div>
+                      </div>
+  
+                      <button class="btn btn-red" style="width: 30%; float: right !important;"
+                        [disabled]="formTarget.invalid || saveDisabled" type="button" (click)="addHeader()">Add</button>
+  
+                    </form>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="table-responsive mb-2">
+                    <ul class="list-group" cdkDropList (cdkDropListDropped)="drop($event)">
+                      <li
+                        class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center fw-bold">
+                        <span class="me-2" style="color: #000;">Header Name</span>
+                        <span class="me-2" style="color: #000;">Header Value</span>
+                        <span style="color: #000;">Actions</span>
+                      </li>
+                      <div>
+                        <li *ngIf="!headerList || headerList.length === 0" 
+                            class="list-group-item text-center text-muted">
+                          No data available
+                        </li>
+                        <li *ngFor="let item of headerList; let i = index"
+                          class="list-group-item d-flex justify-content-between align-items-center" 
+                          cdkDrag 
+                          [cdkDragDisabled]="saveDisabled">
+                          <span class="align-middle">{{ item.header_name }}</span>
+                          <span class="align-middle">{{ item.header_value }}</span>
+                          <span class="align-center">
+                            <button class="btn btn-sm btn-danger me-2" type="button" title="Delete record" [disabled]="saveDisabled"
+                              (click)="removeHeader(i)">
+                              <i class='bx bxs-trash-alt'></i>
+                            </button>
+                          </span>
+                        </li>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-red"
+        style="width: 60%"
+        [disabled]="form.invalid || saveDisabled || notTransformClicked"
+      >
+        Save
+      </button>
+    </form>
+  </div>
+</div>

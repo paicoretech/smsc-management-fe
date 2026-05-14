@@ -1,0 +1,104 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form  [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+  
+        <input type="number" hidden id="id" formControlName="id">
+  
+        <div class="form-group row mb-2">
+          <label for="name" class="col-sm-6 label">Name</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="name" formControlName="name"
+             [class.is-invalid]="validInput('name')" [readonly]="isNameReadOnly">
+            <span class="text-danger mt-2"  *ngIf="validInput('name')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="ip" class="col-sm-6 label">Host</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="ip" name="ip" formControlName="ip" placeholder="127.0.0.1"
+              [class.is-invalid]="validInput('ip')">
+            <span class="text-danger mt-2" *ngIf="validInput('ip')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="port" class="col-sm-6 label">Port</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" id="port" name="port" formControlName="port"
+              [class.is-invalid]="validInput('port')">
+            <span class="text-danger mt-2" *ngIf="validInput('port')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="transaction_timer" class="col-sm-6 label">Transaction Timer</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" id="transaction_timer" name="transaction_timer" formControlName="transaction_timer" placeholder="5000"
+              [class.is-invalid]="validInput('transaction_timer')">
+            <span class="text-danger mt-2" *ngIf="validInput('transaction_timer')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="wait_for_bind" class="col-sm-6 label">Wait For Bind</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" id="wait_for_bind" name="wait_for_bind" formControlName="wait_for_bind" placeholder="5000"
+              [class.is-invalid]="validInput('wait_for_bind')">
+            <span class="text-danger mt-2" *ngIf="validInput('wait_for_bind')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="processor_degree" class="col-sm-6 label">Processor Degree</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" id="processor_degree" name="processor_degree" formControlName="processor_degree" placeholder="15"
+              [class.is-invalid]="validInput('processor_degree')">
+            <span class="text-danger mt-2" *ngIf="validInput('processor_degree')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="queue_capacity" class="col-sm-6 label">Queue Capacity</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" id="queue_capacity" name="queue_capacity" formControlName="queue_capacity" placeholder="1000"
+              [class.is-invalid]="validInput('queue_capacity')">
+            <span class="text-danger mt-2" *ngIf="validInput('queue_capacity')">
+              the field is required
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row mb-2">
+          <label for="tls_enabled" class="col-sm-6 label">Enable TLS</label>
+          <div class="col-sm-6">
+            <div class="form-check form-switch d-flex justify-content-end p-0 w-100">
+              <input class="form-check-input float-end" type="checkbox" id="tls_enabled" formControlName="tls_enabled">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid || saveDisabled">Save</button>
+  
+      </form>
+    </div>
+  </div>
+  

@@ -1,0 +1,123 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+            <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+            <div class="form-group row mb-2">
+                <label for="name" class="col-sm-6 label">Name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="name" formControlName="name"
+                        [class.is-invalid]="validInput('name')">
+                    <span class="text-danger mt-2" *ngIf="validInput('name')">
+                        The field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="uri" class="col-sm-6 label">URI</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="uri" formControlName="uri"
+                        [class.is-invalid]="validInput('uri')">
+                    <span class="text-danger mt-2" *ngIf="validInput('uri')">
+                        The field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="peers" class="col-sm-6 label">Peers</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="peers" formControlName="peers"
+                        [class.is-invalid]="validInput('peers')">
+                    <span class="text-danger mt-2" *ngIf="validInput('peers')">
+                        The field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="dynamic" class="col-sm-6 label">Dynamic</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input" id="dynamic" formControlName="dynamic">
+                </div>
+            </div>
+
+            <div formGroupName="application">
+                <div class="form-group row mb-2 mx-2">
+                    <label for="applicationName" class="col-sm-6 label">Application Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="applicationName" formControlName="name"
+                            [class.is-invalid]="validInput('application.name')">
+                        <span class="text-danger mt-2" *ngIf="validInput('application.name')">
+                            The field is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-2 mx-2">
+                    <label for="vendor_id" class="col-sm-6 label">Vendor ID</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" id="vendor_id" formControlName="vendor_id"
+                            [class.is-invalid]="validInput('application.vendor_id')">
+                        <span class="text-danger mt-2" *ngIf="validInput('application.vendor_id')">
+                            The field is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-2 mx-2">
+                    <label for="auth_appl_id" class="col-sm-6 label">Auth Appl ID</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" id="auth_appl_id" formControlName="auth_appl_id"
+                            [class.is-invalid]="validInput('application.auth_appl_id')">
+                        <span class="text-danger mt-2" *ngIf="validInput('application.auth_appl_id')">
+                            The field is required
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-2 mx-2">
+                    <label for="acct_appl_id" class="col-sm-6 label">Acct Appl ID</label>
+                    <div class="col-sm-6">
+                        <input type="number" class="form-control" id="acct_appl_id" formControlName="acct_appl_id"
+                            [class.is-invalid]="validInput('application.acct_appl_id')">
+                        <span class="text-danger mt-2" *ngIf="validInput('application.acct_appl_id')">
+                            The field is required
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="local_action" class="col-sm-6 label">Local Action</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="local_action" formControlName="local_action">
+                        <option value="LOCAL">LOCAL</option>
+                        <option value="RELAY">RELAY</option>
+                        <option value="PROXY">PROXY</option>
+                        <option value="REDIRECT">REDIRECT</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="exp_time" class="col-sm-6 label">Expiration Time</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="exp_time" formControlName="exp_time"
+                        [class.is-invalid]="validInput('exp_time')">
+                    <span class="text-danger mt-2" *ngIf="validInput('exp_time')">
+                        The field is required
+                    </span>
+                </div>
+            </div>
+
+            <button class="btn btn-red" id="btn_save" style="width: 60%;" [disabled]="form.invalid">Save</button>
+        </form>
+    </div>
+</div>

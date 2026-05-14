@@ -1,0 +1,139 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="name" class="col-sm-5 label">Name</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="name" formControlName="name"
+                    [class.is-invalid]="validInput('name')">
+                  <span class="text-danger mt-2" *ngIf="validInput('name')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="transport_type" class="col-sm-5 label">Transport Type</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                <select class="form-select" id="transport_type" name="transport_type" formControlName="transport_type">
+                  <option value="TCP">TCP</option>
+                  <option value="SCTP">SCTP</option>
+                </select>
+
+                <span class="text-danger mt-2" *ngIf="validInput('transport_type')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="extra_address" class="col-sm-5 label">Extra Host Address</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="extra_address" formControlName="extra_address"
+                    [class.is-invalid]="validInput('extra_address')">
+                  <span class="text-danger mt-2" *ngIf="validInput('extra_address')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="address" class="col-sm-5 label">Host Address</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="host_address" formControlName="host_address"
+                    [class.is-invalid]="validInput('host_address')">
+                  <span class="text-danger mt-2" *ngIf="validInput('host_address')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMinLength('host_address')">
+                    Minimum length is {{ getMinLength('host_address') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMaxLength('host_address')">
+                    Maximum length is {{ getMaxLength('host_address') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('host_address')">
+                    {{ getPatternMessage('host_address') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="port" class="col-sm-5 label">Host Port</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="host_port" formControlName="host_port"
+                    [class.is-invalid]="validInput('host_port')">
+                  <span class="text-danger mt-2" *ngIf="validInput('host_port')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('host_port')">
+                    {{ getPatternMessage('host_port') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="row" *ngIf="showMaxConcurrentConnections">
+              <div class="form-group row mb-2">
+                <label for="max_concurrent_connections" class="col-sm-6 label">Max Concurrent Connections</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" id="max_concurrent_connections" formControlName="max_concurrent_connections"
+                    [class.is-invalid]="validInput('max_concurrent_connections')">
+                  <span class="text-danger mt-2" *ngIf="validInput('max_concurrent_connections')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('max_concurrent_connections')">
+                    {{ getPatternMessage('max_concurrent_connections') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="socket_type" class="col-sm-5 label">Socket Type</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                <select class="form-select" id="socket_type" name="socket_type" formControlName="socket_type" (change)="onChangeSocketType($event)">
+                  <option value="Client">Client</option>
+                  <option value="Server">Server</option>
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('socket_type')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>

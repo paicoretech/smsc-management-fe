@@ -1,0 +1,143 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close(false)">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="name" class="col-sm-5 label">Name</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="name" formControlName="name"
+                    [class.is-invalid]="validInput('name')">
+                  <span class="text-danger mt-2" *ngIf="validInput('name')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="first_sls" class="col-sm-5 label">First SLS</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="first_sls" formControlName="first_sls"
+                    [class.is-invalid]="validInput('first_sls')">
+                  <span class="text-danger mt-2" *ngIf="validInput('first_sls')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('first_sls')">
+                    {{ getPatternMessage('first_sls') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="sap_id" class="col-sm-5 label">SAP ID</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                <select class="form-select" id="sap_id" name="sap_id" formControlName="sap_id">
+                  <option *ngFor="let item of listSAP; let i = index" [value]="item.id">{{ item.name }}</option>
+                </select>
+                <span class="text-danger mt-2" *ngIf="validInput('sap_id')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="last_sls" class="col-sm-5 label">Last SLS</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="last_sls" formControlName="last_sls"
+                    [class.is-invalid]="validInput('last_sls')">
+                  <span class="text-danger mt-2" *ngIf="validInput('last_sls')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('last_sls')">
+                    {{ getPatternMessage('last_sls') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="first_pc" class="col-sm-5 label">First PC</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="first_pc" formControlName="first_pc"
+                    [class.is-invalid]="validInput('first_pc')">
+                  <span class="text-danger mt-2" *ngIf="validInput('first_pc')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('first_pc')">
+                    {{ getPatternMessage('first_pc') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="sls_mask" class="col-sm-5 label">SLS Mask</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="sls_mask" formControlName="sls_mask"
+                    [class.is-invalid]="validInput('sls_mask')">
+                  <span class="text-danger mt-2" *ngIf="validInput('sls_mask')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('sls_mask')">
+                    {{ getPatternMessage('sls_mask') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="last_pc" class="col-sm-5 label">Last PC</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="last_pc" formControlName="last_pc"
+                    [class.is-invalid]="validInput('last_pc')">
+                  <span class="text-danger mt-2" *ngIf="validInput('last_pc')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('last_pc')">
+                    {{ getPatternMessage('last_pc') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>

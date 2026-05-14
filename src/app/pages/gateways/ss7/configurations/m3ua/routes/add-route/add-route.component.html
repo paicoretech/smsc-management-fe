@@ -1,0 +1,132 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="destination_point_code" class="col-sm-5 label">Destination Point Code</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="destination_point_code" formControlName="destination_point_code"
+                    [class.is-invalid]="validInput('destination_point_code')">
+                  <span class="text-danger mt-2" *ngIf="validInput('destination_point_code')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="socketType" class="col-sm-5 label">Originating Point Code</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                  <input type="text" class="form-control" id="origination_point_code" formControlName="origination_point_code"
+                  [class.is-invalid]="validInput('origination_point_code')">
+                  <span class="text-danger mt-2" *ngIf="validInput('originating_point_code')">
+                  the field is required
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="service_indicator" class="col-sm-5 label">Service Indicator</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="service_indicator" formControlName="service_indicator"
+                    [class.is-invalid]="validInput('service_indicator')">
+                  <span class="text-danger mt-2" *ngIf="validInput('service_indicator')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="traffic_mode" class="col-sm-5 label">Traffic Mode</label>
+                <div class="col-sm-7" style="padding-left: 10px;">
+                    <select class="form-select" id="traffic_mode" name="traffic_mode" formControlName="traffic_mode">
+                        <option *ngFor="let item of traficModeList" [value]="item.id">{{ item.name }}</option>
+                    </select>
+                    <span class="text-danger mt-2" *ngIf="validInput('traffic_mode')">
+                    the field is required
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-8 col-md-10 col-sm-12 col-xs-12 mx-auto">
+            <div formArrayName="aspList" class="">
+                <div class="card" style="border: none; box-shadow: none;">
+                  <form [formGroup]="formTarget" class="row mt-3 mb-2 d-flex justify-content-center">
+                    <h6 class="modal-title text-center mx-auto mb-2">AS List</h6>
+
+                    <div class="form-group row mb-2">
+                        <label for="asp" class="col-sm-6 label">AS</label>
+                        <div class="col-sm-6">
+                         <select class="form-select" id="asp" formControlName="asp">
+                          <option *ngFor="let item of appservList" [value]="item.id">{{ item.name }}</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="formTarget.get('asp')?.invalid && formTarget.get('asp')?.touched">
+                          This field is required
+                        </span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-red" style="width: 30%; float: right !important;" type="button" (click)="addToAspList()" [disabled]="formTarget.invalid">Add</button>
+
+                  </form>
+                </div>
+
+                <div class="table-responsive mt-4 mb-2">
+                  <ul class="list-group" cdkDropList (cdkDropListDropped)="drop($event)">
+                    <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center fw-bold">
+                      <span class="me-2" style="color: #000;">AS</span>
+                      <span style="color: #000;">Actions</span>
+                    </li>
+                    <div>
+                      <ng-container *ngFor="let item of aspListControls; let i = index">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" cdkDrag>
+                          <span class="align-middle">{{ item.get('name')?.value }}</span>
+                          <span class="align-center">
+                            <button class="btn btn-sm btn-danger me-2" type="button" (click)="removeFromAspList(i)" title="Delete record">
+                              <i class='bx bxs-trash-alt'></i>
+                            </button>
+                          </span>
+                        </li>
+
+                      </ng-container>
+                    <div *ngIf="form.get('aspList')?.errors?.['minArrayLength']" class="text-danger">
+                          You must add a  minimum of one AS to the list!
+                    </div>
+                    </div>
+                  </ul>
+                </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+</div>

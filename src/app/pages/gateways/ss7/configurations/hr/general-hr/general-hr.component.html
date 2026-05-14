@@ -1,0 +1,60 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <p class="title-content-tab mb-0">Home Routing</p>
+
+    <button
+      *ngIf="isGatewayStarted()"
+      type="button"
+      class="btn btn-red d-flex align-items-center"
+      [disabled]="!hasUnsavedChanges || isHotReloadInProgress"
+      (click)="triggerHotReload()"
+      style="font-size: 15px; padding: 5px 12px;"
+    >
+      <i class="bx bx-refresh me-1"></i>
+      <span *ngIf="isHotReloadInProgress">Reloading...</span>
+      <span *ngIf="!isHotReloadInProgress">Hot Reload</span>
+    </button>
+  </div>
+
+  <hr>
+
+  <div class="row mt-2">
+    <div class="col-md-8 col-sm-6 col-xs-12">
+      <div class="form-group">
+        <label>Mode</label>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="form-group">
+        <select class="form-select" formControlName="mode">
+          <option *ngFor="let mode of modes" [value]="mode">{{ mode }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="col-md-8 col-sm-6 col-xs-12">
+      <div class="form-group">
+        <label>TTL Cache (seconds)</label>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12">
+      <div class="form-group">
+        <input
+          type="number"
+          class="form-control"
+          formControlName="ttlCache"
+          placeholder="e.g. 300"
+          min="1"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="d-flex align-items-center justify-content-end">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-red">Save</button>
+    </div>
+  </div>
+</form>

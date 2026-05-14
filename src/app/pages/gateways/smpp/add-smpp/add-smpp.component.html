@@ -1,0 +1,568 @@
+<div class="content-wrapper ps-2 pe-2 pt-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img
+          src="/assets/img/base-station-icon-1.png"
+          alt="icon"
+          height="40px"
+          width="auto"
+        />
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a
+                [routerLink]="smppBasePath"
+                class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d"
+              >
+                SMPP Gateway
+              </a>
+            </li>
+
+            <li
+              class="breadcrumb-item active"
+              style="margin-top: 22px; color: #7b3031; font-size: 18px"
+              aria-current="page"
+            >
+              <label class="mt-1">
+                {{ isReadonly ? 'View SMPP Gateway' : (isEdit ? 'Edit SMPP Gateway' : 'Create SMPP Gateway') }}
+              </label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <br>
+
+    <form id="smppGatewayForm" [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+      <div class="col-12 mb-2">
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+          <h5 class="fw-bold">Gateway Settings</h5>
+
+          <div class="d-flex gap-2">
+      
+            <button
+              class="btn btn-red"
+              [disabled]="form.invalid || saveDisabled || !isModified"
+              type="submit"
+              *ngIf="!isReadonly"
+            >
+              {{ isEdit ? 'Update Changes' : 'Save Changes' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      @if ( isEdit ) {
+      <div class="form-group row mb-2">
+        <label for="network_id" class="col-sm-6 label">Network Id</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="network_id" formControlName="network_id"
+            [class.is-invalid]="validInput('network_id')">
+          <span class="text-danger mt-2" *ngIf="validInput('network_id')">
+            the field is required
+          </span>
+        </div>
+      </div>
+      }
+
+      <div class="form-group row mb-2">
+        <label for="name" class="col-sm-6 label">ESME Name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="name" formControlName="name"
+            [class.is-invalid]="validInput('name')">
+          <span class="text-danger mt-2" *ngIf="validInput('name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="system_id" class="col-sm-6 label">System Id</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="system_id" formControlName="system_id"
+            [class.is-invalid]="validInput('system_id')">
+          <span class="text-danger mt-2" *ngIf="validInput('system_id')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('system_id')">
+            Minimum length is {{ getMinLength('system_id') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMaxLength('system_id')">
+            Maximum length is {{ getMaxLength('system_id') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('system_id')">
+            {{ getPatternMessage('system_id') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="mno_id" class="col-sm-6 label">MNOs</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="mno_id" formControlName="mno_id">
+            @for (item of mnoList; track $index) {
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('mno_id')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="password" class="col-sm-6 label">Password</label>
+        <div class="col-sm-6">
+          <div style="display: inline-flex; align-items: center;">
+            <input [type]="passwordFieldType" class="form-control" id="password" name="password"
+              formControlName="password" [class.is-invalid]="validInput('password')" autocomplete="new-password">
+            <span style="margin-left: -30px; cursor: pointer;" (click)="togglePasswordVisibility()">
+              <i *ngIf="isPasswordVisible" class="bx bxs-low-vision"></i>
+              <i *ngIf="!isPasswordVisible" class="bx bxs-show"></i>
+            </span>
+          </div>
+          <span class="text-danger mt-2" *ngIf="validInput('password')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('password')">
+            Minimum length is {{ getMinLength('password') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMaxLength('password')">
+            Maximum length is {{ getMaxLength('password') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="ip" class="col-sm-6 label">Host</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="ip" formControlName="ip" [class.is-invalid]="validInput('ip')">
+          <span class="text-danger mt-2" *ngIf="validInput('ip')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('ip')">
+            Minimum length is {{ getMinLength('ip') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMaxLength('ip')">
+            Maximum length is {{ getMaxLength('ip') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('ip')">
+            {{ getPatternMessage('ip') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="port" class="col-sm-6 label">Port</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="port" formControlName="port"
+            [class.is-invalid]="validInput('port')">
+          <span class="text-danger mt-2" *ngIf="validInput('port')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('port')">
+            Minimum length is {{ getMinLength('port') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMaxLength('port')">
+            Maximum length is {{ getMaxLength('port') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="bind_type" class="col-sm-6 label">Bind Types</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="bind_type" formControlName="bind_type">
+            @for (item of bindTypes; track $index) {
+            <option value="{{ item._type }}">{{ item._type }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('bind_type')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="system_type" class="col-sm-6 label">System Type</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="system_type" formControlName="system_type"
+            [class.is-invalid]="validInput('system_type')">
+          <span class="text-danger mt-2" *ngIf="validInput('system_type')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('system_type')">
+            Minimum length is {{ getMinLength('system_type') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMaxLength('system_type')">
+            Maximum length is {{ getMaxLength('system_type') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('system_type')">
+            {{ getPatternMessage('system_type') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="interface_version" class="col-sm-6 label">Interface Version</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="interface_version" formControlName="interface_version">
+            @for (item of catalogInterfaces; track $index) {
+            <option value="{{ item.id }}">{{ item.version }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('interface_version')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="sessions_number" class="col-sm-6 label">Sessions Number</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="sessions_number" formControlName="sessions_number"
+            [class.is-invalid]="validInput('sessions_number')">
+          <span class="text-danger mt-2" *ngIf="validInput('sessions_number')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMin('sessions_number')">
+            Minimum is {{ getMin('sessions_number') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMax('sessions_number')">
+            Maximum is {{ getMax('sessions_number') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('sessions_number')">
+            {{ getPatternMessage('sessions_number') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="address_ton" class="col-sm-6 label">Address TON</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="address_ton" formControlName="address_ton">
+            @for (item of tonCatalog; track $index) {
+            <option value="{{ item.id }}">{{ item.description }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('address_ton')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('address_ton')">
+            {{ getPatternMessage('address_ton') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="address_npi" class="col-sm-6 label">Address NPI</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="address_npi" formControlName="address_npi">
+            @for (item of npiCatalog; track $index) {
+            <option value="{{ item.id }}">{{ item.description }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('address_npi')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('address_npi')">
+            {{ getPatternMessage('address_npi') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="address_range" class="col-sm-6 label">Address Range</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="address_range" formControlName="address_range"
+            [class.is-invalid]="validInput('address_range')">
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="messages_per_second_high" class="col-sm-6 label">Messages Per Second - High Priority</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="messages_per_second_high"
+            formControlName="messages_per_second_high"
+            [class.is-invalid]="validInput('messages_per_second_high') || validMin('messages_per_second_high') || validPattern('messages_per_second_high') || hasPriorityValidationError()">
+          <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_high')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_high')">
+            Minimum value is {{ getMin('messages_per_second_high') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_high')">
+            {{ getPatternMessage('messages_per_second_high') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="messages_per_second_medium" class="col-sm-6 label">Messages Per Second - Medium Priority</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="messages_per_second_medium"
+            formControlName="messages_per_second_medium"
+            [class.is-invalid]="validInput('messages_per_second_medium') || validMin('messages_per_second_medium') || validPattern('messages_per_second_medium') || hasPriorityValidationError()">
+          <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_medium')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_medium')">
+            Minimum value is {{ getMin('messages_per_second_medium') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_medium')">
+            {{ getPatternMessage('messages_per_second_medium') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="messages_per_second_low" class="col-sm-6 label">Messages Per Second - Low Priority</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="messages_per_second_low"
+            formControlName="messages_per_second_low"
+            [class.is-invalid]="validInput('messages_per_second_low') || validMin('messages_per_second_low') || validPattern('messages_per_second_low') || hasPriorityValidationError()">
+
+          <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_low')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_low')">
+            Minimum value is {{ getMin('messages_per_second_low') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_low')">
+            {{ getPatternMessage('messages_per_second_low') }}
+          </span>
+          <span class="text-danger mt-2 d-block" *ngIf="hasPriorityValidationError()">
+            At least one priority must be active.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="messages_per_second" class="col-sm-6 label">Messages Per Second (Total)</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="messages_per_second" formControlName="messages_per_second" readonly>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="enquire_link_period" class="col-sm-6 label">Enquire Link Period</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="enquire_link_period" formControlName="enquire_link_period"
+            [class.is-invalid]="validInput('enquire_link_period')">
+          <span class="text-danger mt-2" *ngIf="validInput('enquire_link_period')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('enquire_link_period')">
+            {{ getPatternMessage('enquire_link_period') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="request_dlr" class="col-sm-6 label">Request DLR</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="request_dlr" name="request_dlr" formControlName="request_dlr">
+            <option value="2">Transparent</option>
+            <option value="1">True</option>
+            <option value="0">False</option>
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('request_dlr')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="no_retry_error_code" class="col-sm-6 label">No Retry Error Code</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="no_retry_error_code" formControlName="no_retry_error_code"
+            [class.is-invalid]="validInput('bind_timeout')">
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="auto_retry_error_code" class="col-sm-6 label">Auto Retry Error Code</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="auto_retry_error_code" formControlName="auto_retry_error_code"
+            [class.is-invalid]="validInput('auto_retry_error_code')">
+          <span class="text-danger mt-2" *ngIf="validInput('auto_retry_error_code')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('auto_retry_error_code')">
+            {{ getPatternMessage('auto_retry_error_code') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="retry_alternate_destination_error_code" class="col-sm-6 label">Retry Alternate Destination Error
+          Code</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="retry_alternate_destination_error_code"
+            formControlName="retry_alternate_destination_error_code"
+            [class.is-invalid]="validInput('retry_alternate_destination_error_code')">
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="bind_timeout" class="col-sm-6 label">Bind Timeout</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="bind_timeout" formControlName="bind_timeout"
+            [class.is-invalid]="validInput('bind_timeout')">
+          <span class="text-danger mt-2" *ngIf="validInput('bind_timeout')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('bind_timeout')">
+            {{ getPatternMessage('bind_timeout') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="bind_retry_period" class="col-sm-6 label">Bind Retry Period</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="bind_retry_period" formControlName="bind_retry_period"
+            [class.is-invalid]="validInput('bind_retry_period')">
+          <span class="text-danger mt-2" *ngIf="validInput('bind_retry_period')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('bind_retry_period')">
+            {{ getPatternMessage('bind_retry_period') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="pdu_timeout" class="col-sm-6 label">{{ getValueForm('protocol') === 'SMPP' ? 'Pdu Timeout' :
+          'Timeout'}}</label>
+        <div class="col-sm-6">
+          <input type="number" class="form-control" id="pdu_timeout" formControlName="pdu_timeout"
+            [class.is-invalid]="validInput('pdu_timeout')">
+          <span class="text-danger mt-2" *ngIf="validInput('pdu_timeout')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('pdu_timeout')">
+            {{ getPatternMessage('pdu_timeout') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="pdu_degree" class="col-sm-6 label">Pdu Degree</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="pdu_degree" formControlName="pdu_degree"
+            [class.is-invalid]="validInput('pdu_degree')">
+          <span class="text-danger mt-2" *ngIf="validInput('pdu_degree')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('pdu_degree')">
+            {{ getPatternMessage('pdu_degree') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="thread_pool_size" class="col-sm-6 label">Thread Pool Size</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="thread_pool_size" formControlName="thread_pool_size"
+            [class.is-invalid]="validInput('thread_pool_size')">
+          <span class="text-danger mt-2" *ngIf="validInput('thread_pool_size')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMin('thread_pool_size')">
+            Minimum is {{ getMin('thread_pool_size') }}
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('thread_pool_size')">
+            {{ getPatternMessage('thread_pool_size') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="encoding_gsm7" class="col-sm-6 label">Encoding for DCS-0</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="encoding_gsm7" formControlName="encoding_gsm7">
+            @for (item of encodingList; track $index) {
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('encoding_gsm7')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('encoding_gsm7')">
+            {{ getPatternMessage('encoding_gsm7') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="encoding_iso88591" class="col-sm-6 label">Encoding for DCS-3</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="encoding_iso88591" formControlName="encoding_iso88591">
+            @for (item of encodingList; track $index) {
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('encoding_iso88591')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('encoding_iso88591')">
+            {{ getPatternMessage('encoding_iso88591') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="encoding_ucs2" class="col-sm-6 label">Encoding for DCS-8</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="encoding_ucs2" formControlName="encoding_ucs2">
+            @for (item of encodingList; track $index) {
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            }
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('encoding_ucs2')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validPattern('encoding_ucs2')">
+            {{ getPatternMessage('encoding_ucs2') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="split_message" class="col-sm-6 label">Split Message</label>
+        <div class="col-sm-6">
+          <input type="checkbox" class="form-check-input check_form" id="split_message" formControlName="split_message"
+            [class.is-invalid]="validInput('split_message')">
+          <span class="text-danger mt-2" *ngIf="validInput('split_message')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="split_smpp_type" class="col-sm-6 label">Split SMPP Type</label>
+        <div class="col-sm-6">
+          <select class="form-select" id="split_smpp_type" name="split_smpp_type" formControlName="split_smpp_type">
+            <option value="TLV" selected>TLV</option>
+            <option value="UDH">UDH</option>
+          </select>
+          <span class="text-danger mt-2" *ngIf="validInput('split_smpp_type')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="tls_enabled" class="col-sm-6 label">Enable TLS</label>
+        <div class="col-sm-6">
+          <input type="checkbox" class="form-check-input check_form" id="tls_enabled" formControlName="tls_enabled">
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

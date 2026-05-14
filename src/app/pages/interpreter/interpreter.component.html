@@ -1,0 +1,63 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center  mt-3">
+                <img src="/assets/img/globe-network-icon-2.png" alt="icon" height="40px" width="auto">
+                <label class="card-header title-content mb-0 ml-2"
+                    style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                    Interpreter by HTTP Gateways
+                </label>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-red mt-3" (click)="refresh()">
+                    <i class='bx bx-refresh'></i>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="table-responsive mt-4">
+                <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                    <thead>
+                        <tr>
+                            <th style="display: none;">id</th>
+                            <th>Gateway</th>
+                            <th>Event Type</th>
+                            <th>Direction</th>
+                            <th>Body Type</th>
+                            <th>Proxy</th>
+                            <th>Default Template</th>
+                            <th class="align-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data; let i = index">
+                            <td class="align-middle" style="display: none;">{{ item?.id }}</td>
+                            <td class="align-middle">{{ item?.gateway_id + '|' + item?.gateway_name }}</td>
+                            <td class="align-middle">{{ item?.event_type }}</td>
+                            <td class="align-middle">{{ item?.direction }}</td>
+                            <td class="align-middle">{{ item?.body_type }}</td>
+                            <td class="align-middle">{{ item?.use_proxy }}</td>
+                            <td class="align-middle">{{ item.default_template }}</td>
+                            <td class="align-center">
+                                <a class="btn btn-sm btn-outline-secondary me-2" title="view record" (click)="editData(item, true)"><i class='bx bxs-show'></i></a>
+                                <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="editData(item, false)"><i
+                                        class='bx bxs-pencil'></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalInterpreter" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <app-add (closeModal)="onCloseModal($event)" [dataUpdate]="module"></app-add>
+    </div>
+</div> 

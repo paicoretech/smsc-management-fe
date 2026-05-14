@@ -1,0 +1,66 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+            <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Submit Date</th>
+                    <td>{{ selectedLog.submit_date }}</td>
+                </tr>
+                <tr>
+                    <th>Delivery Date</th>
+                    <td>{{ selectedLog.delivery_date }}</td>
+                </tr>
+                <tr>
+                    <th>Message Id</th>
+                    <td>{{ selectedLog.message_id }}</td>
+                </tr>
+                <tr>
+                    <th>Sender (From)</th>
+                    <td>{{ selectedLog.addr_src_digits }}</td>
+                </tr>
+                <tr>
+                    <th>Destination (To)</th>
+                    <td>{{ selectedLog.addr_dst_digits }}</td>
+                </tr>
+                <tr>
+                    <th>Account</th>
+                    <td>{{ selectedLog.origination_network_name }}</td>
+                </tr>
+                <tr>
+                    <th>Destination Gateway</th>
+                    <td>{{ selectedLog.destination_network_name }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ selectedLog.status }}</td>
+                </tr>
+                <tr>
+                    <th>Message Type</th>
+                    <td>{{ selectedLog.message_type }}</td>
+                </tr>
+                <tr *ngIf="selectedLog.broadcast_id">
+                    <th>Broadcast Id</th>
+                    <td>{{ selectedLog.broadcast_id }}</td>
+                </tr>
+                <tr *ngIf="selectedLog.broadcast_id">
+                    <th>Broadcast Name</th>
+                    <td>{{ selectedLog.broadcast_name }}</td>
+                </tr>
+                <tr *ngIf="selectedLog.broadcast_id">
+                    <th>Username</th>
+                    <td>{{ selectedLog.broadcast_user_name }}</td>
+                </tr>
+                <tr>
+                    <th>MESSAGE PREVIEW</th>
+                    <td>{{ selectedLog.message }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

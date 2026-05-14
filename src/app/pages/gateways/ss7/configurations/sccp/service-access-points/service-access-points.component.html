@@ -1,0 +1,165 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Service Access Points</p>
+    <div style="display: flex; gap: 10px;">
+        <button *ngIf="isGatewayStarted()" 
+                type="button" 
+                class="btn btn-red" 
+                [disabled]="!hasUnsavedChanges || isHotReloadInProgress"
+                (click)="triggerHotReload()">
+            <i class='bx bx-refresh'></i>
+            <span *ngIf="isHotReloadInProgress">Reloading...</span>
+            <span *ngIf="!isHotReloadInProgress">Hot Reload</span>
+        </button>
+        <button type="button" class="btn btn-red" (click)="showModal(1)">
+            <i class='bx bx-plus'></i>Create
+        </button>
+    </div>
+</div>
+<hr style="margin: 0px;">
+<div>
+  <div class="table-responsive mt-4">
+    <table id="table-m3ua-server" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTriggerSap">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>OPC</th>
+          <th>Network Indicator</th>
+          <th>Local GT Digits</th>
+          <th class="align-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listSAP; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.name }}</td>
+            <td class="align-middle">{{ item?.origin_point_code }}</td>
+            <td class="align-middle">{{ item?.network_indicator }}</td>
+            <td class="align-middle">{{ item?.local_gt_digits }}</td>
+            <td class="align-center">
+                <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="openModalEditSAP(item)"><i class='bx bxs-pencil'></i></button>
+                <button class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="showConfirmationDeleteSAP(item)"><i class='bx bxs-trash-alt'></i></button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br>
+
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">MTP3 Destinations</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(2)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+
+<div>
+  <div class="table-responsive mt-4">
+    <table id="table-m3ua-associations" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTriggerMtp3">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>SAP ID</th>
+            <th>Name</th>
+            <th>First PC</th>
+            <th>Last PC</th>
+            <th>First SLS</th>
+            <th>Last SLS</th>
+            <th>SLS Mask</th>
+            <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listMtp3; let i = index">
+                <td class="align-middle">{{ item.id }}</td>
+                <td class="align-middle">{{ item?.sccp_sap_id }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.first_point_code }}</td>
+                <td class="align-middle">{{ item?.last_point_code }}</td>
+                <td class="align-middle">{{ item?.first_sls }}</td>
+                <td class="align-middle">{{ item?.sls_mask }}</td>
+                <td class="align-middle">{{ item?.sls_mask }}</td>
+                <td class="align-center">
+                    <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="openModalEditMtp3(item)"><i class='bx bxs-pencil'></i></button>
+                    <button class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="showConfirmationDeleteMtp3(item)"><i class='bx bxs-trash-alt'></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<br>
+
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Long Message Rules</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(3)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+
+<div>
+  <div class="table-responsive mt-4">
+    <table id="table-long-message-rules" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTriggerLongMessage">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>SAP ID</th>
+            <th>First PC</th>
+            <th>Last PC</th>
+            <th>Long Message Rule Type</th>
+            <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listLongMessage; let i = index">
+                <td class="align-middle">{{ item.id }}</td>
+                <td class="align-middle">{{ item?.sccp_sap_id }}</td>
+                <td class="align-middle">{{ item?.first_point_code }}</td>
+                <td class="align-middle">{{ item?.last_point_code }}</td>
+                <td class="align-middle">{{ item?.long_message_rule_type }}</td>
+                <td class="align-center">
+                    <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="openModalEditLongMessageRule(item)"><i class='bx bxs-pencil'></i></button>
+                    <button class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="showConfirmationDeleteLongMessageRule(item)"><i class='bx bxs-trash-alt'></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalServiceAccess" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-add-service-access-point [dataId]="sccpId" [dataUpdate]="serviceAccess" (closeModal)="onCloseModal($event, 1)" />
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalMtp3Destination" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <app-add-mtp3-destination [dataListSAP]="listSAP" [dataUpdate]="mtp3Destination" (closeModal)="onCloseModal($event, 2)" />
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalLongMessageRule" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <app-add-long-message-rule [dataListSAP]="listSAP" [dataUpdate]="longMessageRule" (closeModal)="onCloseModal($event, 3)" />
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDelete" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+    </div>
+</div>

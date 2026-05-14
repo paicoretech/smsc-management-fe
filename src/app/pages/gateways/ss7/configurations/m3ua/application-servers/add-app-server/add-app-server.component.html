@@ -1,0 +1,189 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="name" class="col-sm-5 label">Name</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="name" formControlName="name"
+                    [class.is-invalid]="validInput('name')">
+                  <span class="text-danger mt-2" *ngIf="validInput('name')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="functionality" class="col-sm-5 label">Functionality</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                  <select class="form-select" id="functionality" name="functionality" formControlName="functionality">
+                  <option *ngFor="let item of functionalityList" [value]="item.id">{{ item.name }}</option>
+                  </select>
+                  <span class="text-danger mt-2" *ngIf="validInput('functionality')">
+                  the field is required
+                  </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="exchange" class="col-sm-5 label">Exchange</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+                  <select class="form-select" id="exchange" name="exchange" formControlName="exchange">
+                  <option value="SE">SE</option>
+                  <option value="DE">DE</option>
+                  </select>
+                  <span class="text-danger mt-2" *ngIf="validInput('exchange')">
+                  the field is required
+                  </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="form-group row mb-2">
+                  <label for="routing_context" class="col-sm-5 label">Routing Context</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="routing_context" formControlName="routing_context"
+                      [class.is-invalid]="validInput('routing_context')">
+                    <span class="text-danger mt-2" *ngIf="validInput('routing_context')">
+                      the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('routing_context')">
+                      {{ getPatternMessage('routing_context') }}
+                    </span>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="form-group row mb-2">
+                  <label for="network_appearance" class="col-sm-5 label">Network Appearance</label>
+                  <div class="col-sm-7">
+                    <input type="text" class="form-control" id="network_appearance" formControlName="network_appearance"
+                      [class.is-invalid]="validInput('network_appearance')">
+                    <span class="text-danger mt-2" *ngIf="validInput('network_appearance')">
+                      the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('network_appearance')">
+                      {{ getPatternMessage('network_appearance') }}
+                    </span>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="form-group row mb-2">
+                <label for="traffic_mode" class="col-sm-5 label">Traffic Mode</label>
+                <div class="col-sm-7" style="padding-left: 10px;">
+                    <select class="form-select" id="traffic_mode" name="traffic_mode" formControlName="traffic_mode">
+                        <option *ngFor="let item of traficModeList" [value]="item.id">{{ item.name }}</option>
+                    </select>
+                    <span class="text-danger mt-2" *ngIf="validInput('traffic_mode')">
+                    the field is required
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="minuimum_asp_for_loadshare" class="col-sm-5 label">Minumum ASP for loadshare</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="minuimum_asp_for_loadshare" formControlName="minuimum_asp_for_loadshare"
+                    [class.is-invalid]="validInput('minuimum_asp_for_loadshare')">
+                  <span class="text-danger mt-2" *ngIf="validInput('minuimum_asp_for_loadshare')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('minuimum_asp_for_loadshare')">
+                    {{ getPatternMessage('minuimum_asp_for_loadshare') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-8 col-md-10 col-sm-12 col-xs-12 mx-auto">
+            <div formArrayName="aspList" class="">
+              <div class="card" style="border: none; box-shadow: none;">
+                <form [formGroup]="formTarget" class="row mt-3 mb-2 d-flex justify-content-center">
+                  <h6 class="modal-title text-center mx-auto mb-2">ASP List</h6>
+
+                  <div class="form-group row mb-2">
+                    <label for="asp" class="col-sm-6 label">ASP</label>
+                    <div class="col-sm-6">
+                     <select class="form-select" id="asp" formControlName="asp">
+                      <option *ngFor="let item of associationList" [value]="item.id">{{ item.asp_name }}</option>
+                    </select>
+                    <span class="text-danger mt-2" *ngIf="formTarget.get('asp')?.invalid && formTarget.get('asp')?.touched">
+                      This field is required
+                    </span>
+                    </div>
+                  </div>
+
+                  <button class="btn btn-red" style="width: 30%; float: right !important;" 
+                  type="submit" [disabled]="formTarget.invalid" (click)="addToAspList()">Add</button>
+
+                </form>
+              </div>
+
+              <div class="table-responsive mt-4 mb-2">
+                <ul class="list-group" cdkDropList (cdkDropListDropped)="drop($event)">
+                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center fw-bold">
+                    <span class="me-2" style="color: #000;">ASP</span>
+                    <span style="color: #000;">Actions</span>
+                  </li>
+                  <ng-container *ngFor="let item of aspListControls; let i = index">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" cdkDrag>
+                      <span class="align-middle">{{ item.get('asp_name')?.value }}</span>
+                      <span class="align-center">
+                        <button class="btn btn-sm btn-danger me-2" type="button" (click)="removeFromAspList(i)" title="Delete record">
+                          <i class='bx bxs-trash-alt'></i>
+                        </button>
+                      </span>
+                    </li>
+                  </ng-container>
+                  
+                  <div *ngIf="form.get('aspList')?.errors?.['minArrayLength']" class="text-danger">
+                        You must add a  minimum of one ASP to the list!
+                  </div>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>

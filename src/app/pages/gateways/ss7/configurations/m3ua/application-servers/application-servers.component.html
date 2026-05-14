@@ -1,0 +1,53 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Application Servers</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(true)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+<div class="table-responsive mt-4">
+    <table id="table-m3ua-app-server" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>State</th>
+          <th>Functionality</th>
+          <th>Routing Context</th>
+          <th>Network Appearance</th>
+          <th class="align-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listApplicationServers; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.name }}</td>
+            <td class="align-middle">{{ item?.state }}</td>
+            <td class="align-middle">{{ item?.functionality }}</td>
+            <td class="align-middle">{{ item?.routing_context }}</td>
+            <td class="align-middle">{{ item?.network_appearance }}</td>
+            <td class="align-center">
+              <button class="btn btn-sm btn-red me-2" (click)="editData(item)" title="Edit record"><i class='bx bxs-pencil'></i></button>
+              <button class="btn btn-sm btn-secondary me-2"  title="Delete record" (click)="showDeleteModal(item)"><i class='bx bxs-trash-alt'></i></button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddAppServer" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <app-add-app-server [dataUpdate]="dataServer" (closeModal)="onCloseModal($event)" />
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteAppServer" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+    </div>
+</div>

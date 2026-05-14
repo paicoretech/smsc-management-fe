@@ -1,0 +1,39 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="/assets/img/settings-icon-2.png" alt="icon" height="40px" width="auto">
+                <label class="card-header title-content mb-0 ml-2"
+                    style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                    Settings
+                </label>
+            </div>
+        </div>
+        <div class="ps-3 pe-3 pb-4 mt-2 bg-white">
+            <!-- tabs -->
+            <ul class="nav nav-tabs mt-4" (click)="changeTab($event)" id="options">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'general'">General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'smpp'" aria-current="page">SMPP Server</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'http'">HTTP Server</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" [class.show]="activeTab === 'general'" [class.active]="activeTab === 'general'" id="general">
+                    <app-general />
+                </div>
+                <div class="tab-pane fade" [class.show]="activeTab === 'smpp'" [class.active]="activeTab === 'smpp'" id="smpp">
+                    <app-smpp *ngIf="activeTab === 'smpp'" />
+                </div>
+                <div class="tab-pane fade" [class.show]="activeTab === 'http'" [class.active]="activeTab === 'http'" id="http">
+                    <app-http *ngIf="activeTab === 'http'" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

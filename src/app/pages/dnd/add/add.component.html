@@ -1,0 +1,69 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" class="row g-3 d-flex justify-content-center" (submit)="save()" class="row g-3">
+
+      <div class="form-group row mb-2">
+        <label for="name" class="col-sm-5 label">Name</label>
+        <div class="col-sm-7">
+          <input id="name" type="text" class="form-control" formControlName="name" />
+          <span class="text-danger mt-2" *ngIf="isInvalid('name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="dnd_type" class="col-sm-5 label">DND Type</label>
+        <div class="col-sm-7">
+          <select id="dnd_type" class="form-select" formControlName="dnd_type" (change)="onDndTypeChange()">
+            <option value="GLOBAL">GLOBAL</option>
+            <option value="SENDER">SENDER</option>
+            <option value="NETWORK_ID">NETWORK_ID</option>
+          </select>
+          <span class="text-danger mt-2" *ngIf="isInvalid('dnd_type')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" *ngIf="showSenderInput">
+        <label for="dnd_value_sender" class="col-sm-5 label">Sender</label>
+        <div class="col-sm-7">
+          <input id="dnd_value_sender" type="text" class="form-control" formControlName="dnd_value" />
+          <span class="text-danger mt-2" *ngIf="isInvalid('dnd_value')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" *ngIf="showNetworkSelect">
+        <label for="dnd_value_network" class="col-sm-5 label">Origin Account</label>
+        <div class="col-sm-7">
+          <select id="dnd_value_network" class="form-select" formControlName="dnd_value">
+            <option *ngFor="let net of networksList" [value]="net.network_id">{{ net.name }}</option>
+          </select>
+          <span class="text-danger mt-2" *ngIf="isInvalid('dnd_value')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="file" class="col-sm-5 label">File</label>
+        <div class="col-sm-7">
+          <input id="file" type="file" class="form-control" (change)="onFileChange($event)" accept=".csv,.txt" />
+          <span class="text-danger mt-2" *ngIf="fileError">{{ fileError }}</span>
+        </div>
+      </div>
+ 
+      <button class="btn btn-red m-auto mt-5" style="width: 60%;" [disabled]="form.invalid || !selectedFile" type="submit">Save</button>
+
+    </form>
+  </div>
+</div>

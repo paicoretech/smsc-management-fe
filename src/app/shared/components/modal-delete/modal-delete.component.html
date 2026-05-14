@@ -1,0 +1,15 @@
+<div class="modal-content modal-delete-m">
+    <div class="modal-body mt-5 text-center">
+        <p>{{ mensaje }}</p>
+    </div>
+    <div class="m-2 text-center">
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-no" data-dismiss="modal" (click)="onConfirmAction()">{{ cancelButtonText }}</button>
+            </div>
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-yes" (click)="onConfirmAction(true)">{{ confirmButtonText }}</button>
+            </div>
+        </div>
+    </div>
+</div>

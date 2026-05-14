@@ -1,0 +1,134 @@
+<div class="d-flex" style="max-width: 100vw; overflow-x: hidden;">
+
+    <div class="content-wrapper ps-2 pe-2 flex-grow-1">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center  mt-3">
+                    <img src="/assets/img/view.png" alt="icon" height="40px" width="auto">
+                     <nav aria-label="breadcrumb" class="ms-2">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item mt-4 not-bredcrumb">
+                               <a [routerLink]="'../report'" class="card-header title-content mb-0 ml-2"
+                                        style="font-size: 18px; font-weight: 500; color: #1d609d; margin-left: 0px;">
+                                    Analyze Reports
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" style="margin-top: 20px; color: #7B3031; font-size: 18px;" aria-current="page">
+                                <label class="mt-1">Download History</label>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="mt-2">
+                <a [routerLink]="'../report'" class="btn  px-3 py-1" style="font-size: 16px; color: #7B3031; font-weight: 700;">
+                    &lt; Back to Reports
+                </a>
+            </div>
+            <!-- Search Section -->
+            <div class="d-flex mt-4">
+                <div class="form-group mb-0 me-3">
+                    <label for="reportType">Report Content</label>
+                    <ng-select [items]="reportOptions" bindLabel="label" bindValue="value" style="min-width: 350px" appendTo="body" placeholder="ALL"
+                        [(ngModel)]="reportType" [clearable]="true">
+                    </ng-select>
+                </div>
+
+                <div class="form-group mb-0 me-3">
+                    <label for="startDate">Start Date</label>
+                    <input
+                    type="date"
+                    class="form-control"
+                    id="startDate"
+                    name="startDate"
+                    [(ngModel)]="startDate"
+                    />
+                </div>
+
+                <div class="form-group mb-0 me-3">
+                    <label for="endDate">End Date</label>
+                    <input
+                    type="date"
+                    class="form-control"
+                    id="endDate"
+                    name="endDate"
+                    [(ngModel)]="endDate"
+                    />
+                </div>
+
+                <div class="mt-4">
+                    <button class="btn btn-red me-2" (click)="refresh()">
+                        Apply
+                    </button>
+                    <button type="button" class="btn btn-red" (click)="refresh()">
+                        <i class='bx bx-refresh'></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="mt-4">
+                <div *ngIf="data.length === 0" class="border rounded p-3 shadow-sm bg-white text-center text-muted">
+                    <p class="mb-0">No download history found.</p>
+                </div>
+                <table *ngIf="data.length > 0" id="tableExample" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th class="invisible-header"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of data; let i = index">
+                            <td>{{ item.id }}</td>
+                            <td>
+                                <div class="border rounded p-3 shadow-sm bg-white">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">{{ item.file_name }}</h6>
+                                            <p class="mb-0 text-muted">Created by {{ item.created_by }}</p>
+                                            <p class="mb-0 text-muted">Updated at {{ item.updated_at | date: 'yyyy-MM-dd HH:mm:ss' }}</p>
+                                            <p class="fw-bold">{{ getReportName(item) }} Report</p>
+                                        </div>
+
+                                        <div class="text-end ms-3 d-flex flex-column align-items-end">
+                                            <small class="fw-bold mb-1"
+                                                [ngClass]="{
+                                                    'text-primary': item.status === 'CREATING',
+                                                    'text-success': item.status === 'COMPLETED',
+                                                    'text-danger': item.status === 'FAILED',
+                                                    'text-secondary': item.status === 'TOKEN_EXPIRED'
+                                                }">
+                                                {{ item.status }}
+                                            </small>
+
+                                            <div class="progress mb-2" style="height: 5px; width: 100px;">
+                                                <div class="progress-bar"
+                                                    [ngClass]="{
+                                                        'bg-primary': item.status === 'CREATING',
+                                                        'bg-success': item.status === 'COMPLETED',
+                                                        'bg-danger': item.status === 'FAILED',
+                                                        'bg-secondary': item.status === 'TOKEN_EXPIRED'
+                                                    }"
+                                                    style="width: 100%;">
+                                                </div>
+                                            </div>
+                                            <button 
+                                                *ngIf="item.status === 'COMPLETED'"
+                                                class="btn btn-sm mt-auto" 
+                                                style="background-color: #7B3031; color: white;"
+                                                (click)="downloadFile(item)">
+                                            Download
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>

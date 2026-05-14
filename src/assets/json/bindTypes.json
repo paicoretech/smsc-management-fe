@@ -1,0 +1,16 @@
+{
+    "status": "200",
+    "message": "success",
+    "comment": "",
+    "data": [
+        {
+            "name": "TRANSMITTER"
+        },
+        {
+            "name": "RECEIVER"
+        },
+        {
+            "name": "TRANSCEIVER"
+        }
+    ]
+}

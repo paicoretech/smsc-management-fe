@@ -1,0 +1,15 @@
+<div class="card--container">
+    @for (item of totalList; track $index) {
+        <div class="card--wrapper">
+            <div class="info--card">
+                <div class="card--header">
+                    <div class="content">
+                        <span class="content-title">{{ item.title }}</span>
+                        <span class="content-value">{{ item.total }}</span>
+                    </div>
+                    <i class="icon + {{ item.icon }}"></i>
+                </div>
+            </div>
+        </div>
+    }
+</div>

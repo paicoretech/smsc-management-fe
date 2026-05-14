@@ -1,0 +1,860 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" class="row g-3 d-flex justify-content-center" (submit)="save()">
+
+      <input type="text" hidden id="id" formControlName="id">
+
+      <div class="row">
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="origin_network_id" class="col-sm-6 label">Origin Network</label>
+            <div class="col-sm-6">
+              <select class="form-select" id="origin_network_id" formControlName="origin_network_id"
+                (change)="onOriginNetworkChange()">
+                @for (item of networksList; track $index) {
+                <option value="{{ item.network_id }}">{{ item.network_id + ' | ' +item.name }}</option>
+                }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('origin_network_id')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+        </div>
+      </div>
+
+      <div class="accordion" id="accordionFilters">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button custom-accordion-header collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseOne" aria-controls="collapseOne"
+              [attr.aria-expanded]="accordionA ? 'true' : 'false'">
+              Filters
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="collapseOne"
+            [ngClass]="{ 'show': accordionA }">
+            <div class="accordion-body">
+              <div class="row mt-2">
+                <div class="col-sm-8">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row mb-2">
+                        <label for="regex_source_addr" class="col-sm-6 label">Regex Source Address</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_source_addr"
+                            formControlName="regex_source_addr" [class.is-invalid]="validInput('regex_source_addr')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_source_addr')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="regex_source_addr_ton" class="col-sm-6 label">Regex Source Address TON</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_source_addr_ton"
+                            formControlName="regex_source_addr_ton"
+                            [class.is-invalid]="validInput('regex_source_addr_ton')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_source_addr_ton')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('regex_source_addr_ton')">
+                            {{ getPatternMessage('regex_source_addr_ton') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="regex_source_addr_npi" class="col-sm-6 label">Regex Source Address NPI</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_source_addr_npi"
+                            formControlName="regex_source_addr_npi"
+                            [class.is-invalid]="validInput('regex_source_addr_npi')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_source_addr_npi')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <div class="form-group row mb-2">
+                        <label for="regex_destination_addr" class="col-sm-6 label">Regex Destination Address</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_destination_addr"
+                            formControlName="regex_destination_addr"
+                            [class.is-invalid]="validInput('regex_destination_addr')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_destination_addr')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="regex_dest_addr_ton" class="col-sm-6 label">Regex Destination Address TON</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_dest_addr_ton"
+                            formControlName="regex_dest_addr_ton"
+                            [class.is-invalid]="validInput('regex_dest_addr_ton')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_dest_addr_ton')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('regex_dest_addr_ton')">
+                            {{ getPatternMessage('regex_dest_addr_ton') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="regex_dest_addr_npi" class="col-sm-6 label">Regex Destination Address NPI</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="regex_dest_addr_npi"
+                            formControlName="regex_dest_addr_npi"
+                            [class.is-invalid]="validInput('regex_dest_addr_npi')">
+                          <span class="text-danger mt-2" *ngIf="validInput('regex_dest_addr_npi')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('regex_dest_addr_npi')">
+                            {{ getPatternMessage('regex_dest_addr_npi') }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="regex_short_message" class="col-sm-3 label">Regex Short Message</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="regex_short_message"
+                        formControlName="regex_short_message" [class.is-invalid]="validInput('regex_short_message')">
+                      <span class="text-danger mt-2" *ngIf="validInput('regex_short_message')">
+                        the field is required
+                      </span>
+                      <span class="text-danger mt-2" *ngIf="validPattern('regex_short_message')">
+                        Regex is invalid
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group row mb-2">
+                    <label for="regex_imsi_digits_mask" class="col-sm-6 label">Regex IMSI Digits Mask</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="regex_imsi_digits_mask"
+                        formControlName="regex_imsi_digits_mask"
+                        [class.is-invalid]="validInput('regex_imsi_digits_mask')">
+                      <span class="text-danger mt-2" *ngIf="validInput('regex_imsi_digits_mask')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="regex_network_node_number" class="col-sm-6 label">Regex Network Node Number</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="regex_network_node_number"
+                        formControlName="regex_network_node_number"
+                        [class.is-invalid]="validInput('regex_network_node_number')">
+                      <span class="text-danger mt-2" *ngIf="validInput('regex_network_node_number')">
+                        the field is required
+                      </span>
+                      <span class="text-danger mt-2" *ngIf="validPattern('regex_network_node_number')">
+                        {{ getPatternMessage('regex_network_node_number') }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="regex_calling_party_address" class="col-sm-6 label">Regex Calling Party Address</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="regex_calling_party_address"
+                        formControlName="regex_calling_party_address"
+                        [class.is-invalid]="validInput('regex_calling_party_address')">
+                      <span class="text-danger mt-2" *ngIf="validInput('regex_calling_party_address')">
+                        the field is required
+                      </span>
+                      <span class="text-danger mt-2" *ngIf="validPattern('regex_calling_party_address')">
+                        {{ getPatternMessage('regex_calling_party_address') }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="is_sri_response" class="col-sm-6 label">is SRI Response </label>
+                    <div class="col-sm-6">
+                      <input type="checkbox" class="form-check-input check_form" id="is_sri_response"
+                        formControlName="is_sri_response" [class.is-invalid]="validInput('is_sri_response')"
+                        (change)="onChangeSRI()">
+                      <span class="text-danger mt-2" *ngIf="validInput('is_sri_response')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mt-2">
+
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="card">
+                    <form [formGroup]="formFields" class="row mt-3 mb-2 d-flex justify-content-center">
+                      <h6 class="modal-title text-center mx-auto mb-2">Custom Parameter Matcher</h6>
+
+                      <div class="form-group row mb-2">
+                        <label for="property_name" class="col-sm-4 label">Property Name</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="property_name" formControlName="property_name"
+                            [class.is-invalid]="validInput('property_name')">
+                          <span class="text-danger mt-2" *ngIf="validInput('property_name')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="value_matcher" class="col-sm-4 label">Value Matcher</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="value_matcher" formControlName="value_matcher"
+                            [class.is-invalid]="validInput('value_matcher')">
+                          <span class="text-danger mt-2" *ngIf="validInput('value_matcher')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <button class="btn btn-red" style="width: 30%; float: right !important;"
+                        [disabled]="formFields.invalid" type="button" (click)="addCustomParams()">Add</button>
+                    </form>
+                  </div>
+
+                </div>
+
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                  <div class="table-responsive mb-2">
+                    <table class="table table-hover" cdkDropList
+                      (cdkDropListDropped)="dropRowTableCustomParams($event)">
+                      <thead>
+                        <tr>
+                          <td class="fw-bold">Property Name</td>
+                          <td class="fw-bold">Value Matcher</td>
+                          <td></td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of customParamsList; let i = index" cdkDrag>
+                          <td>{{ item.property_name }}</td>
+                          <td>{{ item.value_matcher }}</td>
+                          <td>
+                            <button class="btn btn-sm btn-danger" type="button" title="Delete record"
+                              (click)="removeCustomParams(i)">
+                              <i class="bx bxs-trash-alt"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center align-items-center">
+                      <label class="align-items-center" [hidden]="customParamsList.length != 0">Not display data</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button custom-accordion-header collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo" aria-controls="collapseTwo"
+              [attr.aria-expanded]="accordionB ? 'true' : 'false'">
+              Actions
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            [ngClass]="{ 'show': accordionB }">
+            <div class="accordion-body">
+
+              <div class="row mt-2">
+                <div class="col-sm-8">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group row mb-2">
+                        <label for="new_source_addr" class="col-sm-6 label">New Source Address</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="new_source_addr" formControlName="new_source_addr"
+                            [class.is-invalid]="validInput('new_source_addr')">
+                          <span class="text-danger mt-2" *ngIf="validInput('new_source_addr')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="remove_source_addr_prefix" class="col-sm-6 label">Remove Source Address
+                          Prefix</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="remove_source_addr_prefix"
+                            formControlName="remove_source_addr_prefix"
+                            [class.is-invalid]="validInput('remove_source_addr_prefix')">
+                          <span class="text-danger mt-2" *ngIf="validInput('remove_source_addr_prefix')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('remove_source_addr_prefix')">
+                            {{ getPatternMessage('remove_source_addr_prefix') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="add_source_addr_prefix" class="col-sm-6 label">Add Source Address Prefix</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="add_source_addr_prefix"
+                            formControlName="add_source_addr_prefix"
+                            [class.is-invalid]="validInput('add_source_addr_prefix')">
+                          <span class="text-danger mt-2" *ngIf="validInput('add_source_addr_prefix')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('add_source_addr_prefix')">
+                            {{ getPatternMessage('add_source_addr_prefix') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="new_source_addr_ton" class="col-sm-6 label">New Source Address TON</label>
+                        <div class="col-sm-6">
+                          <select class="form-select" id="new_source_addr_ton" formControlName="new_source_addr_ton">
+                            @for (item of newSourceAddressTonList; track $index) {
+                            <option value="{{ item.id }}">{{ item.description }}</option>
+                            }
+                          </select>
+                          <span class="text-danger mt-2" *ngIf="validInput('new_source_addr_ton')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="new_source_addr_npi" class="col-sm-6 label">New Source Address NPI</label>
+                        <div class="col-sm-6">
+                          <select class="form-select" id="new_source_addr_npi" formControlName="new_source_addr_npi">
+                            @for (item of newSourceAddressNpiList; track $index) {
+                            <option value="{{ item.id }}">{{ item.description }}</option>
+                            }
+                          </select>
+                          <span class="text-danger mt-2" *ngIf="validInput('new_source_addr_npi')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="diameter_charging" class="col-sm-6 label">
+                          Diameter Charging
+                          <img src="assets/img/crown.png" alt="premium" style="width: 16px; height: 16px; margin-left: 4px;">
+                        </label>
+                        <div class="col-sm-6">
+                          <input type="checkbox" class="form-check-input check_form" id="diameter_charging"
+                            (change)="onChangeDiameterCharging()" formControlName="diameter_charging"
+                            [class.is-invalid]="validInput('diameter_charging')">
+                          <span class="text-danger mt-2" *ngIf="validInput('diameter_charging')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                      <div class="form-group row mb-2">
+                        <label for="new_destination_addr" class="col-sm-6 label">New Destination Address</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="new_destination_addr"
+                            formControlName="new_destination_addr"
+                            [class.is-invalid]="validInput('new_destination_addr')">
+                          <span class="text-danger mt-2" *ngIf="validInput('new_destination_addr')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="remove_dest_addr_prefix" class="col-sm-6 label">Remove Destination Address
+                          Prefix</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="remove_dest_addr_prefix"
+                            formControlName="remove_dest_addr_prefix"
+                            [class.is-invalid]="validInput('remove_dest_addr_prefix')">
+                          <span class="text-danger mt-2" *ngIf="validInput('remove_dest_addr_prefix')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('remove_dest_addr_prefix')">
+                            {{ getPatternMessage('remove_dest_addr_prefix') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="add_dest_addr_prefix" class="col-sm-6 label">Add Destination Address Prefix</label>
+                        <div class="col-sm-6">
+                          <input type="text" class="form-control" id="add_dest_addr_prefix"
+                            formControlName="add_dest_addr_prefix"
+                            [class.is-invalid]="validInput('add_dest_addr_prefix')">
+                          <span class="text-danger mt-2" *ngIf="validInput('add_dest_addr_prefix')">
+                            the field is required
+                          </span>
+                          <span class="text-danger mt-2" *ngIf="validPattern('add_dest_addr_prefix')">
+                            {{ getPatternMessage('add_dest_addr_prefix') }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="new_dest_addr_ton" class="col-sm-6 label">New Destination Address TON</label>
+                        <div class="col-sm-6">
+                          <select class="form-select" id="new_dest_addr_ton" formControlName="new_dest_addr_ton">
+                            @for (item of newDestAddrTonList; track $index) {
+                            <option value="{{ item.id }}">{{ item.description }}</option>
+                            }
+                          </select>
+                          <span class="text-danger mt-2" *ngIf="validInput('new_dest_addr_ton')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2">
+                        <label for="new_dest_addr_npi" class="col-sm-6 label">New Destination Address NPI</label>
+                        <div class="col-sm-6">
+                          <select class="form-select" id="new_dest_addr_npi" formControlName="new_dest_addr_npi">
+                            @for (item of newDestAddrNpiList; track $index) {
+                            <option value="{{ item.id }}">{{ item.description }}</option>
+                            }
+                          </select>
+                          <span class="text-danger mt-2" *ngIf="validInput('new_dest_addr_npi')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row mb-2 mt-2">
+                        <label for="apply_for_refund" class="col-sm-6 label">
+                          Apply Refund On Fail
+                          <img src="assets/img/crown.png" alt="premium" style="width: 16px; height: 16px; margin-left: 4px;">
+                        </label>
+                        <div class="col-sm-6">
+                          <input type="checkbox" class="form-check-input check_form" id="apply_for_refund"
+                            formControlName="apply_for_refund" [class.is-invalid]="validInput('apply_for_refund')">
+                          <span class="text-danger mt-2" *ngIf="validInput('apply_for_refund')">
+                            the field is required
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group row mb-2">
+                      <label for="new_short_message" class="col-sm-3 label d-flex align-items-center">
+                        New Short Message
+                        <img src="assets/img/crown.png" alt="premium" style="width:16px;height:16px;margin-left:4px;">
+                      </label>
+                      <div class="col-sm-9">
+                        <input type="text" class="form-control" id="new_short_message"
+                          formControlName="new_short_message" [class.is-invalid]="validInput('new_short_message')">
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row">
+                    <div class="form-group row mb-2">
+                      <label for="new_gt_sccp_addr" class="col-sm-3 label"
+                        [title]="tooltipText">
+                        New GT SCCP Address
+                        <img src="assets/img/crown.png" alt="premium" style="width: 16px; height: 16px; margin-left: 4px;">
+                      </label>
+                      <div class="col-sm-9">
+                        <input type="text" id="new_gt_sccp_addr" class="form-control" formControlName="new_gt_sccp_addr"
+                          (input)="cleanAndValidateNewGtSccpAddr()"
+                          [class.is-invalid]="form.get('new_gt_sccp_addr')?.invalid && form.get('new_gt_sccp_addr')?.touched">
+  
+                        <span class="text-danger mt-2" *ngIf="form.get('new_gt_sccp_addr')?.errors?.['invalidFormat']">
+                          {{ form.get('new_gt_sccp_addr')?.errors?.['invalidFormat'] }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group row mb-2">
+                    <label for="drop_map_sri" class="col-sm-6 label d-flex align-items-center">
+                      Drop after get MAP SRI Response
+                      <img src="assets/img/crown.png" alt="premium" style="width:16px;height:16px;margin-left:4px;">
+                    </label>
+                    <div class="col-sm-6">
+                      <input type="checkbox" class="form-check-input check_form" id="drop_map_sri"
+                        formControlName="drop_map_sri" [class.is-invalid]="validInput('drop_map_sri')">
+                      <span class="text-danger mt-2" *ngIf="validInput('drop_map_sri')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="network_id_to_map_sri" class="col-sm-6 label d-flex align-items-center">
+                      Reroute after get MAP SRI Response
+                      <img src="assets/img/crown.png" alt="premium" style="width:16px;height:16px;margin-left:4px;">
+                    </label>
+                    <div class="col-sm-6">
+                      <select class="form-select" id="network_id_to_map_sri" formControlName="network_id_to_map_sri">
+                        <option value="">Undefined</option>
+                        @for (item of networksListSs7; track $index) {
+                        <option value="{{ item.network_id }}">{{ item.network_id + ' | ' +item.name }}</option>
+                        }
+                      </select>
+                      <span class="text-danger mt-2" *ngIf="validInput('network_id_to_map_sri')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="network_id_to_permanent_failure" class="col-sm-6 label d-flex align-items-center">
+                      Reroute after get Permanent Failure
+                      <img src="assets/img/crown.png" alt="premium" style="width:16px;height:16px;margin-left:4px;">
+                    </label>
+                    <div class="col-sm-6">
+                      <select class="form-select" id="network_id_to_permanent_failure"
+                        formControlName="network_id_to_permanent_failure">
+                        <option value="">Undefined</option>
+                        @for (item of networksListSs7; track $index) {
+                        <option value="{{ item.network_id }}">{{ item.network_id + ' | ' +item.name }}</option>
+                        }
+                      </select>
+                      <span class="text-danger mt-2" *ngIf="validInput('network_id_to_permanent_failure')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2 d-none">
+                    <label for="drop_temp_failure" class="col-sm-6 label">Drop Temp Failure</label>
+                    <div class="col-sm-6">
+                      <input type="checkbox" class="form-check-input check_form" id="drop_temp_failure"
+                        formControlName="drop_temp_failure" [class.is-invalid]="validInput('drop_temp_failure')">
+                      <span class="text-danger mt-2" *ngIf="validInput('drop_temp_failure')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="network_id_temp_failure" class="col-sm-6 label">
+                      Reroute after get Temp Failure
+                      <img src="assets/img/crown.png" alt="premium" style="width: 16px; height: 16px; margin-left: 4px;">
+                    </label>
+                    <div class="col-sm-6">
+                      <select class="form-select" id="network_id_temp_failure" formControlName="network_id_temp_failure"
+                        (change)="onChangeState('network_id_temp_failure')">
+                        <option value="">Undefined</option>
+                        @for (item of networksListSs7; track $index) {
+                        <option value="{{ item.network_id }}">{{ item.network_id + ' | ' +item.name }}</option>
+                        }
+                      </select>
+                      <span class="text-danger mt-2" *ngIf="validInput('network_id_temp_failure')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row mb-2">
+                    <label for="check_sri_response" class="col-sm-6 label">
+                      Check SRI Response in the rules
+                      <img src="assets/img/crown.png" alt="premium" style="width: 16px; height: 16px; margin-left: 4px;">
+                    </label>
+                    <div class="col-sm-6">
+                      <input type="checkbox" class="form-check-input check_form" id="check_sri_response"
+                        formControlName="check_sri_response" [class.is-invalid]="validInput('check_sri_response')">
+                      <span class="text-danger mt-2" *ngIf="validInput('check_sri_response')">
+                        the field is required
+                      </span>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="row mt-2" [hidden]="!canView">
+                <div class="col-sm-12">
+                  <hr>
+                  <div class="card" style="width: 100%;">
+                    <div class="card-header">
+                      Advanced Actions
+                      <img src="assets/img/crown.png" alt="premium" style="width:16px;height:16px;margin-left:6px;">
+                    </div>
+                      <div class="card-body">
+                          <form [formGroup]="formAdvancedActions" class="row mt-3 mb-2 d-flex justify-content-center">
+                              <div class="row mb-2">
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="ssn_smsc_sri" class="col-sm-6 label">SSN SMSC SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="number" class="form-control" id="ssn_smsc_sri" formControlName="ssn_smsc_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="sccp_source_address_sri" class="col-sm-6 label">SCCP Source Address SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="sccp_source_address_sri" formControlName="sccp_source_address_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="operation_code_sri" class="col-sm-6 label">Operation Code For SRI</label>
+                                          <div class="col-sm-6">
+                                              <select class="form-select" id="operation_code_sri" formControlName="operation_code_sri">
+                                                  <option value="-1">Default</option>
+                                                  <option value="45">45-SM</option>
+                                                  <option value="22">22-VOICE</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-2">
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="ssn_smsc_mt" class="col-sm-6 label">SSN SMSC MT</label>
+                                          <div class="col-sm-6">
+                                              <input type="number" class="form-control" id="ssn_smsc_mt" formControlName="ssn_smsc_mt">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="sccp_source_address_mt" class="col-sm-6 label">SCCP Source Address MT</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="sccp_source_address_mt" formControlName="sccp_source_address_mt">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="operation_code_mt" class="col-sm-6 label">Operation Code For MT</label>
+                                          <div class="col-sm-6">
+                                              <select class="form-select" id="operation_code_mt" formControlName="operation_code_mt">
+                                                  <option value="-1">Default</option>
+                                                  <option value="44">44-MT</option>
+                                                  <option value="46">46-MO</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-2">
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="ssn_hlr_sri" class="col-sm-6 label">SSN HLR SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="number" class="form-control" id="ssn_hlr_sri" formControlName="ssn_hlr_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="sccp_destination_address_sri" class="col-sm-6 label">SCCP Destination Address SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="sccp_destination_address_sri" formControlName="sccp_destination_address_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="custom_map_layer_source_address_sri" class="col-sm-6 label">MAP Source Address SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="custom_map_layer_source_address_sri" formControlName="custom_map_layer_source_address_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-2">
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="ssn_msc_mt" class="col-sm-6 label">SSN MSC MT</label>
+                                          <div class="col-sm-6">
+                                              <input type="number" class="form-control" id="ssn_msc_mt" formControlName="ssn_msc_mt">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="sccp_destination_address_mt" class="col-sm-6 label">SCCP Destination Address MT</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="sccp_destination_address_mt" formControlName="sccp_destination_address_mt">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="custom_map_layer_source_address_mt" class="col-sm-6 label">MAP Source Address MT</label>
+                                          <div class="col-sm-6">
+                                              <input type="text" class="form-control" id="custom_map_layer_source_address_mt" formControlName="custom_map_layer_source_address_mt">
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-2">
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="priority_flag_sri" class="col-sm-6 label">Priority Flag SRI</label>
+                                          <div class="col-sm-6">
+                                              <input type="checkbox" class="form-check-input check_form" id="priority_flag_sri" formControlName="priority_flag_sri">
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="map_version" class="col-sm-6 label">MAP Version</label>
+                                          <div class="col-sm-6">
+                                              <select class="form-select" id="map_version" formControlName="map_version" (change)="onMapVersionChange($event)">
+                                                  <option value="-1" selected>Select...</option>
+                                                  <option value="2">2</option>
+                                                  <option value="3">3</option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-sm-4">
+                                      <div class="form-group row">
+                                          <label for="application_context_mt" class="col-sm-6 label">Application Context MT</label>
+                                          <div class="col-sm-6">
+                                              <select class="form-select" id="application_context_mt"
+                                                      formControlName="application_context_mt"
+                                                      [disabled]="applicationContextOptions.length === 0">
+                                                  <option *ngFor="let opt of applicationContextOptions" [value]="opt.value">
+                                                      {{ opt.label }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button custom-accordion-header collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"
+              [attr.aria-expanded]="accordionC ? 'true' : 'false'">
+              Destinations
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+            [ngClass]="{ 'show': accordionC }">
+            <div class="accordion-body mt-2">
+              <div formArrayName="destination" class="">
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <form [formGroup]="formTarget" class="row mt-3 mb-2 d-flex justify-content-center">
+                        <h6 class="modal-title text-center mx-auto mb-2">Destinations</h6>
+
+                        <div class="form-group row mb-2">
+                          <label for="priority" class="col-sm-6 label">Priority</label>
+                          <div class="col-sm-6">
+                            <input type="text" class="form-control" id="priority" formControlName="priority"
+                              [class.is-invalid]="validInput('priority')">
+                          </div>
+                        </div>
+
+                        <div class="form-group row mb-2">
+                          <label for="network_id" class="col-sm-6 label">Destination Network</label>
+                          <div class="col-sm-6">
+                            <select class="form-select" id="network_id" formControlName="network_id">
+                              <option value="">Select a network</option>
+                              @for (item of destinationNetwoksList; track $index) {
+                              <option value="{{ item.network_id }}">{{ item.network_id + ' | ' +item.name }}</option>
+                              }
+                            </select>
+                            <span class="text-danger mt-2" *ngIf="validInput('network_id')">
+                              the field is required
+                            </span>
+                          </div>
+                        </div>
+
+                        <button class="btn btn-red" style="width: 30%; float: right !important;"
+                          [disabled]="formTarget.invalid" type="button" (click)="addDestination()">Add</button>
+
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 col-sm-12 col-xs-12">
+                    <div class="table-responsive mb-2">
+                      <table class="table table-hover" cdkDropList (cdkDropListDropped)="drop($event)">
+                        <thead>
+                          <tr>
+                            <td class="fw-bold">Priority</td>
+                            <td class="fw-bold">Gateway</td>
+                            <td></td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of destinationList; let i = index" cdkDrag>
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ item.gateway_name }}</td>
+                            <td>
+                              <button class="btn btn-sm btn-danger" type="button" title="Delete record"
+                                (click)="removeDestination(i)">
+                                <i class="bx bxs-trash-alt"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div class="d-flex justify-content-center align-items-center">
+                        <label class="align-items-center" [hidden]="destinationList.length != 0">Not display
+                          data</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid" type="submit">Save</button>
+    </form>
+  </div>
+</div>

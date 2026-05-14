@@ -1,0 +1,111 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="name" class="col-sm-5 label">Name</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="name" formControlName="name"
+                  [class.is-invalid]="validInput('name')">
+                <span class="text-danger mt-2" *ngIf="validInput('name')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="socket" class="col-sm-5 label">Socket</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="m3ua_socket_id" name="socket" formControlName="m3ua_socket_id">
+              @for (item of listSockets; track $index) {
+              <option value="{{ item.id }}">{{ item.name }}</option>
+              }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('socket')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="peer_address" class="col-sm-5 label">Peer Address</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="peer" formControlName="peer"
+                  [class.is-invalid]="validInput('peer_address')">
+                <span class="text-danger mt-2" *ngIf="validInput('peer')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validMinLength('peer')">
+                  Minimum length is {{ getMinLength('peer') }}
+                </span>
+                <span class="text-danger mt-2" *ngIf="validMaxLength('peer')">
+                  Maximum length is {{ getMaxLength('peer') }}
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('peer')">
+                  {{ getPatternMessage('peer') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="peer_port" class="col-sm-5 label">Peer Port</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="peer_port" formControlName="peer_port"
+                  [class.is-invalid]="validInput('peer_port')">
+                <span class="text-danger mt-2" *ngIf="validInput('peer_port')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('peer_port')">
+                  {{ getPatternMessage('peer_port') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="form-group row mb-2">
+            <label for="heart_beat" class="col-sm-5 label">M3UA Heartbeat</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="m3ua_heartbeat" name="m3ua_heartbeat" formControlName="m3ua_heartbeat">
+                <option value="TRUE">TRUE</option>
+                <option value="FALSE">FALSE</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('heart_beat')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+          <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+        <div class="row">
+          <div class="form-group row mb-2">
+            <label for="rsp" class="col-sm-5 label">RSP</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" id="rsp" formControlName="rsp"
+                [class.is-invalid]="validInput('rsp')">
+              <span class="text-danger mt-2" *ngIf="validInput('rsp')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group row mb-2">
+              <label for="rss" class="col-sm-5 label">RSS</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="rss" formControlName="rss"
+                  [class.is-invalid]="validInput('rss')">
+                <span class="text-danger mt-2" *ngIf="validInput('rss')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+        </div>
+
+        <div class="form-group row mb-2">
+            <label for="mark_prohibited" class="col-sm-5 label">Mark Prohibite</label>
+            <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="mark_prohibited" name="mark_prohibited" formControlName="mark_prohibited">
+                <option value="TRUE">True</option>
+                <option value="FALSE">False</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('mark_prohibited')">
+                the field is required
+              </span>
+            </div>
+        </div>
+  
+        <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid">Save</button>
+  
+      </form>
+    </div>
+  </div>

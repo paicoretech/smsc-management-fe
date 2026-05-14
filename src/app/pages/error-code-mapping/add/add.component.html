@@ -1,0 +1,53 @@
+ <div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form  [formGroup]="form"  class="row g-3 d-flex justify-content-center" (submit)="save()">
+
+      <input type="text" hidden id="id" formControlName="id">
+
+      <div class="form-group row mb-2">
+        <label for="error_code_id" class="col-sm-6 label">Error Code</label>
+        <div class="col-sm-6">
+            <select class="form-select" id="error_code_id" formControlName="error_code_id">
+              <option *ngFor="let item of errorCodeList; let i = index" [value]="item.id">{{ item.code + ' - '+ item.description }}</option>
+            </select>
+            <span class="text-danger mt-2" *ngIf="validInput('error_code_id')">
+              the field is required
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="delivery_error_code_id" class="col-sm-6 label">Delivery Error Code</label>
+        <div class="col-sm-6">
+            <select class="form-select" id="delivery_error_code_id" formControlName="delivery_error_code_id">
+              <option *ngFor="let item of deliveryErrorCodeList; let i = index" [value]="item.id">{{ item.code + ' - '+ item.description }}</option>
+            </select>
+            <span class="text-danger mt-2" *ngIf="validInput('delivery_error_code_id')">
+              the field is required
+            </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="delivery_status_id" class="col-sm-6 label">Delivery Status</label>
+        <div class="col-sm-6">
+            <select class="form-select" id="delivery_status_id" formControlName="delivery_status_id">
+              <option *ngFor="let item of deliveryStatusList; let i = index" [value]="item.value">{{ item.name }}</option>
+            </select>
+            <span class="text-danger mt-2" *ngIf="validInput('delivery_status_id')">
+              the field is required
+            </span>
+        </div>
+      </div>
+
+      <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid" type="submit">Save</button>
+
+    </form>
+  </div>
+</div>

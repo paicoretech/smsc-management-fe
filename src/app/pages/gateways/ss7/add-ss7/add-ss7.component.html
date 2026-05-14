@@ -1,0 +1,571 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl grow container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img
+          src="/assets/img/base-station-icon-1.png"
+          alt="icon"
+          height="40px"
+          width="auto"
+        />
+
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item mt-4 not-bredcrumb">
+              <a
+                [routerLink]="ss7BasePath"
+                class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d"
+              >
+                Gateways SS7
+              </a>
+            </li>
+            @if (isEdit) {
+            <li class="breadcrumb-item mt-4">
+              <a
+                [routerLink]="'../'"
+                class="card-header title-content mb-0 ml-2"
+                style="
+                  font-size: 20px;
+                  font-weight: 500;
+                  color: #1d609d;
+                  margin-left: 0px;
+                "
+              >
+                {{ gatewaySs7 ? gatewaySs7.name : "" }}
+              </a>
+            </li>
+            }
+            <li
+              class="breadcrumb-item active"
+              style="margin-top: 22px; color: #7b3031; font-size: 18px"
+              aria-current="page"
+            >
+              <label class="mt-1">General</label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <br />
+    <form
+      [formGroup]="form"
+      (ngSubmit)="save()"
+      class="row g-3 d-flex justify-content-center"
+    >
+      <div class="col-12 mb-2">
+        <div
+          class="d-flex justify-content-between align-items-center border-bottom pb-2"
+        >
+          <h5 class="fw-bold">Gateway Settings</h5>
+          <button
+            class="btn btn-red"
+            [disabled]="form.invalid"
+            type="submit"
+            *ngIf="!isEdit"
+          >
+            Save Changes
+          </button>
+          <button
+            class="btn btn-red"
+            [disabled]="form.invalid || disabled || !isModified"
+            type="submit"
+            *ngIf="isEdit"
+          >
+            Update Changes
+          </button>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-6">
+          @if ( isEdit ) {
+          <div class="form-group row mb-2">
+            <label for="network_id" class="col-sm-4 label">Network Id</label>
+            <div class="col-sm-8">
+              <input
+                type="number"
+                class="form-control"
+                id="network_id"
+                formControlName="network_id"
+                [class.is-invalid]="validInput('network_id')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('network_id')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          }
+
+          <div class="form-group row mb-2">
+            <label for="name" class="col-sm-4 label">Name</label>
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name"
+                [class.is-invalid]="validInput('name')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('name')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="mno_id" class="col-sm-4 label">MNOs</label>
+            <div class="col-sm-8">
+              <select class="form-select" id="mno_id" formControlName="mno_id">
+                @for (item of mnoList; track $index) {
+                <option value="{{ item.id }}">{{ item.name }}</option>
+                }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('mno_id')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="messages_per_second_high" class="col-sm-6 label"
+              >Messages Per Second - High Priority</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="messages_per_second_high"
+                formControlName="messages_per_second_high"
+                [class.is-invalid]="validInput('messages_per_second_high') || validMin('messages_per_second_high') || validPattern('messages_per_second_high') || hasPriorityValidationError()"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_high')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_high')">
+                Minimum value is {{ getMin('messages_per_second_high') }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_high')">
+                {{ getPatternMessage('messages_per_second_high') }}
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2">
+            <label for="messages_per_second_low" class="col-sm-6 label"
+              >Messages Per Second - Low Priority</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="messages_per_second_low"
+                formControlName="messages_per_second_low"
+                [class.is-invalid]="validInput('messages_per_second_low') || validMin('messages_per_second_low') || validPattern('messages_per_second_low') || hasPriorityValidationError()"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_low')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_low')">
+                Minimum value is {{ getMin('messages_per_second_low') }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_low')">
+                {{ getPatternMessage('messages_per_second_low') }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="messages_per_second_medium" class="col-sm-6 label"
+              >Messages Per Second - Medium Priority</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="messages_per_second_medium"
+                formControlName="messages_per_second_medium"
+                [class.is-invalid]="validInput('messages_per_second_medium') || validMin('messages_per_second_medium') || validPattern('messages_per_second_medium') || hasPriorityValidationError()"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_medium')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_medium')">
+                Minimum value is {{ getMin('messages_per_second_medium') }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_medium')">
+                {{ getPatternMessage('messages_per_second_medium') }}
+              </span>
+                  <span class="text-danger mt-2 d-block" *ngIf="hasPriorityValidationError()">
+               At least one priority must be active.
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-2">
+            <label for="messages_per_second" class="col-sm-6 label">Messages Per Second (Total)</label>
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="messages_per_second"
+                formControlName="messages_per_second"
+                readonly
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="split_message" class="col-sm-6 label"
+              >Split Message</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="checkbox"
+                class="form-check-input check_form"
+                id="split_message"
+                formControlName="split_message"
+                [class.is-invalid]="validInput('split_message')"
+              />
+              <span
+                class="text-danger mt-2"
+                *ngIf="validInput('split_message')"
+              >
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="home_routing" class="col-sm-6 label">Home Routing</label>
+            <div class="col-sm-6">
+              <input type="checkbox" class="form-check-input check_form" id="home_routing" formControlName="home_routing"
+                [class.is-invalid]="validInput('home_routing')">
+              <span class="text-danger mt-2" *ngIf="validInput('home_routing')">
+                the field is required
+              </span>
+            </div>
+            <div class="col-md-6" *ngIf="flagsUi.showHssUpdate">
+              <div class="form-group row mb-2">
+                <label for="hss_update_enabled" class="col-sm-6 label">Allowed Registration Traffic</label>
+                <div class="col-sm-6">
+                  <input
+                    type="checkbox"
+                    class="form-check-input check_form"
+                    id="hss_update_enabled"
+                    formControlName="hss_update_enabled"
+                    [class.is-invalid]="validInput('hss_update_enabled')"
+                  />
+                  <span class="text-danger mt-2" *ngIf="validInput('hss_update_enabled')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6" *ngIf="flagsUi.showAllowedTraffic">
+              <div class="form-group row mb-2">
+                <label for="allowed_traffic" class="col-sm-6 label">Allowed SMS Traffic</label>
+                <div class="col-sm-6">
+                  <input
+                    type="checkbox"
+                    class="form-check-input check_form"
+                    id="allowed_traffic"
+                    formControlName="allowed_traffic"
+                    [class.is-invalid]="validInput('allowed_traffic')"
+                  />
+                  <span class="text-danger mt-2" *ngIf="validInput('allowed_traffic')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6" *ngIf="flagsUi.showAllowedUssi" >
+              <div class="form-group row mb-2">
+                <label for="allowed_ussi" class="col-sm-6 label">Allowed USSI</label>
+                <div class="col-sm-6">
+                  <input
+                    type="checkbox"
+                    class="form-check-input check_form"
+                    id="allowed_ussi"
+                    formControlName="allowed_ussi"
+                    [class.is-invalid]="validInput('allowed_ussi')"
+                  />
+                  <span class="text-danger mt-2" *ngIf="validInput('allowed_ussi')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fw-bold border-bottom pb-1 mb-3">
+        SMSC Global Title Settings
+      </h5>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="form-group row mb-2">
+            <label for="global_title" class="col-sm-4 label"
+              >SMSC Global Title</label
+            >
+            <div class="col-sm-8">
+              <input
+                type="text"
+                class="form-control"
+                id="global_title"
+                formControlName="global_title"
+                [class.is-invalid]="validInput('global_title')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('global_title')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
+            <label for="translation_type" class="col-sm-4 label"
+              >SMSC Global Title - Translation Type</label
+            >
+            <div class="col-sm-8">
+              <input
+                type="number"
+                class="form-control"
+                id="translation_type"
+                formControlName="translation_type"
+                [class.is-invalid]="validInput('translation_type')"
+              />
+              <span
+                class="text-danger mt-2"
+                *ngIf="validInput('translation_type')"
+              >
+                the field is required
+              </span>
+              <span
+                class="text-danger mt-2"
+                *ngIf="validMin('translation_type')"
+              >
+                Minimum length is {{ getMin("translation_type") }}
+              </span>
+              <span
+                class="text-danger mt-2"
+                *ngIf="validMax('translation_type')"
+              >
+                Maximum length is {{ getMax("translation_type") }}
+              </span>
+              <span
+                class="text-danger mt-2"
+                *ngIf="validPattern('translation_type')"
+              >
+                {{ getPatternMessage("translation_type") }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group row mb-2">
+            <label for="global_title_indicator" class="col-sm-4 label"
+              >SMSC Global Title Indicator</label
+            >
+            <div class="col-sm-8">
+              <select
+                class="form-select"
+                id="global_title_indicator"
+                formControlName="global_title_indicator"
+              >
+                @for (item of global_title_indicator; track $index) {
+                <option value="{{ item.gtIndicatorId }}">
+                  {{ item.gtIndicator }}
+                </option>
+                }
+              </select>
+              <span
+                class="text-danger mt-2"
+                *ngIf="validInput('global_title_indicator')"
+              >
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fw-bold border-bottom pb-1 mb-3">
+        Sub System Number Settings
+      </h5>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group row mb-2">
+            <label for="smsc_ssn" class="col-sm-6 label"
+              >SMSC Subsystem Number</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="smsc_ssn"
+                formControlName="smsc_ssn"
+                [class.is-invalid]="validInput('smsc_ssn')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('smsc_ssn')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('smsc_ssn')">
+                Minimum length is {{ getMin("smsc_ssn") }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('smsc_ssn')">
+                {{ getPatternMessage("smsc_ssn") }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="form-group row mb-2">
+            <label for="hlr_ssn" class="col-sm-6 label"
+              >HLR Subsystem Number</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="hlr_ssn"
+                formControlName="hlr_ssn"
+                [class.is-invalid]="validInput('hlr_ssn')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('hlr_ssn')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('hlr_ssn')">
+                Minimum length is {{ getMin("hlr_ssn") }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('hlr_ssn')">
+                {{ getPatternMessage("hlr_ssn") }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group row mb-2">
+            <label for="msc_ssn" class="col-sm-6 label"
+              >MSC Subsystem Number</label
+            >
+            <div class="col-sm-6">
+              <input
+                type="number"
+                class="form-control"
+                id="msc_ssn"
+                formControlName="msc_ssn"
+                [class.is-invalid]="validInput('msc_ssn')"
+              />
+              <span class="text-danger mt-2" *ngIf="validInput('msc_ssn')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validMin('msc_ssn')">
+                Minimum length is {{ getMin("msc_ssn") }}
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('msc_ssn')">
+                {{ getPatternMessage("msc_ssn") }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fw-bold border-bottom pb-1 mb-3">SS7 Version Settings</h5>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="form-group row mb-2">
+            <label for="map_version" class="col-sm-6 label"
+              >MAP version supported</label
+            >
+            <div class="col-sm-6">
+              <select
+                class="form-select"
+                id="map_version"
+                formControlName="map_version"
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('map_version')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fw-bold border-bottom pb-1 mb-3">API Settings</h5>
+      <div class="row align-items-center g-2 mb-2">
+        <div class="col-sm-6">
+          <div class="row align-items-center">
+            <label for="api_enabled" class="col-4">Enable API</label>
+            <div class="col-8">
+              <div
+                class="form-check form-switch m-0 p-0 ps-2 d-flex justify-content-end"
+              >
+                <input
+                  class="form-check-input check_form"
+                  type="checkbox"
+                  id="api_enabled"
+                  formControlName="api_enabled"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 m-0" *ngIf="isEdit">
+        <div class="d-flex align-items-center gap-2 mt-0">
+          <div class="input-group input-group-sm" style="flex: 1">
+            <span class="input-group-text">Token</span>
+            <input
+              id="api_token_preview"
+              type="text"
+              class="form-control text-truncate font-monospace"
+              [value]="tokenPreview"
+              readonly
+              placeholder="No token generated yet"
+            />
+          </div>
+
+          <button
+            class="btn btn-outline-secondary rounded-1"
+            type="button"
+            (click)="copyToken()"
+            [disabled]="!tokenPreview"
+            title="Copy token"
+          >
+            Copy
+          </button>
+
+          <button
+            class="btn btn-red rounded-1"
+            type="button"
+            (click)="onGenerateToken()"
+            [disabled]="!isEdit || generating || disabled"
+            title="Regenerate token"
+          >
+            {{ generating ? "Regenerating..." : "Regenerate" }}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

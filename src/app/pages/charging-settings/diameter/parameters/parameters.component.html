@@ -1,0 +1,271 @@
+<h5 class="fw-bold border-bottom pb-1 mb-3">Parameters</h5>
+<form [formGroup]="parameterForm" class="row g-3 d-flex justify-content-center">
+    <div class="row mt-5">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+
+            <div class="form-group row mb-2">
+                <label for="accept_undefined_peer" class="col-sm-6 label">Accept Undefined Peer</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input check_form" id="accept_undefined_peer"
+                        formControlName="accept_undefined_peer"
+                        [class.is-invalid]="validInput('accept_undefined_peer')">
+                    <span class="text-danger mt-2" *ngIf="validInput('accept_undefined_peer')">
+                        the field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="duplicate_protection" class="col-sm-6 label">Duplicate Protection</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input check_form" id="duplicate_protection"
+                        formControlName="duplicate_protection" [class.is-invalid]="validInput('duplicate_protection')">
+                    <span class="text-danger mt-2" *ngIf="validInput('duplicate_protection')">
+                        the field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="duplicate_timer" class="col-sm-6 label">Duplicate Timer</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="duplicate_timer" formControlName="duplicate_timer"
+                        [class.is-invalid]="validInput('duplicate_timer')">
+                    <span class="text-danger mt-2" *ngIf="validInput('duplicate_timer')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('duplicate_timer')">
+                        {{ getPatternMessage('duplicate_timer') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="duplicate_size" class="col-sm-6 label">Duplicate Size</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="duplicate_size" formControlName="duplicate_size"
+                        [class.is-invalid]="validInput('duplicate_size')">
+                    <span class="text-danger mt-2" *ngIf="validInput('duplicate_size')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('duplicate_size')">
+                        {{ getPatternMessage('duplicate_size') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="use_uri_as_fqdn" class="col-sm-6 label">Use URI FQDN</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input check_form" id="use_uri_as_fqdn"
+                        formControlName="use_uri_as_fqdn" [class.is-invalid]="validInput('use_uri_as_fqdn')">
+                    <span class="text-danger mt-2" *ngIf="validInput('use_uri_as_fqdn')">
+                        the field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="queue_size" class="col-sm-6 label">Queue Size</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="queue_size" formControlName="queue_size"
+                        [class.is-invalid]="validInput('queue_size')">
+                    <span class="text-danger mt-2" *ngIf="validInput('queue_size')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('queue_size')">
+                        {{ getPatternMessage('queue_size') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="queue_size" class="col-sm-6 label">Message Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="message_time_out" formControlName="message_time_out"
+                        [class.is-invalid]="validInput('message_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('message_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('message_time_out')">
+                        {{ getPatternMessage('message_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="queue_size" class="col-sm-6 label">Stop Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="stop_time_out" formControlName="stop_time_out"
+                        [class.is-invalid]="validInput('stop_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('stop_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('stop_time_out')">
+                        {{ getPatternMessage('stop_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="cea_time_out" class="col-sm-6 label">Cea Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="cea_time_out" formControlName="cea_time_out"
+                        [class.is-invalid]="validInput('cea_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('cea_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('cea_time_out')">
+                        {{ getPatternMessage('cea_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="iac_time_out" class="col-sm-6 label">Iac Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="iac_time_out" formControlName="iac_time_out"
+                        [class.is-invalid]="validInput('iac_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('iac_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('iac_time_out')">
+                        {{ getPatternMessage('iac_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 position-relative">
+
+            <div class="form-group row mb-2">
+                <label for="dwa_time_out" class="col-sm-6 label">Dwa Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="dwa_time_out" formControlName="dwa_time_out"
+                        [class.is-invalid]="validInput('dwa_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('dwa_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('dwa_time_out')">
+                        {{ getPatternMessage('dwa_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="dpa_time_out" class="col-sm-6 label">Dpa Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="dpa_time_out" formControlName="dpa_time_out"
+                        [class.is-invalid]="validInput('dpa_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('dpa_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('dpa_time_out')">
+                        {{ getPatternMessage('dpa_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="rec_time_out" class="col-sm-6 label">Rec Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="rec_time_out" formControlName="rec_time_out"
+                        [class.is-invalid]="validInput('rec_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('rec_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('rec_time_out')">
+                        {{ getPatternMessage('rec_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="peer_fsm_thread_count" class="col-sm-6 label">Peer FSM Thread Count</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="peer_fsm_thread_count"
+                        formControlName="peer_fsm_thread_count"
+                        [class.is-invalid]="validInput('peer_fsm_thread_count')">
+                    <span class="text-danger mt-2" *ngIf="validInput('peer_fsm_thread_count')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('peer_fsm_thread_count')">
+                        {{ getPatternMessage('peer_fsm_thread_count') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="single_local_peer" class="col-sm-6 label">Single Local Peer</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input check_form" id="single_local_peer"
+                        formControlName="single_local_peer" [class.is-invalid]="validInput('single_local_peer')">
+                    <span class="text-danger mt-2" *ngIf="validInput('single_local_peer')">
+                        the field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="session_time_out" class="col-sm-6 label">Session Timeout</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="session_time_out" formControlName="session_time_out"
+                        [class.is-invalid]="validInput('session_time_out')">
+                    <span class="text-danger mt-2" *ngIf="validInput('session_time_out')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('session_time_out')">
+                        {{ getPatternMessage('session_time_out') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="bind_delay" class="col-sm-6 label">Bind Delay</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="bind_delay" formControlName="bind_delay"
+                        [class.is-invalid]="validInput('bind_delay')">
+                    <span class="text-danger mt-2" *ngIf="validInput('bind_delay')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('bind_delay')">
+                        {{ getPatternMessage('bind_delay') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="request_table_size" class="col-sm-6 label">Request Table Size</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="request_table_size"
+                        (input)="onRequestTableSizeChange()" formControlName="request_table_size"
+                        [class.is-invalid]="validInput('request_table_size')">
+                    <span class="text-danger mt-2" *ngIf="validInput('request_table_size')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('request_table_size')">
+                        {{ getPatternMessage('request_table_size') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="request_table_clear_size" class="col-sm-6 label">Request Table Clear Size</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="request_table_clear_size"
+                        formControlName="request_table_clear_size"
+                        [class.is-invalid]="validInput('request_table_clear_size') || validClearSize()">
+
+                    <span class="text-danger mt-2" *ngIf="validInput('request_table_clear_size')">
+                        The field is required.
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="parameterForm.hasError('clearSizeGteSize')">
+                        Request Table Clear Size must be less than Request Table Size.
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

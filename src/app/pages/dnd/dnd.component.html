@@ -1,0 +1,137 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img src="/assets/img/dnd-icon.png" alt="icon" height="40px" width="auto">
+        <label class="card-header title-content mb-0 ml-2"
+               style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+          DND
+        </label>
+      </div>
+      <div>
+        <button type="button" class="btn btn-red mt-3" (click)="showModal(true);" style="margin-right: 10px;">
+          <i class='bx bx-plus'></i>
+          Create
+        </button>
+        <button type="button" class="btn btn-red mt-3" (click)="renderer()">
+          <i class='bx bx-refresh'></i>
+        </button>
+      </div>
+    </div>
+    <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+      <div class="table-responsive mt-4">
+        <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+               [dtTrigger]="dtTrigger">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>DND TYPE</th>
+            <th>STATUS</th>
+            <th>CREATED AT</th>
+            <th>UPDATED AT</th>
+            <th class="align-center">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of data; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.name }}</td>
+            <td class="align-middle">{{ item?.dnd_type }}</td>
+              <td class="align-middle">
+                  {{ item?.status }}
+                  <span
+                          *ngIf="(($any(item)?.comment || '').trim().length > 0) || item?.status === 'FAILED'"
+                          [attr.title]="(($any(item)?.comment || '').trim().length > 0)
+                          ?$any(item)?.comment: 'Processing failed. Hover for details.'"
+                          aria-label="More info"
+                          class="ms-1 text-muted">
+                          <i class="bx bx-info-circle"></i>
+                  </span>
+              </td>
+              <td class="align-middle">{{ getDate(item.created_at) }}</td>
+            <td class="align-middle">{{ getDate(item.updated_at) }}</td>
+            <td class="align-center">
+              <!-- View -->
+              <button type="button"
+                      class="btn btn-sm btn-outline-light border-secondary me-2"
+                      title="View Details"
+                      (click)="showModalDetail(item, true)">
+                <i class="bx bx-show text-secondary"></i>
+              </button>
+
+
+              <!-- Edit -->
+              <button type="button"
+                      class="btn btn-sm btn-red me-2"
+                      title="Edit DND"
+                       [disabled]="item?.status !== 'ACTIVE'"
+                       (click)="showModalDetail(item, false)">
+                <i class='bx bx-edit'></i>
+              </button>
+
+              <!-- Delete -->
+              <button type="button"
+                      class="btn btn-sm btn-secondary me-2"
+                      title="Delete DND"
+                      [disabled]="item?.status === 'CREATING' || item?.status === 'ACTIVATING'"
+                      (click)="confirmDeleteDnd(item)">
+                <i class='bx bx-trash'></i>
+              </button>
+
+              <!-- Disable (only when ACTIVE) -->
+              <button *ngIf="item?.status === 'ACTIVE'"
+                      type="button"
+                      class="btn btn-sm btn-red me-2"
+                      title="Disable DND"
+                      (click)="confirmDisableDnd(item)">
+                <i class='bx bx-block'></i>
+              </button>
+
+              <!-- Enable (only when DISABLED) -->
+              <button *ngIf="item?.status === 'DISABLED'"
+                      type="button"
+                      class="btn btn-sm btn-success me-2"
+                      title="Enable DND"
+                      (click)="confirmEnableDnd(item)">
+                <i class='bx bx-check'></i>
+              </button>
+
+                <!-- Disable/Enable when ACTIVATING | CREATING | FAILED ) -->
+                <button *ngIf="item?.status !== 'ACTIVE' && item?.status !== 'DISABLED'"
+                      type="button"
+                      class="btn btn-sm btn-secondary me-2"
+                      [disabled]="item?.status === 'CREATING' || item?.status === 'ACTIVATING' || item?.status === 'FAILED'">
+                <i class="bx bx-block"></i>
+              </button>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDnd" data-bs-backdrop="static"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-add [networksList]="networksList" (closeModal)="onCloseModal($event, 1)"></app-add>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDndDetail" data-bs-backdrop="static"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <app-detail *ngIf="showDetail" [networksList]="networksList" [dataUpdate]="itemDnd" [viewOnly]="detailViewOnly"  (closeModal)="onCloseModal($event, 2)"></app-detail>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDisableDnd" data-bs-backdrop="static"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)"></app-modal-delete>
+  </div>
+</div>

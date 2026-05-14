@@ -1,0 +1,121 @@
+
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center mt-3">
+                <img src="/assets/img/users.png" alt="icon" height="40px" width="auto">
+                <label class="card-header title-content mb-0 ml-2"
+                    style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+                    Users
+                </label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-red mt-3" (click)="showModal(true); module=undefined" style="margin-right: 10px;" [disabled]="!permission">
+                    <i class='bx bx-plus'></i>
+                    Create
+                </button>
+                <button type="button" class="btn btn-red mt-3" (click)="refresh()" [disabled]="!permission">
+                    <i class='bx bx-refresh'></i>
+                </button>
+            </div>
+        </div>
+        <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+            <div class="table-responsive mt-4">
+                <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+                    [dtTrigger]="dtTrigger">
+                    <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Last Name</th>
+                          <th>Username</th>
+                          <th>Roles</th>
+                          <th>Status</th>
+                          <th class="align-center">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of data; let i = index">
+                          <td class="align-middle">{{ item.id }}</td>
+                          <td class="align-middle">{{ item.name }}</td>
+                          <td class="align-middle">{{ item.last_name }}</td>
+                            <td class="align-middle">{{ item.user_name }}</td>
+                          <td class="align-middle">
+                            <ng-container *ngFor="let role of item.roles">
+                              <span class="badge bg-secondary me-1">{{ role }}</span>
+                            </ng-container>
+                          </td>
+                          <td class="align-middle">
+                            <span class="badge" [ngClass]="(item.account_locked && item.status === 1) ? 'bg-warning' : item.status ? 'bg-success' : 'bg-danger'">
+                              {{ (item.account_locked && item.status === 1) ? 'Account Locked' : item.status ? 'Active' : 'Inactive' }}
+                            </span>
+                          </td>
+                          <td class="align-center">
+                            <button class="btn btn-sm btn-red me-2" 
+                              title="Edit record" 
+                              (click)="editData(item)">
+                              <i class='bx bxs-pencil'></i>
+                            </button>
+                            <button class="btn btn-sm btn-red me-2" 
+                                [disabled]="item.account_locked && item.status === 1 || item.roles.includes('ROOT')"
+                                title="Change Status" 
+                                (click)="deleteUser(item)">
+                                <i class="bx" [ngClass]="item.status === 0 ? 'bx-user-x' : 'bx-user-check'"></i>
+                            </button>
+                            <button class="btn btn-sm btn btn-red me-2" 
+                              title="Change Password" 
+                              (click)="openChangePasswordModal(item)"
+                              [disabled]="item.account_locked && item.status === 1">
+                              <i class='bx bx-key'></i>
+                            </button>                  
+                            <button
+                              class="btn btn-sm btn-red"
+                              title="Unlock Account"
+                              (click)="unlockUser(item)"
+                              [disabled]="!item.account_locked && item.status === 1"
+                            >
+                              <i class="bx" [ngClass]="item.account_locked ? 'bx-lock-open-alt' : 'bx-lock'"></i>
+                            </button>          
+                          </td>
+                        </tr>
+                      </tbody>                      
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalUser" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-add *ngIf="permission" (closeModal)="onCloseModal($event)" [dataUpdate]="module"></app-add>
+    </div>
+</div> 
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteUser" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)"></app-modal-delete>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalChangePassword" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+
+          <div class="bg-white">
+            <app-password-form 
+              [showCancel]="true"
+              (submitForm)="changePasswordFromModal($event)" 
+              (cancel)="onCancelChangePassword()">
+            </app-password-form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

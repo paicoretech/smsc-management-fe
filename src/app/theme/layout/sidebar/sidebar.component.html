@@ -1,0 +1,132 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <div class="app-brand demo">
+    <a routerLink="/pages/home" class="app-brand-link" style="text-decoration: none;">
+      <img [src]="brandingPaic" alt="paic" id="paic-logo">
+    </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  <hr>
+  <ul class="menu-inner py-1">
+
+    <ng-container *ngFor="let item of sidebarItems; let i = index">
+
+      <!-- Section header (groupTitle) -->
+      <li *ngIf="item.groupTitle" class="menu-section">
+        <span class="menu-section-title">{{ item.title }}</span>
+      </li>
+
+      <!-- Regular menu item -->
+      <li *ngIf="!item.groupTitle"
+          class="menu-item item-decoration ml-1"
+          [ngClass]="{ 'is-root': item.isRoot }">
+
+        <!-- Leaf item: no submenu -->
+        <ng-container *ngIf="item.submenu.length === 0">
+
+          <!-- Premium leaf → redirect to PremiumUrl -->
+          <a *ngIf="item.premium"
+             class="menu-link menu-link-premium"
+             [href]="environment.PremiumUrl"
+             target="_blank"
+             (click)="onSubmit()">
+            <img [src]="'../../../../assets/svg/' + item.icon + '.svg'" class="menu-icon">
+            <img [src]="'../../../../assets/svg/' + item.icon + '-clear.svg'" class="menu-icon hidden">
+            <span class="menu-title">{{ item.title }}</span>
+            <img src="assets/img/crown.png" class="menu-crown">
+          </a>
+
+          <!-- Normal leaf → routerLink -->
+          <a *ngIf="!item.premium"
+             class="menu-link menu-link-normal"
+             [routerLink]="[item.path]"
+             routerLinkActive="item-selected"
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="onSubmit()">
+            <img [src]="'../../../../assets/svg/' + item.icon + '.svg'" class="menu-icon" [routerLinkActive]="'hidden'">
+            <img [src]="'../../../../assets/svg/' + item.icon + '-clear.svg'" class="menu-icon hidden" [routerLinkActive]="'show'">
+            <span class="menu-title">{{ item.title }}</span>
+          </a>
+
+        </ng-container>
+
+        <!-- Dropdown item: has submenu -->
+        <div *ngIf="item.submenu.length > 0" class="dropdown ml-10">
+
+          <!-- Premium group → entire dropdown redirects -->
+          <a *ngIf="item.premiumGroup"
+             class="menu-link menu-link-premium"
+             [href]="environment.PremiumUrl"
+             target="_blank"
+             (click)="onSubmit()">
+            <img [src]="'../../../../assets/svg/' + item.icon + '.svg'" class="menu-icon">
+            <img [src]="'../../../../assets/svg/' + item.icon + '-clear.svg'" class="menu-icon hidden">
+            <span class="menu-title">{{ item.title }}</span>
+            <img src="assets/img/crown.png" class="menu-crown">
+          </a>
+
+          <!-- Normal group → expandable dropdown -->
+          <ng-container *ngIf="!item.premiumGroup">
+            <a href="javascript:void(0);" class="menu-link" (click)="toggleDropdown(i)">
+              <img [src]="'../../../../assets/svg/' + item.icon + '.svg'" class="menu-icon">
+              <img [src]="'../../../../assets/svg/' + item.icon + '-clear.svg'" class="menu-icon hidden">
+              <span class="menu-title">{{ item.title }}</span>
+              <i class="bx bx-chevron-down"></i>
+            </a>
+
+            <ul *ngIf="item.show" class="submenu" [ngClass]="{'show': item.show}">
+              <li *ngFor="let subitem of item.submenu"
+                  class="submenu-item item-decoration"
+                  [routerLinkActive]="'item-selected'">
+
+                <!-- Premium sub-item -->
+                <ng-container *ngIf="subitem.premium; else subNormal">
+                  <a class="menu-link menu-link-premium"
+                     [href]="environment.PremiumUrl"
+                     target="_blank"
+                     (click)="onSubmit()">
+                    <span class="menu-title">{{ subitem.title }}</span>
+                    <img src="assets/img/crown.png" class="menu-crown">
+                  </a>
+                </ng-container>
+
+                <!-- Normal sub-item -->
+                <ng-template #subNormal>
+                  <a class="menu-link menu-link-normal"
+                     [routerLink]="[subitem.path]"
+                     routerLinkActive="item-selected"
+                     [routerLinkActiveOptions]="{ exact: true }"
+                     (click)="onSubmit()">
+                    <span class="menu-title">{{ subitem.title }}</span>
+                  </a>
+                </ng-template>
+
+              </li>
+            </ul>
+          </ng-container>
+
+        </div>
+
+      </li>
+
+    </ng-container>
+  </ul>
+
+  <div class="mt-5 Logout-button px-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center" style="color: #1A1A1A;">
+        <i class="bx bx-user-circle me-1" style="font-size: 20px;"></i>
+        <span style="font-size: 14px; font-weight: 500;">{{ userName }}</span>
+      </div>
+
+      <button class="menu-link-personalized btn p-0" (click)="logout()" style="font-size: 14px;">
+        <img src="../../../../assets/img/door-check-out-icon.png" alt="close-door" class="img-logout me-1">Logout
+      </button>
+    </div>
+  </div>
+
+</aside>

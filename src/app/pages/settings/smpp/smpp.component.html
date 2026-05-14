@@ -1,0 +1,90 @@
+<div>
+  <div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center mt-4">
+          <h5>List of SMPP Servers</h5>
+        </div>
+        <div>
+          <button type="button" class="btn btn-red mt-3" (click)="showModal(true)" style="margin-right: 10px;">
+            <i class='bx bx-plus'></i>
+            Create
+          </button>
+          <button type="button" class="btn btn-red mt-3" (click)="refresh()">
+            <i class='bx bx-refresh'></i>
+          </button>
+        </div>
+      </div>
+      <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+        <div class="table-responsive mt-4">
+          <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Host</th>
+                <th>Port</th>
+                <th>Status</th>
+                <th>TLS Enabled</th>
+                <th class="align-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of smppServerConfig; let i = index">
+                <td class="align-middle">{{ item.id }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.ip }}</td>
+                <td class="align-middle">{{ item?.port }}</td>
+                <td class="align-middle">
+                  <span [ngClass]="{'text-danger': item?.status === 'FAILED'}">
+                    {{ item?.status }}
+                    <i *ngIf="item?.status === 'FAILED'" class='bx bxs-error-circle' (click)="showErrorStatus(item?.action_status)" [title]="item?.action_status"></i>
+                  </span>
+                </td>
+                <td class="align-middle">{{ item?.tls_enabled ? 'Yes' : 'No' }}</td>
+                <td class="align-center">
+                    <a class="btn btn-sm btn-outline-secondary me-2" title="view record" (click)="editData(item, true)"><i class='bx bxs-show'></i></a>
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-red me-2" (click)="editData(item)" title="Edit record"><i class='bx bxs-pencil' ></i></button>
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="deleteSmppServer(item)"><i class='bx bxs-trash-alt' ></i></button>
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-success me-2" title="Start" (click)="changeEnabledStatus(item, true)"><i class='bx bx-play' ></i></button>
+                    <button [disabled]="item.enabled ==0"  class="btn btn-sm btn-danger" title="Stop" (click)="changeEnabledStatus(item, false)"><i class='bx bx-pause'></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" tabindex="-1" role="dialog" id="modalSmppServer" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <app-add [dataUpdate]="module" (closeModal)="onCloseModal($event)"></app-add>
+    </div>
+  </div>
+  
+  <div class="modal fade" tabindex="-1" role="dialog" id="modalSmppServerConfirmation" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseConfirmationModal($event)"></app-modal-delete>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modalActionStatus" tabindex="-1" aria-labelledby="modalActionStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fs-5" id="modalActionStatusModalLabel">SMPP Server Message Error</h5>
+          <button type="button" class="btn btn-close-modal" data-bs-dismiss="modal">X</button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-error d-flex align-items-center" role="alert">
+            <i class="bx bxs-error-circle me-2" style="font-size: 2rem;"></i>
+            <div>
+              <strong>Error:</strong> {{ messageShow }} <br>  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="content-wrapper ps-2 pe-2">
+    <label class="card-header title-content mb-0 ml-0"
+      style="font-size: 20px; font-weight: 500; padding-bottom: 0px;">
+      MAP Operation Properties
+    </label>
+    <hr />
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+        <div class="row">
+          <div class="form-group col-md-4 mb-2">
+            <div class="row mb-2">
+              <label for="sri_service_op_code" class="col-sm-7 label">SRI service Op Code</label>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" id="sri_service_op_code" formControlName="sri_service_op_code"
+                  [class.is-invalid]="validInput('sri_service_op_code')">
+                <span class="text-danger mt-2" *ngIf="validInput('sri_service_op_code')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validMin('sri_service_op_code')">
+                  Minimum is {{ getMin('sri_service_op_code') }}
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('sri_service_op_code')">
+                  {{ getPatternMessage('sri_service_op_code') }}
+                </span>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="forward_sm_service_op_code" class="col-sm-7 label">forward SM service Op Code</label>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" id="forward_sm_service_op_code" formControlName="forward_sm_service_op_code"
+                  [class.is-invalid]="validInput('forward_sm_service_op_code')">
+                <span class="text-danger mt-2" *ngIf="validInput('forward_sm_service_op_code')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validMin('forward_sm_service_op_code')">
+                    Minimum is {{ getMin('forward_sm_service_op_code') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('forward_sm_service_op_code')">
+                    {{ getPatternMessage('forward_sm_service_op_code') }}
+                </span>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="d-flex align-items-center justify-content-end">
+            <button class="btn btn-red" [disabled]="form.invalid" >Save</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>

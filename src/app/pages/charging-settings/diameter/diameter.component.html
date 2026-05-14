@@ -1,0 +1,300 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()"
+  class="row g-3 d-flex justify-content-center"
+>
+  <div class="col-12">
+    <div
+      class="d-flex justify-content-between align-items-center border-bottom pb-2"
+    >
+      <h5 class="fw-bold">Basic Settings</h5>
+
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-red"
+          [disabled]="!isModified || chargingSetting.started"
+        >
+          {{ chargingSetting.id ? "Update" : "Create" }}
+        </button>
+
+        <button
+          class="btn btn-sm btn-success"
+          title="Start"
+          type="button"
+          (click)="openConfirmToggle(chargingSetting, 'diameter')"
+          [disabled]="chargingSetting.started"
+        >
+          <i class="bx bx-play"></i>
+        </button>
+
+        <button
+          class="btn btn-sm btn-danger"
+          title="Stop"
+          type="button"
+          (click)="openConfirmToggle(chargingSetting, 'diameter')"
+          [disabled]="!chargingSetting.started"
+        >
+          <i class="bx bx-pause"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="form-group row mb-2">
+      <label for="name" class="col-sm-6 label">Name</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          formControlName="name"
+          [class.is-invalid]="validInput('name')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('name')">
+          the field is required
+        </span>
+        <span class="text-danger mt-2" *ngIf="validPattern('name')">
+          {{ getPatternMessage("name") }}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2 d-none">
+      <label for="type" class="col-sm-6 label">Type</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          id="type"
+          formControlName="type"
+          [class.is-invalid]="validInput('type')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('type')">
+          the field is required
+        </span>
+        <span class="text-danger mt-2" *ngIf="validPattern('type')">
+          {{ getPatternMessage("type") }}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2">
+      <label for="connection_type" class="col-sm-6 label"
+        >Connection Type</label
+      >
+      <div class="col-sm-6">
+        <select
+          class="form-select"
+          id="connection_type"
+          name="connection_type"
+          formControlName="connection_type"
+        >
+          <option value="SCTP" selected>SCTP</option>
+          <option value="TCP">TCP</option>
+        </select>
+        <span class="text-danger mt-2" *ngIf="validInput('connection_type')">
+          the field is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2" *ngIf="isCrudComponent">
+      <label for="split_message" class="col-sm-6 label">Split Message</label>
+      <div class="col-sm-6">
+        <input
+          type="checkbox"
+          class="form-check-input check_form"
+          id="split_message"
+          formControlName="split_message"
+          [class.is-invalid]="validInput('split_message')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('split_message')">
+          the field is required
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="form-group row mb-2" *ngIf="isCrudComponent">
+      <label for="mno_id" class="col-sm-6 label">MNOs</label>
+      <div class="col-sm-6">
+        <select class="form-select" id="mno_id" formControlName="mno_id">
+          @for (item of mnoList; track $index) {
+          <option value="{{ item.id }}">{{ item.name }}</option>
+          }
+        </select>
+        <span class="text-danger mt-2" *ngIf="validInput('mno_id')">
+          the field is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2" *ngIf="isCrudComponent">
+      <label for="global_title" class="col-sm-6 label">Global Title</label>
+      <div class="col-sm-6">
+        <input
+          type="text"
+          class="form-control"
+          id="global_title"
+          formControlName="global_title"
+          [class.is-invalid]="validInput('global_title')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('global_title')">
+          the field is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2" *ngIf="isCrudComponent && flagsUi.showHssUpdate">
+      <label for="hss_update_enabled" class="col-sm-6 label">Allowed Registration Traffic</label>
+      <div class="col-sm-6">
+        <input
+          type="checkbox"
+          class="form-check-input check_form"
+          id="hss_update_enabled"
+          formControlName="hss_update_enabled"
+          [class.is-invalid]="validInput('hss_update_enabled')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('hss_update_enabled')">
+          the field is required
+        </span>
+      </div>
+    </div>
+    <div class="form-group row mb-2" *ngIf="isCrudComponent && flagsUi.showAllowedTraffic">
+      <label for="split_message" class="col-sm-6 label">Allowed Traffic</label>
+      <div class="col-sm-6">
+        <input
+          type="checkbox"
+          class="form-check-input check_form"
+          id="allowed_traffic"
+          formControlName="allowed_traffic"
+          [class.is-invalid]="validInput('allowed_traffic')"
+        />
+        <span class="text-danger mt-2" *ngIf="validInput('allowed_traffic')">
+          the field is required
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12" *ngIf="isCrudComponent">
+    <div class="row">
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="form-group row mb-2">
+          <label for="messages_per_second_high" class="col-sm-6 label"
+            >Messages Per Second - High Priority</label
+          >
+          <div class="col-sm-6">
+            <input
+              type="number"
+              class="form-control"
+              id="messages_per_second_high"
+              formControlName="messages_per_second_high"
+              [class.is-invalid]="validInput('messages_per_second_high') || validMin('messages_per_second_high') || validPattern('messages_per_second_high') || hasPriorityValidationError()"
+            />
+            <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_high')">
+              the field is required
+            </span>
+            <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_high')">
+              Minimum value is {{ getMin('messages_per_second_high') }}
+            </span>
+            <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_high')">
+              {{ getPatternMessage('messages_per_second_high') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group row mb-2">
+          <label for="messages_per_second_low" class="col-sm-6 label"
+            >Messages Per Second - Low Priority</label
+          >
+          <div class="col-sm-6">
+            <input
+              type="number"
+              class="form-control"
+              id="messages_per_second_low"
+              formControlName="messages_per_second_low"
+              [class.is-invalid]="validInput('messages_per_second_low') || validMin('messages_per_second_low') || validPattern('messages_per_second_low') || hasPriorityValidationError()"
+            />
+            <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_low')">
+              the field is required
+            </span>
+            <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_low')">
+              Minimum value is {{ getMin('messages_per_second_low') }}
+            </span>
+            <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_low')">
+              {{ getPatternMessage('messages_per_second_low') }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="form-group row mb-2">
+          <label for="messages_per_second_medium" class="col-sm-6 label"
+            >Messages Per Second - Medium Priority</label
+          >
+          <div class="col-sm-6">
+            <input
+              type="number"
+              class="form-control"
+              id="messages_per_second_medium"
+              formControlName="messages_per_second_medium"
+              [class.is-invalid]="validInput('messages_per_second_medium') || validMin('messages_per_second_medium') || validPattern('messages_per_second_medium') || hasPriorityValidationError()"
+            />
+            <span class="text-danger mt-2" *ngIf="validInput('messages_per_second_medium')">
+              the field is required
+            </span>
+            <span class="text-danger mt-2" *ngIf="validMin('messages_per_second_medium')">
+              Minimum value is {{ getMin('messages_per_second_medium') }}
+            </span>
+            <span class="text-danger mt-2" *ngIf="validPattern('messages_per_second_medium')">
+              {{ getPatternMessage('messages_per_second_medium') }}
+            </span>
+                <span class="text-danger mt-2 d-block" *ngIf="hasPriorityValidationError()">
+                At least one priority must be active.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group row mb-2">
+          <label for="tps" class="col-sm-6 label">Messages Per Second (Total)</label>
+          <div class="col-sm-6">
+            <input
+              type="number"
+              class="form-control"
+              id="tps"
+              formControlName="tps"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<br />
+<app-local-peer *ngIf="isDataLoaded" [localPeer]="chargingSetting.local_peer" [isDisabled]="chargingSetting.started"
+  (localPeerChange)="updateLocalPeer($event)" />
+
+<br />
+<app-parameters *ngIf="isDataLoaded" [parameters]="chargingSetting.parameters" [isDisabled]="chargingSetting.started"
+  (parametersChange)="updateParameters($event)" />
+
+<br />
+<app-peer *ngIf="isDataLoaded" [peers]="peers" (peersChange)="updatePeers($event)"
+  (peerToggleRequest)="openConfirmToggle($event, 'peer')" [isDisabled]="chargingSetting.started" />
+
+<br />
+<app-realms *ngIf="isDataLoaded" [realms]="realms" [isDisabled]="chargingSetting.started"
+  (realmsChange)="updateRealms($event)" />
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalConfirmToggle" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onConfirmToggle($event)"></app-modal-delete>
+  </div>
+</div>

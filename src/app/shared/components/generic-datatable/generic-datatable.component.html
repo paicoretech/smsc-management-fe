@@ -1,0 +1,23 @@
+<table class="table"  class="row-border hover" >
+<!-- <table class="table" datatable [dtOptions]="dtOptions" class="row-border hover" [dtTrigger]="dtTrigger"></table> -->
+  <thead>
+    <tr>
+      <th *ngFor="let col of columns">{{ col.title }}</th>
+      <th *ngIf="actions.length > 0">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let col of columns">
+        {{ col.render ? col.render(row[col.dataKey], row) : row[col.dataKey] }}
+      </td>
+      <td *ngIf="actions.length > 0">
+        <button *ngFor="let action of actions"
+                (click)="onActionClick(action, row)"
+                ngIf="!action.isVisible || action.isVisible(row)">
+          {{ action.name }}
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

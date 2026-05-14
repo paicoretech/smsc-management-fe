@@ -1,0 +1,72 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close(false)">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+        <div class="row">
+          <div class="form-group row mb-2">
+            <label for="name" class="col-sm-5 label">Name</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" id="name" formControlName="name"
+                [class.is-invalid]="validInput('name')">
+              <span class="text-danger mt-2" *ngIf="validInput('name')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group row mb-2">
+              <label for="opc" class="col-sm-5 label">OPC</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="opc" formControlName="opc"
+                  [class.is-invalid]="validInput('opc')">
+                <span class="text-danger mt-2" *ngIf="validInput('opc')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('network_indicator')">
+                  {{ getPatternMessage('network_indicator') }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="network_indicator" class="col-sm-5 label">NI</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="network_indicator" formControlName="network_indicator"
+                  [class.is-invalid]="validInput('network_indicator')">
+                <span class="text-danger mt-2" *ngIf="validInput('network_indicator')">
+                  the field is required
+                </span>
+                <span class="text-danger mt-2" *ngIf="validPattern('network_indicator')">
+                  {{ getPatternMessage('network_indicator') }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group row mb-2">
+              <label for="rsp" class="col-sm-5 label">Local GT Digits</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="local_gt_digits" formControlName="local_gt_digits"
+                  [class.is-invalid]="validInput('local_gt_digits')">
+                <span class="text-danger mt-2" *ngIf="validInput('local_gt_digits')">
+                  the field is required
+                </span>
+              </div>
+            </div>
+          </div>
+
+        <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid">Save</button>
+
+      </form>
+    </div>
+  </div>

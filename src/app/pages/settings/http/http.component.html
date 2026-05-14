@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <label class="form-check-label me-auto" for="flexSwitchCheckDefault">All HTTP Servers</label>
+            <div class="form-check form-switch">
+                <button class="btn btn-sm btn-success ms-2"
+                    title="Start" [disabled]="btnAll" (click)="openModalAll('STARTED')"><i class='bx bx-play'></i></button>
+                <button class="btn btn-sm btn-danger" title="Stop"
+                    [disabled]="btnAll" (click)="openModalAll('STOPPED')"><i class='bx bx-pause'></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12"></div>
+</div>
+<hr>
+<div class="mt-4">
+    <h5>List of HTTP Servers</h5>
+</div>
+<div class="table-responsive mt-4">
+    <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>IP</th>
+            <th>Port</th>
+            <th>Protocol</th>
+            <th>Status</th>
+            <th class="align-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of httoServerConfig; let i = index">
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle">{{ item.ip }}</td>
+            <td class="align-middle">{{ item.port }}</td>
+            <td class="align-middle">{{ item.protocol }}</td>
+            <td class="align-middle">{{ item.state }}</td>
+            <td class="align-center">
+                <button [disabled]="item.state === 'STARTED'" class="btn btn-sm btn-success"
+                title="Start" (click)="openModal(item.name, 'STARTED')"><i class='bx bx-play'></i></button>
+                <button [disabled]="item.state !== 'STARTED'" class="btn btn-sm btn-danger ms-2" title="Stop"
+                    (click)="openModal(item.name, 'STOPPED')"><i class='bx bx-pause'></i></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalHttpServer" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="changeStatus($event)"></app-modal-delete>
+    </div>
+</div>

@@ -1,0 +1,260 @@
+<div class="card-header">
+    <p class="title-content-tab">SCCP Properties</p>
+</div>
+<hr style="margin: 0px;">
+
+    <form [formGroup]="form" (ngSubmit)="save()" >
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="zMarginXudtMessage">ZMarginXudtMessage</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="zMarginXudtMessage" formControlName="zMarginXudtMessage"
+                            [class.is-invalid]="validInput('zMarginXudtMessage')">
+                            <span class="text-danger mt-2" *ngIf="validInput('zMarginXudtMessage')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="removeSpc">RemoveSpc</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="removeSpc" name="removeSpc" formControlName="removeSpc">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('removeSpc')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="sstTimerDurationMin">SstTimerDuration_Min</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="sstTimerDurationMin" formControlName="sstTimerDurationMin"
+                            [class.is-invalid]="validInput('sstTimerDurationMin')">
+                            <span class="text-danger mt-2" *ngIf="validInput('sstTimerDurationMin')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="sstTimerDurationMax">SstTimerDuration_Max</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="sstTimerDurationMax" formControlName="sstTimerDurationMax"
+                            [class.is-invalid]="validInput('sstTimerDurationMax')">
+                            <span class="text-danger mt-2" *ngIf="validInput('sstTimerDurationMax')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="sstTimerDurationIncreaseFactor">SstTimerDuration_IncreaseFactor</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="sstTimerDurationIncreaseFactor" formControlName="sstTimerDurationIncreaseFactor"
+                            [class.is-invalid]="validInput('sstTimerDurationIncreaseFactor')">
+                            <span class="text-danger mt-2" *ngIf="validInput('sstTimerDurationIncreaseFactor')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="maxDataMessage">MaxDataMessage</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="maxDataMessage" formControlName="maxDataMessage"
+                            [class.is-invalid]="validInput('maxDataMessage')">
+                            <span class="text-danger mt-2" *ngIf="validInput('maxDataMessage')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="periodOfLogging">PeriodOfLogging</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="periodOfLogging" formControlName="periodOfLogging"
+                            [class.is-invalid]="validInput('periodOfLogging')">
+                            <span class="text-danger mt-2" *ngIf="validInput('periodOfLogging')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="reassemblyTimerDelay">ReassemblyTimerDelay</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="reassemblyTimerDelay" formControlName="reassemblyTimerDelay"
+                            [class.is-invalid]="validInput('reassemblyTimerDelay')">
+                            <span class="text-danger mt-2" *ngIf="validInput('reassemblyTimerDelay')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="previewMode">PreviewMode</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="previewMode" name="previewMode" formControlName="previewMode">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('previewMode')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="sccpProtocolVersion">SCCPProtocolVersion</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="sccpProtocolVersion" name="sccpProtocolVersion" formControlName="sccpProtocolVersion">
+                        <option value="ITU">ITU</option>
+                        <option value="ANSI">ANSI</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('sccpProtocolVersion')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="congestionControlTimeA">Congestion Control Time A</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="congestionControlTimeA" formControlName="congestionControlTimeA"
+                            [class.is-invalid]="validInput('congestionControlTimeA')">
+                            <span class="text-danger mt-2" *ngIf="validInput('congestionControlTimeA')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="congestionControlTimeB">Congestion Control Time B</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="congestionControlTimeB" formControlName="congestionControlTimeB"
+                            [class.is-invalid]="validInput('congestionControlTimeB')">
+                            <span class="text-danger mt-2" *ngIf="validInput('congestionControlTimeB')">
+                            the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="congestionControlAlgorithm">Congestion Control algorithm</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="congestionControlAlgorithm" name="congestionControlAlgorithm" formControlName="congestionControlAlgorithm">
+                        <option value="international">INTERNATIONAL</option>
+                        <option value="levelDepended">LEVEL DEPENDED</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('congestionControlAlgorithm')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="congestionControl">Congestion Control</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="congestionControl" name="congestionControl" formControlName="congestionControl">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('congestionControl')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label for="rspProhibitedByDefault">Rsp Prohibited By Default</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" style="padding-left: 12px;">
+                        <select class="form-select" id="rspProhibitedByDefault" name="rspProhibitedByDefault" formControlName="rspProhibitedByDefault">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                        </select>
+                        <span class="text-danger mt-2" *ngIf="validInput('rspProhibitedByDefault')">
+                            the field is required
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 ">
+          <div class="col-lg-10 col-md-8 col-xs-12 "></div>
+          <div class="col-lg-2 col-md-4 col-xs-12 ">
+            <button class="btn btn-red" style="width: 100%;" >Save</button>
+          </div>
+        </div>
+    </form>

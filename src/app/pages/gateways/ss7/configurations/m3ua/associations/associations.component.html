@@ -1,0 +1,116 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Sockets</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(1)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+<div class="table-responsive mt-4">
+    <table id="table-m3ua-server" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTriggerSocket">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>State</th>
+          <th>Transport Type</th>
+          <th>Address</th>
+          <th>Extra Address</th>
+          <th>Port</th>
+          <th>Socket Type</th>
+          <th class="align-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listSockets; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.name }}</td>
+            <td class="align-middle">{{ item?.state }}</td>
+            <td class="align-middle">{{ item?.transport_type }}</td>
+            <td class="align-middle">{{ item?.host_address }}</td>
+            <td class="align-middle">{{ item?.extra_address }}</td>
+            <td class="align-middle">{{ item?.host_port }}</td>
+            <td class="align-middle">{{ item?.socket_type }}</td>
+            <td class="align-center">
+                <button [disabled]="item.enabled!==0" class="btn btn-sm btn-red me-2" (click)="editSocket(item)" title="Edit record"><i class='bx bxs-pencil'></i></button>
+                <button [disabled]="item.enabled!==0" class="btn btn-sm btn-secondary me-2" (click)="deleteAssoc(item,MODAL_SOCKET)" title="Delete record"><i class='bx bxs-trash-alt'></i></button>
+                <button [disabled]="item.enabled!==0" class="btn btn-sm btn-success me-2"
+                  title="Start" (click)="run(item,MODAL_SOCKET)"><i class='bx bx-play'></i></button>
+                <button [disabled]="item.enabled ==0" class="btn btn-sm btn-danger"
+                  title="Stop" (click)="stop(item,MODAL_SOCKET)"><i class='bx bx-pause'></i></button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<br>
+
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Associations</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(2)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+
+<div class="table-responsive mt-4">
+    <table id="table-m3ua-associations" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTriggerAssociations">
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>State</th>
+            <th>Peer Address</th>
+            <th>Peer Port</th>
+            <th>Heartbeat</th>
+            <th>Socket</th>
+            <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listAssociations; let i = index">
+                <td class="align-middle">{{ item.id }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.state ? item?.state : "STOPPED" }}</td>
+                <td class="align-middle">{{ item?.peer }}</td>
+                <td class="align-middle">{{ item?.peer_port }}</td>
+                <td class="align-middle">{{ item?.m3ua_heartbeat }}</td>
+                <td class="align-middle">{{ item?.m3ua_socket_id }} ({{ item?.m3ua_socket_name}})</td>
+                <td class="align-center">
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-red me-2" (click)="editAssoc(item)" title="Edit record"><i class='bx bxs-pencil'></i></button>
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-secondary me-2" (click)="deleteAssoc(item, MODAL_ASSOCIATION)" title="Delete record"><i class='bx bxs-trash-alt'></i></button>
+                    <button [disabled]="item.enabled!==0" class="btn btn-sm btn-success me-2"
+                      title="Start" (click)="run(item,MODAL_ASSOCIATION)"><i class='bx bx-play'></i></button>
+                    <button [disabled]="item.enabled ==0" class="btn btn-sm btn-danger"
+                      title="Stop" (click)="stop(item,MODAL_ASSOCIATION)"><i class='bx bx-pause'></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddSocket" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <app-add-server [dataUpdate]="dataSocket" (closeModal)="onCloseModal($event, 1)" />
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddAssociation" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <app-add-association [dataUpdate]="dataAssociation" (closeModal)="onCloseModal($event, 2)" />
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteAssociation" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+    </div>
+</div>

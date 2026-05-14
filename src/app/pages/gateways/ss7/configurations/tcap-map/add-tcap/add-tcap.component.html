@@ -1,0 +1,268 @@
+<div class="content-wrapper ps-2 pe-2">
+  <label class="card-header title-content mb-0 ml-0"
+    style="font-size: 20px; font-weight: 500; padding-bottom: 0px;">
+    TCAP Properties
+  </label>
+  <hr />
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+      <div class="row">
+        <div class="form-group col-md-4 mb-2">
+          <div class="row mb-2">
+            <label for="ssn_list" class="col-sm-7 label">SSN List</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" id="ssn_list" formControlName="ssn_list"
+                [class.is-invalid]="validInput('ssn_list')">
+              <span class="text-danger mt-2" *ngIf="validInput('ssn_list')">
+                the field is required
+              </span>
+              <span class="text-danger mt-2" *ngIf="validPattern('ssn_list')">
+                {{ getPatternMessage('ssn_list') }}
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="preview_mode" class="col-sm-7 label">Preview Mode</label>
+            <div class="col-sm-5">
+              <select class="form-select" id="preview_mode" formControlName="preview_mode">
+                <option value="false">false</option>
+                <option value="true">true</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('preview_mode')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="dialog_idle_timeout" class="col-sm-7 label">Dialog Idle Timeout</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="dialog_idle_timeout" formControlName="dialog_idle_timeout"
+                [class.is-invalid]="validInput('dialog_idle_timeout')">
+              <span class="text-danger mt-2" *ngIf="validInput('dialog_idle_timeout')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="invoke_timeout" class="col-sm-7 label">Invoke Timeout</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="invoke_timeout" formControlName="invoke_timeout"
+                [class.is-invalid]="validInput('invoke_timeout')">
+              <span class="text-danger mt-2" *ngIf="validInput('invoke_timeout')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="dialog_id_range_start" class="col-sm-7 label">Dialog Id Range Start</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="dialog_id_range_start" formControlName="dialog_id_range_start"
+                [class.is-invalid]="validInput('dialog_id_range_start')">
+              <span class="text-danger mt-2" *ngIf="validInput('dialog_id_range_start')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="dialog_id_range_end" class="col-sm-7 label">Dialog Id Range End</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="dialog_id_range_end" formControlName="dialog_id_range_end"
+                [class.is-invalid]="validInput('dialog_id_range_end')">
+              <span class="text-danger mt-2" *ngIf="validInput('dialog_id_range_end')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="max_dialogs" class="col-sm-7 label">Max Dialogs</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="max_dialogs" formControlName="max_dialogs"
+                [class.is-invalid]="validInput('max_dialogs')">
+              <span class="text-danger mt-2" *ngIf="validInput('max_dialogs')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="do_not_send_protocol_version" class="col-sm-7 label">Do not Send Protocol Version</label>
+            <div class="col-sm-5">
+              <select class="form-select" id="do_not_send_protocol_version" formControlName="do_not_send_protocol_version">
+                <option value="false">false</option>
+                <option value="true">true</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('do_not_send_protocol_version')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-2">
+          <div class="row mb-2">
+            <label for="swap_tcap_id_enabled" class="col-sm-7 label">Swap TCAP ID Enabled</label>
+            <div class="col-sm-5">
+              <select class="form-select" id="swap_tcap_id_enabled" formControlName="swap_tcap_id_enabled">
+                <option value="false" >false</option>
+                <option value="true">true</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('swap_tcap_id_enabled')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="sls_range_id" class="col-sm-7 label">SLS Range</label>
+            <div class="col-sm-5">
+              <select class="form-select" id="sls_range_id" formControlName="sls_range_id">
+                  @for (item of slsRangeList; track $index) {
+                      <option value="{{ item.id }}">{{ item.name }}</option>
+                  }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('sls_range_id')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_delay_thr1" class="col-sm-7 label">Exr Delay THR 1</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_delay_thr1" formControlName="exr_delay_thr1"
+                [class.is-invalid]="validInput('exr_delay_thr1')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_delay_thr1')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_delay_thr2" class="col-sm-7 label">Exr Delay THR 2</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_delay_thr2" formControlName="exr_delay_thr2"
+                [class.is-invalid]="validInput('exr_delay_thr2')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_delay_thr2')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_delay_thr3" class="col-sm-7 label">Exr Delay THR 3</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_delay_thr3" formControlName="exr_delay_thr3"
+                [class.is-invalid]="validInput('exr_delay_thr3')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_delay_thr3')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_back_to_normal_delay_thr1" class="col-sm-7 label">Exr Back-to-Normal Delay THR 1</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_back_to_normal_delay_thr1" formControlName="exr_back_to_normal_delay_thr1"
+                [class.is-invalid]="validInput('exr_back_to_normal_delay_thr1')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_back_to_normal_delay_thr1')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_back_to_normal_delay_thr2" class="col-sm-7 label">Exr Back-to-Normal Delay THR 2</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_back_to_normal_delay_thr2" formControlName="exr_back_to_normal_delay_thr2"
+                [class.is-invalid]="validInput('exr_back_to_normal_delay_thr2')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_back_to_normal_delay_thr2')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="exr_back_to_normal_delay_thr3" class="col-sm-7 label">Exr Back-to-Normal Delay THR 3</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="exr_back_to_normal_delay_thr3" formControlName="exr_back_to_normal_delay_thr3"
+                [class.is-invalid]="validInput('exr_back_to_normal_delay_thr3')">
+              <span class="text-danger mt-2" *ngIf="validInput('exr_back_to_normal_delay_thr3')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-4 mb-2">
+          <div class="row mb-2">
+            <label for="memory_monitor_thr1" class="col-sm-7 label">Memory Monitor THR 1</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="memory_monitor_thr1" formControlName="memory_monitor_thr1"
+                [class.is-invalid]="validInput('memory_monitor_thr1')">
+              <span class="text-danger mt-2" *ngIf="validInput('memory_monitor_thr1')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="memory_monitor_thr2" class="col-sm-7 label">Memory Monitor THR 2</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="memory_monitor_thr2" formControlName="memory_monitor_thr2"
+                [class.is-invalid]="validInput('memory_monitor_thr2')">
+              <span class="text-danger mt-2" *ngIf="validInput('memory_monitor_thr2')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="memory_monitor_thr3" class="col-sm-7 label">Memory Monitor THR 3</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="memory_monitor_thr3" formControlName="memory_monitor_thr3"
+                [class.is-invalid]="validInput('memory_monitor_thr3')">
+              <span class="text-danger mt-2" *ngIf="validInput('memory_monitor_thr3')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="mem_back_to_normal_delay_thr1" class="col-sm-7 label">Mem Back-to-Normal Delay THR 1</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="mem_back_to_normal_delay_thr1" formControlName="mem_back_to_normal_delay_thr1"
+                [class.is-invalid]="validInput('mem_back_to_normal_delay_thr1')">
+              <span class="text-danger mt-2" *ngIf="validInput('mem_back_to_normal_delay_thr1')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="mem_back_to_normal_delay_thr2" class="col-sm-7 label">Mem Back-to-Normal Delay THR 2</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="mem_back_to_normal_delay_thr2" formControlName="mem_back_to_normal_delay_thr2"
+                [class.is-invalid]="validInput('mem_back_to_normal_delay_thr2')">
+              <span class="text-danger mt-2" *ngIf="validInput('mem_back_to_normal_delay_thr2')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="mem_back_to_normal_delay_thr3" class="col-sm-7 label">Mem Back-to-Normal Delay THR 3</label>
+            <div class="col-sm-5">
+              <input type="number" class="form-control" id="mem_back_to_normal_delay_thr3" formControlName="mem_back_to_normal_delay_thr3"
+                [class.is-invalid]="validInput('mem_back_to_normal_delay_thr3')">
+              <span class="text-danger mt-2" *ngIf="validInput('mem_back_to_normal_delay_thr3')">
+                the field is required
+              </span>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="blocking_incoming_tcap_messages" class="col-sm-7 label">Blocking incoming TCAP messages</label>
+            <div class="col-sm-5">
+              <select class="form-select" id="blocking_incoming_tcap_messages" formControlName="blocking_incoming_tcap_messages">
+                <option value="false" >false</option>
+                <option value="true">true</option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('blocking_incoming_tcap_messages')">
+                the field is required
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="d-flex align-items-center justify-content-end">
+          <button class="btn btn-red" [disabled]="form.invalid" >Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,195 @@
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="card-header">
+    <p class="title-content-tab">TCP/SCTP</p>
+    <hr>
+    <div class="row">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label for="connect-delay">Connect Delay</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" id="connect-delay" formControlName="connectDelay" placeholder="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-header">
+    <p class="title-content-tab">M3UA</p>
+    <hr>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Max Sequence Number</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="maxSequenceNumber" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Max As For Route</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="maxAsForRoute" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Deliver Message Thread Count</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="deliverMessageThreadCount" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Routing Label Format</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="routingLabelFormat" placeholder="">
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Heartbeat Time</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="heartbeatTime" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Use Lowest Bit for link</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+              <select class="form-select" id="useLowestBitForLink" name="useLowestBitForLink" formControlName="useLowestBitForLink">
+                <option value="true">TRUE</option>
+                <option value="false">FALSE</option>
+              </select>
+            <!-- </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>Routing Key Management Enabled</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+              <select class="form-select" id="routingKeyManagementEnabled" name="routingKeyManagementEnabled" formControlName="routingKeyManagementEnabled">
+                <option value="true">TRUE</option>
+                <option value="false">FALSE</option>
+              </select>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>cc delay threshold 1</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayThreshold1" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>CC Delay Threshold 2</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayThreshold2" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>CC Delay Threshold 3</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayThreshold3" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>CC Delay Back To Normal Threshold 1</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayBackToNormalThreshold1" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>CC Delay Back To Normal Threshold 2</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayBackToNormalThreshold2" placeholder="">
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-md-8 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <label>CC Delay Back To Normal Threshold 3</label>
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <div class="form-group">
+          <input type="text" class="form-control" formControlName="ccDelayBackToNormalThreshold3" placeholder="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2">
+    <div class="d-flex align-items-center justify-content-end">
+      <button type="submit" [disabled]="form.invalid" class="btn btn-red">Save</button>
+    </div>
+  </div>
+</form>

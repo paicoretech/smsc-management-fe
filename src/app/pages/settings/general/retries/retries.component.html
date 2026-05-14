@@ -1,0 +1,100 @@
+<h5>Retries and validity period</h5>
+<form  [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+    <div class="row mt-5">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+                <label for="maxDueDelay" class="col-sm-6 label">Max Due Delay (Seconds)</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="maxDueDelay" formControlName="maxDueDelay"
+                    [class.is-invalid]="validInput('maxDueDelay')">
+                  <span class="text-danger mt-2" *ngIf="validInput('maxDueDelay')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMin('maxDueDelay')">
+                    Minimum is {{ getMin('maxDueDelay') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('maxDueDelay')">
+                    {{ getPatternMessage('maxDueDelay') }}
+                  </span>
+                </div>
+            </div> 
+
+            <div class="form-group row mb-2">
+                <label for="retryDelayMultiplier" class="col-sm-6 label">Retry Delay Multiplier</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="retryDelayMultiplier" formControlName="retryDelayMultiplier"
+                    [class.is-invalid]="validInput('retryDelayMultiplier')">
+                  <span class="text-danger mt-2" *ngIf="validInput('retryDelayMultiplier')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMin('retryDelayMultiplier')">
+                    Minimum is {{ getMin('retryDelayMultiplier') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('retryDelayMultiplier')">
+                    {{ getPatternMessage('retryDelayMultiplier') }}
+                  </span>
+                </div>
+            </div> 
+
+            <div class="form-group row mb-2">
+                <!-- <label for="validityPeriod" class="col-sm-6 label">Validity period scheduling prolongation (sec)</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="validityPeriod" formControlName="validityPeriod"
+                    [class.is-invalid]="validInput('validityPeriod')">
+                  <span class="text-danger mt-2" *ngIf="validInput('validityPeriod')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMin('validityPeriod')">
+                    Minimum is {{ getMin('validityPeriod') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('validityPeriod')">
+                    {{ getPatternMessage('validityPeriod') }}
+                  </span>
+                </div> -->
+            </div> 
+
+        </div> 
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 position-relative">
+            <div class="form-group row mb-2">
+                <label for="firstRetryDelay" class="col-sm-6 label">First Due Delay (Seconds)</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="firstRetryDelay" formControlName="firstRetryDelay"
+                    [class.is-invalid]="validInput('firstRetryDelay')">
+                  <span class="text-danger mt-2" *ngIf="validInput('firstRetryDelay')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMin('firstRetryDelay')">
+                    Minimum is {{ getMin('firstRetryDelay') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('firstRetryDelay')">
+                    {{ getPatternMessage('firstRetryDelay') }}
+                  </span>
+                </div>
+            </div> 
+
+            <div class="form-group row mb-2">
+                <!-- <label for="second_due_delay" class="col-sm-6 label">Second Due Delay (Seconds)</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="second_due_delay" formControlName="second_due_delay"
+                    [class.is-invalid]="validInput('second_due_delay')">
+                  <span class="text-danger mt-2" *ngIf="validInput('second_due_delay')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validMin('second_due_delay')">
+                    Minimum is {{ getMin('second_due_delay') }}
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('second_due_delay')">
+                    {{ getPatternMessage('second_due_delay') }}
+                  </span>
+                </div> -->
+            </div> 
+
+            <div class="row position-absolute bottom-0 end-0 mt-2 div-btn-settings">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex mb-2 me-2">
+                    <button class="btn btn-red" [disabled]="form.invalid">Save</button>
+                </div>
+            </div>
+
+        </div> 
+    </div>
+</form>

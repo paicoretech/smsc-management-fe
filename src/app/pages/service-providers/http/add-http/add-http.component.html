@@ -1,0 +1,413 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center mt-3">
+                <img alt="icon" height="40px" src="/assets/img/desktop-smartphone-transfer-icon-2.png" width="auto">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item mt-4 not-bredcrumb">
+                            <a (click)="close()" class="card-header title-content mb-0 ml-2" style="font-size: 20px; font-weight: 500; color: #1d609d; cursor: pointer;">
+                                HTTP Service Providers
+                            </a>
+                        </li>
+                        <li aria-current="page" class="breadcrumb-item active" style="margin-top: 22px; color: #7b3031; font-size: 18px">
+                            <label class="mt-1">{{ isEdit ? 'Edit' : 'Create' }}</label>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <br>
+        <form (ngSubmit)="save()" [formGroup]="form" class="row g-3 d-flex justify-content-center">
+            <div class="col-12 mb-2">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                    <h5 class="fw-bold">{{ title }}</h5>
+                    <button [disabled]="form.invalid || saveDisabled"
+                            class="btn btn-red"
+                            type="submit">
+                        {{ isEdit ? 'Update Changes' : 'Save Changes' }}
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+
+                    @if ( isEdit ) {
+                        <div class="form-group row mb-2">
+                            <label class="col-sm-4 label" for="network_id">Network Id</label>
+                            <div class="col-sm-8">
+                                <input [class.is-invalid]="validInput('network_id')"
+                                       class="form-control"
+                                       formControlName="network_id"
+                                       id="network_id"
+                                       type="text">
+                                <span *ngIf="validInput('network_id')" class="text-danger mt-2">
+                                    the field is required
+                                </span>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="name">ESME Name</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('name')"
+                                   class="form-control"
+                                   formControlName="name"
+                                   id="name"
+                                   type="text">
+                            <span *ngIf="validInput('name')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="system_id">System Id</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('system_id')"
+                                   class="form-control"
+                                   formControlName="system_id"
+                                   id="system_id"
+                                   type="text">
+                            <span *ngIf="validInput('system_id')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                            <span *ngIf="validMinLength('system_id')" class="text-danger mt-2">
+                                Minimum length is {{ getMinLength('system_id') }}
+                            </span>
+                            <span *ngIf="validMaxLength('system_id')" class="text-danger mt-2">
+                                Maximum length is {{ getMaxLength('system_id') }}
+                            </span>
+                            <span *ngIf="validPattern('system_id')" class="text-danger mt-2">
+                                {{ getPatternMessage('system_id') }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="tps">Messages Per Second</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('tps')"
+                                   class="form-control"
+                                   formControlName="tps"
+                                   id="tps"
+                                   type="number">
+                            <span *ngIf="validInput('tps')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="message_priority">Messages Priority</label>
+                        <div class="col-sm-8">
+                            <select class="form-select"
+                                    formControlName="message_priority"
+                                    id="message_priority">
+                                <option value="LOW">LOW</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="HIGH">HIGH</option>
+                            </select>
+                            <span *ngIf="validInput('message_priority')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="contact_name">Contact Name</label>
+                        <div class="col-sm-8">
+                            <input class="form-control"
+                                   formControlName="contact_name"
+                                   id="contact_name"
+                                   type="text">
+                            <span *ngIf="validPattern('contact_name')" class="text-danger mt-2">
+                                {{ getPatternMessage('contact_name') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="email">Email</label>
+                        <div class="col-sm-8">
+                            <input class="form-control"
+                                   formControlName="email"
+                                   id="email"
+                                   type="email">
+                            <span *ngIf="validPattern('email')" class="text-danger mt-2">
+                                {{ getPatternMessage('email') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="phone_number">Phone Number</label>
+                        <div class="col-sm-8">
+                            <input class="form-control"
+                                   formControlName="phone_number"
+                                   id="phone_number"
+                                   type="text">
+                            <span *ngIf="validPattern('phone_number')" class="text-danger mt-2">
+                                {{ getPatternMessage('phone_number') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-bold border-bottom pb-1 mb-3 mt-4">Callback</h5>
+            <!-- Callback URL -->
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="callback_url">Callback URL</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('callback_url')"
+                                   class="form-control"
+                                   formControlName="callback_url"
+                                   id="callback_url"
+                                   type="text">
+                            <span *ngIf="validInput('callback_url')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="authentication_types">Authentication Types</label>
+                        <div class="col-sm-8">
+                            <select (change)="onSelectAuthenticationTypes($event)"
+                                    class="form-select"
+                                    formControlName="authentication_types"
+                                    id="authentication_types">
+                                <option value="Undefined">Undefined</option>
+                                <option value="Basic">Basic</option>
+                                <option value="Bearer">Bearer</option>
+                                <option value="Api-key">Api-key</option>
+                            </select>
+                            <span *ngIf="validInput('authentication_types')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="showInputHeader" class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="header_security_name">Header Security Name</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('header_security_name')"
+                                   class="form-control"
+                                   formControlName="header_security_name"
+                                   id="header_security_name"
+                                   type="text">
+                            <span *ngIf="validInput('header_security_name')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div *ngIf="showInputToken" class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="token">Token</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('token')"
+                                   class="form-control"
+                                   formControlName="token"
+                                   id="token"
+                                   type="text">
+                            <span *ngIf="validInput('token')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="showInputUser" class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="user_name">Username</label>
+                        <div class="col-sm-8">
+                            <input [class.is-invalid]="validInput('user_name')"
+                                   class="form-control"
+                                   formControlName="user_name"
+                                   id="user_name"
+                                   type="text">
+                            <span *ngIf="validInput('user_name')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="showInputPass" class="form-group row mb-2">
+                        <label class="col-sm-4 label" for="passwd">Password</label>
+                        <div class="col-sm-8">
+                            <div style="display: inline-flex; align-items: center; width: 100%;">
+                                <input [class.is-invalid]="validInput('passwd')"
+                                       [type]="headerPasswordFieldType"
+                                       class="form-control"
+                                       formControlName="passwd"
+                                       id="passwd">
+                                <span (click)="togglePasswordVisibility('header')"
+                                      style="margin-left: -30px; cursor: pointer;">
+                                    <i *ngIf="headerPasswordVisible" class="bx bxs-low-vision"></i>
+                                    <i *ngIf="!headerPasswordVisible" class="bx bxs-show"></i>
+                                </span>
+                            </div>
+                            <span *ngIf="validInput('passwd')" class="text-danger mt-2">
+                                the field is required
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-3 mb-3">
+                <div class="card-header"
+                     style="background-color: #f8f9fa; cursor: pointer;"
+                     (click)="toggleHeadersPanel()"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#headersCollapse">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold">Additional Callback Headers HTTP</h6>
+                        <i class="bx" [ngClass]="showHeadersPanel ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                    </div>
+                </div>
+                <div class="collapse show" id="headersCollapse">
+                    <div class="card-body">
+                        <div formArrayName="callback_headers_http">
+                            <div [formGroup]="formTarget" class="row mb-3">
+                                <div class="col-md-5">
+                                    <input [class.is-invalid]="formTarget.get('header_name')?.invalid && formTarget.get('header_name')?.touched"
+                                           [disabled]="saveDisabled"
+                                           class="form-control"
+                                           formControlName="header_name"
+                                           placeholder="Header Name"
+                                           type="text">
+                                </div>
+
+                                <div class="col-md-5">
+                                    <input [class.is-invalid]="formTarget.get('header_value')?.invalid && formTarget.get('header_value')?.touched"
+                                           [disabled]="saveDisabled"
+                                           class="form-control"
+                                           formControlName="header_value"
+                                           placeholder="Header Value"
+                                           type="text">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button (click)="addHeader()"
+                                            [disabled]="formTarget.invalid || saveDisabled"
+                                            class="btn btn-red w-100"
+                                            type="button">
+                                        Add
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="headerList.length > 0" class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Header Name</th>
+                                        <th>Header Value</th>
+                                        <th style="width: 100px;">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody (cdkDropListDropped)="drop($event)" cdkDropList>
+                                    <tr *ngFor="let item of headerList; let i = index" cdkDrag>
+                                        <td>{{ item.header_name }}</td>
+                                        <td>{{ item.header_value }}</td>
+                                        <td class="text-center">
+                                            <button (click)="removeHeader(i)"
+                                                    [disabled]="saveDisabled"
+                                                    class="btn btn-sm btn-danger"
+                                                    title="Delete record"
+                                                    type="button">
+                                                <i class='bx bxs-trash-alt'></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 mb-3">
+                <div class="card-header"
+                     style="background-color: #f8f9fa; cursor: pointer;"
+                     (click)="toggleCustomParamsPanel()"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#customParamsCollapse">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold">Custom Parameters</h6>
+                        <i class="bx" [ngClass]="showCustomParamsPanel ? 'bx-chevron-up' : 'bx-chevron-down'"></i>
+                    </div>
+                </div>
+                <div class="collapse show" id="customParamsCollapse">
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">Key-value pairs automatically included as custom parameters in broadcast messages sent through this service provider.</p>
+                        <div class="row mb-3">
+                            <div class="col-md-5">
+                                <input [value]="customParamKey"
+                                       (input)="customParamKey = $any($event.target).value"
+                                       [disabled]="saveDisabled"
+                                       class="form-control"
+                                       placeholder="Key"
+                                       type="text">
+                            </div>
+                            <div class="col-md-5">
+                                <input [value]="customParamValue"
+                                       (input)="customParamValue = $any($event.target).value"
+                                       [disabled]="saveDisabled"
+                                       class="form-control"
+                                       placeholder="Value"
+                                       type="text">
+                            </div>
+                            <div class="col-md-2">
+                                <button (click)="addCustomParam()"
+                                        [disabled]="saveDisabled"
+                                        class="btn btn-red w-100"
+                                        type="button">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <div *ngIf="customParamsList.length > 0" class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                    <th style="width: 100px;">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let param of customParamsList; let i = index">
+                                    <td>{{ param.key }}</td>
+                                    <td>{{ param.value }}</td>
+                                    <td class="text-center">
+                                        <button (click)="removeCustomParam(i)"
+                                                [disabled]="saveDisabled"
+                                                class="btn btn-sm btn-danger"
+                                                title="Delete parameter"
+                                                type="button">
+                                            <i class='bx bxs-trash-alt'></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

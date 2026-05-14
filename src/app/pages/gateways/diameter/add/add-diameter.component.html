@@ -1,0 +1,42 @@
+<div class="content-wrapper ps-2 pe-2 pt-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img
+          src="/assets/img/base-station-icon-1.png"
+          alt="icon"
+          height="40px"
+          width="auto"
+        />
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a
+                [routerLink]="diameterBasePath"
+                class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d"
+              >
+                Diameter Gateway
+              </a>
+            </li>
+
+            <li
+              class="breadcrumb-item active"
+              style="margin-top: 22px; color: #7b3031; font-size: 18px"
+              aria-current="page"
+            >
+              <label class="mt-1">
+                {{ mode === 'add' ? "Create Diameter Gateway" : "Edit Diameter Gateway" }}
+              </label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <br>
+    <app-diameter
+      [diameterGatewayId]="diameterGatewayId"
+      [isCrudComponent]="true"
+    ></app-diameter>
+  </div>
+</div>

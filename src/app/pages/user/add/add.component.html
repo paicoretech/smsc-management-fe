@@ -1,0 +1,147 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="alert alert-primary d-flex align-items-center mt-0 ms-4 me-4 mb-0" role="alert" *ngIf="lockMessage">
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+      <use xlink:href="#info-fill"></use>
+    </svg>
+    <div>
+      {{ lockMessage }}
+    </div>
+  </div>
+
+  <div class="modal-body mt-0">
+    <form [formGroup]="form" class="row g-3 mt-2" (submit)="save()">
+      <div class="form-group row mb-2">
+        <label for="user_name" class="col-sm-5 label">Username</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" id="user_name" formControlName="user_name">
+          <span class="text-danger mt-2" *ngIf="validInput('user_name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="name" class="col-sm-5 label">Name</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" id="name" formControlName="name">
+          <span class="text-danger mt-2" *ngIf="validInput('name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="last_name" class="col-sm-5 label">Last Name</label>
+        <div class="col-sm-7">
+          <input type="text" class="form-control" id="last_name" formControlName="last_name">
+          <span class="text-danger mt-2" *ngIf="validInput('last_name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" *ngIf="!isEdit">
+        <label for="password" class="col-sm-5 label">Password</label>
+        <div class="col-sm-7">
+          <div class="position-relative">
+            <input [type]="passwordFieldType" class="form-control pe-5" id="password" name="password"
+              formControlName="password" [class.is-invalid]="validInput('password')" autocomplete="new-password"
+              style="width: 100%;" />
+            <span class="position-absolute" style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+              (click)="togglePasswordVisibility('password')">
+              <i *ngIf="isPasswordVisible" class="bx bxs-low-vision"></i>
+              <i *ngIf="!isPasswordVisible" class="bx bxs-show"></i>
+            </span>
+          </div>
+          <span class="text-danger mt-2" *ngIf="validInput('password')">
+            the field is required
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('password')">
+            Minimum length is {{ getMinLength('password') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" *ngIf="!isEdit">
+        <label for="confirmPassword" class="col-sm-5 label">Confirm Password</label>
+        <div class="col-sm-7">
+          <div class="position-relative">
+            <input [type]="passwordConfirmFieldType" class="form-control pe-5" id="confirmPassword"
+              name="confirmPassword" formControlName="confirmPassword"
+              [class.is-invalid]="validInput('confirmPassword')" autocomplete="new-password" style="width: 100%;" />
+            <span class="position-absolute" style="top: 50%; right: 15px; transform: translateY(-50%); cursor: pointer;"
+              (click)="togglePasswordVisibility('passwordConfirm')">
+              <i *ngIf="isPasswordConfirmVisible" class="bx bxs-low-vision"></i>
+              <i *ngIf="!isPasswordConfirmVisible" class="bx bxs-show"></i>
+            </span>
+
+          </div>
+          <span class="text-danger mt-2"
+            *ngIf="form.hasError('passwordMismatch') && form.controls['confirmPassword'].touched">
+            Passwords do not match
+          </span>
+          <span class="text-danger mt-2" *ngIf="validMinLength('confirmPassword')">
+            Minimum length is {{ getMinLength('confirmPassword') }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="roles" class="col-sm-5 label">Roles</label>
+        <div class="col-sm-7">
+          <ng-select [items]="roles" bindLabel="displayName" bindValue="name" [multiple]="true" formControlName="roles"
+            placeholder="Select roles" [closeOnSelect]="false">
+          </ng-select>
+          <span class="text-danger mt-2" *ngIf="validInput('roles')">
+            Select at least one role
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="all_service_providers" class="col-sm-5 label">All Service Providers</label>
+        <div class="col-sm-7 d-flex align-items-center">
+          <input type="checkbox" class="form-check-input mt-0" id="all_service_providers"
+            formControlName="all_service_providers">
+        </div>
+      </div>
+
+      <div class="form-group row mb-2">
+        <label for="service_providers" class="col-sm-5 label">Service Providers</label>
+        <div class="col-sm-7">
+          <ng-select [items]="providers" bindLabel="name" bindValue="network_id" [multiple]="true"
+            formControlName="service_providers" placeholder="Select service providers" [closeOnSelect]="false">
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="form-group row mb-2" *ngIf="!isRoot">
+        <label for="sender_ids" class="col-sm-5 label">Allowed Sender IDs</label>
+        <div class="col-sm-7">
+          <ng-select
+            [items]="senderIdOptions"
+            [addTag]="addSenderIdTag"
+            [multiple]="true"
+            [clearable]="true"
+            [closeOnSelect]="false"
+            bindLabel="value"
+            bindValue="value"
+            formControlName="sender_ids"
+            placeholder="Type a sender ID and press Enter">
+            (add)="onSenderIdAdded($event)"
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="col-12 text-center mt-3">
+        <button class="btn btn-red w-50" [disabled]="!btnEnabled || form.invalid" type="submit">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

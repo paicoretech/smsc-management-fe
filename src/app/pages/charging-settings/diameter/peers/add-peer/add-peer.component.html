@@ -1,0 +1,151 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+            <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+            <div class="form-group row mb-2">
+                <label for="name" class="col-sm-6 label">Name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="name" formControlName="name"
+                        [class.is-invalid]="validInput('name')">
+                    <span class="text-danger mt-2" *ngIf="validInput('name')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('name')">
+                        {{ getPatternMessage('name') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="uri" class="col-sm-6 label">URI</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="uri" formControlName="uri"
+                        [class.is-invalid]="validInput('uri')">
+                    <span class="text-danger mt-2" *ngIf="validInput('uri')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('uri')">
+                        {{ getPatternMessage('uri') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="rating" class="col-sm-6 label">Rating</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="rating" formControlName="rating"
+                        [class.is-invalid]="validInput('rating')">
+                    <span class="text-danger mt-2" *ngIf="validInput('rating')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('rating')">
+                        {{ getPatternMessage('rating') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="host" class="col-sm-6 label">Host</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="host" formControlName="host"
+                        [class.is-invalid]="validInput('host')">
+                    <span class="text-danger mt-2" *ngIf="validInput('host')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('host')">
+                        {{ getPatternMessage('host') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="applications" class="col-sm-6 label">Applications</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="applications" formControlName="applications"
+                        [class.is-invalid]="validInput('applications')">
+                    <span class="text-danger mt-2" *ngIf="validInput('applications')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('applications')">
+                        {{ getPatternMessage('applications') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="ip" class="col-sm-6 label">Ip</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="ip" formControlName="ip"
+                        [class.is-invalid]="validInput('ip')">
+                    <span class="text-danger mt-2" *ngIf="validInput('ip')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('ip')">
+                        {{ getPatternMessage('ip') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="attempt_connect" class="col-sm-6 label">Attempt Connect</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" class="form-check-input check_form" id="attempt_connect"
+                        formControlName="attempt_connect" [class.is-invalid]="validInput('attempt_connect')">
+                    <span class="text-danger mt-2" *ngIf="validInput('attempt_connect')">
+                        the field is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="port_range" class="col-sm-6 label">Port Range</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="port_range" formControlName="port_range"
+                        [class.is-invalid]="validInput('port_range')">
+                    <span class="text-danger mt-2" *ngIf="validInput('port_range')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('port_range')">
+                        {{ getPatternMessage('port_range') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="security_ref" class="col-sm-6 label">Security Ref</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="security_ref" formControlName="security_ref"
+                        [class.is-invalid]="validInput('security_ref')">
+                    <span class="text-danger mt-2" *ngIf="validInput('security_ref')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('security_ref')">
+                        {{ getPatternMessage('security_ref') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="standby_addresses" class="col-sm-6 label">Standby Addresses</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="standby_addresses" formControlName="standby_addresses"
+                        [class.is-invalid]="validInput('standby_addresses')">
+                    <span class="text-danger mt-2" *ngIf="validInput('standby_addresses')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('standby_addresses')">
+                        {{ getPatternMessage('standby_addresses') }}
+                    </span>
+                </div>
+            </div>
+
+            <button class="btn btn-red" id="btn_save" style="width: 60%;" [disabled]="form.invalid">Save</button>
+        </form>
+    </div>
+</div>

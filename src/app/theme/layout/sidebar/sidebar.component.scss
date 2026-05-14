@@ -1,0 +1,190 @@
+@import '../../../../styles.scss';
+
+#paic-logo {
+  cursor: pointer;
+  width: 90%;
+  height: auto
+}
+
+ul {
+  margin-left: 5%;
+}
+
+li {
+  max-width: 90%;
+}
+
+.item-decoration {
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.img-logout {
+  display: inline-block;
+  text-decoration: none;
+  height: 24px;
+  width: auto;
+  color: $color-primary !important;
+}
+
+.menu-link-personalized {
+  display: inline-block;
+  text-decoration: none;
+  color: $color-dark;
+  font-weight: bold;
+  border: none;
+  background: none;
+}
+
+.show {
+  display: inline !important;
+}
+
+.hidden {
+  display: none;
+}
+
+aside {
+  height: 100%;
+  margin: 0;
+}
+
+.Logout-button {
+  border-top: rgb(224, 224, 224) 1px solid;
+  text-align: left;
+  width: 90%;
+  margin-left: 5%;
+
+  a {
+    margin-left: 5%;
+  }
+}
+
+.dropdown i.bx-chevron-down {
+  margin-left: 10px;
+}
+
+// ── Section headers (SMSC / IP-SM-GW) ──────────────────────────────────────
+.menu-section {
+  list-style: none;
+  margin: 10px 0 5px 0;
+  padding-top: 10px;
+  padding-left: 16px;
+  border-top: 1px solid rgb(224, 224, 224);
+  cursor: default;
+}
+
+.menu-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8a8a8a;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.menu-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+// ── isRoot vs indented items ────────────────────────────────────────────────
+.menu-item:not(.is-root) > .menu-link,
+.menu-item:not(.is-root) > .dropdown {
+  margin-left: 18px;
+}
+
+.menu-item.is-root > .menu-link,
+.menu-item.is-root > .dropdown {
+  margin-left: 0;
+}
+
+// ── Menu links (shared base) ────────────────────────────────────────────────
+.menu-inner {
+  padding: 0;
+  margin: 0;
+
+  .menu-item {
+    list-style: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .menu-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none !important;
+    font-weight: bold;
+    width: 100%;
+    min-height: 30px;
+    margin: 10px 0;
+    padding: 5px 10px;
+    color: $color-dark;
+
+    .menu-icon {
+      width: 20px;
+      height: auto;
+      margin-left: 10px;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .menu-crown {
+      width: 16px;
+      height: 16px;
+      margin-left: 6px;
+      display: inline-block;
+    }
+
+    .menu-title {
+      margin-left: 10px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    &.menu-link-normal:not(.item-selected):hover {
+      background-color: lighten($color-primary, 60%) !important;
+      color: $color-dark !important;
+    }
+
+    &.menu-link-normal.item-selected {
+      background-color: $color-primary !important;
+      color: white !important;
+      transition: all 0.15s ease-in-out;
+
+      .menu-icon {
+        filter: brightness(0) invert(1);
+        width: 20px;
+        height: auto;
+      }
+
+      &:hover {
+        background-color: $color-primary !important;
+        color: white !important;
+        font-weight: bolder;
+        transform: scale(1.02);
+      }
+    }
+
+    &.menu-link-premium:hover {
+      background-color: lighten($color-primary, 60%) !important;
+    }
+  }
+
+  .dropdown i.bx-chevron-down {
+    margin-left: 10px;
+  }
+
+  .submenu {
+    margin: 0;
+    padding: 0;
+
+    .submenu-item {
+      list-style: none;
+      padding-left: 40px;
+    }
+  }
+}

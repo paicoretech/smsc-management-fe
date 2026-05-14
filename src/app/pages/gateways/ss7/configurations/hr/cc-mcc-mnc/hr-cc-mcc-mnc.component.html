@@ -1,0 +1,55 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+  <p class="title-content-tab">MSISDN Prefix / MCC-MNC</p>
+  <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModalCreate()">
+    <i class='bx bx-plus'></i>
+    Create
+  </button>
+</div>
+<hr style="margin: 0px;">
+
+<div class="table-responsive mt-4">
+  <table class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>MSISDN Prefix</th>
+        <th>MCC-MNC</th>
+        <th>SMSC</th>
+        <th class="align-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listRows; let i = index">
+        <td class="align-middle">{{ item.id }}</td>
+        <td class="align-middle">{{ item.country_code }}</td>
+        <td class="align-middle">{{ item.mcc_mnc }}</td>
+        <td class="align-middle">{{ item.smsc }}</td>
+        <td class="align-center">
+          <button class="btn btn-sm btn-red me-2" title="Edit" (click)="editData(item)">
+            <i class='bx bxs-pencil'></i>
+          </button>
+          <button class="btn btn-sm btn-secondary me-2" title="Delete" (click)="showDelete(item)">
+            <i class='bx bxs-trash-alt'></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddCcMccMnc" data-bs-backdrop="static"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-add-hr-cc-mcc-mnc
+      [ss7HomeRoutingId]="ss7HomeRoutingId"
+      [dataUpdate]="rowSelected"
+      (closeModal)="onCloseModal($event)" />
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteCcMccMnc" data-bs-backdrop="static"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+  </div>
+</div>

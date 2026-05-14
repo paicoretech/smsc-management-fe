@@ -1,0 +1,57 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Routes</p>
+    <button type="button" class="btn btn-red" style="margin-left: auto;" (click)="showModal(true)" >
+        <i class='bx bx-plus'></i>
+        Create
+    </button>
+</div>
+<hr style="margin: 0px;">
+<div class="table-responsive mt-4">
+    <table id="table-m3ua-routing" class="table" style="width:100%" datatable [dtOptions]="dtOptions"
+      [dtTrigger]="dtTrigger">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>OPC</th>
+          <th>DPC</th>
+          <th>Service Indicator</th>
+          <th>Traffic Mode</th>
+          <th>Application Server</th>
+          <th class="align-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listRouting; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.origination_point_code }}</td>
+            <td class="align-middle">{{ item?.destination_point_code }}</td>
+            <td class="align-middle">{{ item?.service_indicator }}</td>
+            <td class="align-middle">{{ item?.traffic_mode_id }} ({{ item?.traffic_mode_name?.trim() }})</td>
+            <td class="align-middle">
+              @for (i of item?.app_servers; track $index) {
+                <span class="badge bg-secondary me-2">{{ i }}</span>
+              }
+            </td>
+            <td class="align-center">
+                <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="editData(item)"><i class='bx bxs-pencil'></i></button>
+                <button class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="showDeleteRoute(item)" ><i class='bx bxs-trash-alt'></i></button>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddRouting" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <app-add-route [dataUpdate]="dataRoute" [m3ua]="m3uaSettings" (closeModal)="onCloseModal($event)" />
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteRouting" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+    </div>
+</div>

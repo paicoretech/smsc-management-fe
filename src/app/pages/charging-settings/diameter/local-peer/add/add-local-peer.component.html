@@ -1,0 +1,70 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+            <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+            <div class="form-group row mb-2">
+                <label for="name" class="col-sm-6 label">Name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="name" formControlName="name"
+                        [class.is-invalid]="validInput('name')">
+                    <span class="text-danger mt-2" *ngIf="validInput('name')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('name')">
+                        {{ getPatternMessage('name') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="vendor_id" class="col-sm-6 label">Vendor Id</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="vendor_id" formControlName="vendor_id"
+                        [class.is-invalid]="validInput('vendor_id')">
+                    <span class="text-danger mt-2" *ngIf="validInput('vendor_id')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('vendor_id')">
+                        {{ getPatternMessage('vendor_id') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="auth_appl_id" class="col-sm-6 label">Auth Appl Id</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="auth_appl_id" formControlName="auth_appl_id"
+                        [class.is-invalid]="validInput('auth_appl_id')">
+                    <span class="text-danger mt-2" *ngIf="validInput('auth_appl_id')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('auth_appl_id')">
+                        {{ getPatternMessage('auth_appl_id') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="acct_appl_id" class="col-sm-6 label">Acct Appl Id</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="acct_appl_id" formControlName="acct_appl_id"
+                        [class.is-invalid]="validInput('acct_appl_id')">
+                    <span class="text-danger mt-2" *ngIf="validInput('acct_appl_id')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('acct_appl_id')">
+                        {{ getPatternMessage('acct_appl_id') }}
+                    </span>
+                </div>
+            </div>
+
+            <button class="btn btn-red" id="btn_save" style="width: 60%;" [disabled]="form.invalid">Save</button>
+        </form>
+    </div>
+</div>

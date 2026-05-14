@@ -1,0 +1,68 @@
+<div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+    <p class="title-content-tab">Remote Resources</p>
+    <div style="display: flex; gap: 10px;">
+        <button *ngIf="isGatewayStarted()" 
+                type="button" 
+                class="btn btn-red" 
+                [disabled]="!hasUnsavedChanges || isHotReloadInProgress"
+                (click)="triggerHotReload()">
+            <i class='bx bx-refresh'></i>
+            <span *ngIf="isHotReloadInProgress">Reloading...</span>
+            <span *ngIf="!isHotReloadInProgress">Hot Reload</span>
+        </button>
+        <button type="button" class="btn btn-red" (click)="showModal()" >
+            <i class='bx bx-plus'></i>
+            Create
+        </button>
+    </div>
+</div>
+<hr style="margin: 0px;">
+
+<div class="table-responsive mt-4">
+    <table id="table-m3ua-associations" class="table" style="width:100%" datatable [dtOptions]="dtOptionsRemoteResource"
+      [dtTrigger]="dtTriggerRemoteResource">
+        <thead>
+            <tr>
+              <th>ID</th>
+              <th>SPC</th>
+              <th>SPC Status</th>
+              <th>SSN</th>
+              <th>SSN Status</th>
+              <th>SCCP Status</th>
+              <th>Mark Pohibited When SPC Resumes</th>
+              <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listRemoteResource; let i = index">
+            <td class="align-middle">{{ item.id }}</td>
+            <td class="align-middle">{{ item?.remote_spc }}</td>
+            <td class="align-middle">{{ item?.remote_spc_status }}</td>
+            <td class="align-middle">{{ item?.remote_ssn }}</td>
+            <td class="align-middle">{{ item?.remote_ssn_status }}</td>
+            <td class="align-middle">{{ item?.remote_sccp_status }}</td>
+            <td class="align-middle">{{ item?.mark_prohibited }}</td>
+            <td class="align-center">
+                <button class="btn btn-sm btn-red me-2" title="Edit record" (click)="editItem(item)"><i class='bx bxs-pencil'></i></button>
+                <button class="btn btn-sm btn-secondary me-2" title="Delete record" (click)="showConfirmationDelete(item)"><i class='bx bxs-trash-alt'></i></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalAddResource" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-add-remote-resource [dataId]="sccpId" [dataUpdate]="remoteResource" (closeModal)="onCloseModal($event)" />
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteResource" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)" />
+    </div>
+</div>

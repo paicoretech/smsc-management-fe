@@ -1,0 +1,100 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h5 class="modal-title text-center mx-auto">Broadcast Statistics</h5>
+            <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+        </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="row mb-3">
+            <label class="col-sm-6 fw-bold">Broadcast Name:</label>
+            <div class="col-sm-6">
+                <span>{{ broadcast.name }}</span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-6 fw-bold">Service Provider:</label>
+            <div class="col-sm-6">
+                <span>{{ providerName }}</span>
+            </div>
+        </div>
+
+        <hr>
+
+        <ul class="nav nav-tabs mb-3" role="tablist" style="border-bottom:1px solid #dee2e6;">
+            <li class="nav-item" role="presentation">
+                <button
+                        class="nav-link"
+                        [class.active]="activeTab==='stats'"
+                        (click)="showTab('stats')"
+                        type="button"
+                        role="tab"
+                        [attr.aria-selected]="activeTab==='stats'"
+                        style="height:40px;"
+                >
+                    Execution Statistics
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button
+                        class="nav-link"
+                        [class.active]="activeTab==='failures'"
+                        [disabled]="!statistics.failed"
+                        (click)="showTab('failures')"
+                        type="button"
+                        role="tab"
+                        [attr.aria-selected]="activeTab==='failures'"
+                        style="height:40px;"
+                        [attr.title]="statistics.failed ? 'View failure reasons' : 'No failures'"
+                >
+                    Failed (by reason)
+                </button>
+            </li>
+        </ul>
+
+        <div *ngIf="activeTab==='stats'">
+            <div class="row mb-2" *ngIf="statistics">
+                <div class="col-6">Total Messages:</div><div class="col-6">{{ statistics.total_message}}</div>
+                <div class="col-6">Pending:</div><div class="col-6">{{ statistics.pending  }}</div>
+                <div class="col-6">Enqueue:</div><div class="col-6">{{ statistics.enqueue}}</div>
+                <div class="col-6">Sent:</div><div class="col-6">{{ statistics.sent }}</div>
+                <div class="col-6">Failed:</div><div class="col-6">{{ statistics.failed }}</div>
+                <div class="col-6">Duplicated:</div><div class="col-6">{{ statistics.duplicated  }}</div>
+                <div class="col-6">Invalid:</div><div class="col-6">{{ statistics.invalid }}</div>
+            </div>
+        </div>
+
+        <div *ngIf="activeTab==='failures'">
+            <div *ngIf="failuresLoading" class="text-muted small">Loading…</div>
+            <div *ngIf="failuresError" class="text-danger small">{{ failuresError }}</div>
+
+            <div
+                    class="table-responsive"
+                    *ngIf="!failuresLoading && !failuresError"
+                    (scroll)="onReasonsScroll($event)"
+                    style="max-height: 360px; overflow: auto; border:1px solid #dee2e6; border-radius:.25rem;
+                    padding-right: .75rem;"
+            >
+                <table class="table table-sm table-bordered mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width:70%; text-transform:none;">Reason</th>
+                        <th class="text-end" style="text-transform:none; padding-right:.75rem;">Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let reason of visibleReasons">
+                        <td>{{ reason.comment || '—' }}</td>
+                        <td class="text-end">{{ reason.count | number }}</td>
+                    </tr>
+                    <tr *ngIf="!visibleReasons.length && !failuresLoading">
+                        <td colspan="2" class="text-center text-muted">No failure rows found.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

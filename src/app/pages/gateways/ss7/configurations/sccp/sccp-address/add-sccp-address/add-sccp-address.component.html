@@ -1,0 +1,157 @@
+<div class="modal-content">
+    <div class="modal-header" style="border: none;">
+      <div class="d-flex justify-content-between align-items-center w-100">
+        <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+        <button type="button" class="btn btn-close-modal" (click)="close(false)">X</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="name" class="col-sm-5 label">Name</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="name" formControlName="name"
+                    [class.is-invalid]="validInput('name')">
+                  <span class="text-danger mt-2" *ngIf="validInput('name')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="tt" class="col-sm-5 label">Translation Type</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="tt" formControlName="tt"
+                    [class.is-invalid]="validInput('tt')">
+                  <span class="text-danger mt-2" *ngIf="validInput('tt')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('tt')">
+                    {{ getPatternMessage('tt') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="ai" class="col-sm-5 label">Address Indicator</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="ai" formControlName="ai"
+                    [class.is-invalid]="validInput('ai')">
+                  <span class="text-danger mt-2" *ngIf="validInput('ai')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('ai')">
+                    {{ getPatternMessage('ai') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="numbering_plan_id" class="col-sm-5 label">Numbering Plan</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="numbering_plan_id" name="numbering_plan_id" formControlName="numbering_plan_id">
+                @for (item of numberingPlanList; track $index) {
+                  <option value="{{ item.id }}">{{ item.name }}</option>
+                }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('numbering_plan_id')">
+                  the field is required
+              </span>
+              </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="pc" class="col-sm-5 label">Point Code</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="pc" formControlName="pc"
+                    [class.is-invalid]="validInput('pc')">
+                  <span class="text-danger mt-2" *ngIf="validInput('pc')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('pc')">
+                    {{ getPatternMessage('pc') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+              <label for="nature_of_address" class="col-sm-5 label">Nature of Address</label>
+              <div class="col-sm-7" style="padding-left: 0px; padding-right: 35px;">
+              <select class="form-select" id="nature_of_address" name="nature_of_address" formControlName="nature_of_address">
+                @for (item of naturaOfAddressList; track $index) {
+                  <option value="{{ item.id }}">{{ item.name }}</option>
+                }
+              </select>
+              <span class="text-danger mt-2" *ngIf="validInput('nature_of_address')">
+                  the field is required
+              </span>
+              </div>
+          </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="ssn" class="col-sm-5 label">SSN</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="ssn" formControlName="ssn"
+                    [class.is-invalid]="validInput('ssn')">
+                  <span class="text-danger mt-2" *ngIf="validInput('ssn')">
+                    the field is required
+                  </span>
+                  <span class="text-danger mt-2" *ngIf="validPattern('ssn')">
+                    {{ getPatternMessage('ssn') }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="form-group row mb-2">
+                <label for="digits" class="col-sm-5 label">Global Tittle Digits</label>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="digits" formControlName="digits"
+                    [class.is-invalid]="validInput('digits')">
+                  <span class="text-danger mt-2" *ngIf="validInput('digits')">
+                    the field is required
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <button class="btn btn-red" style="width: 100%;" [disabled]="form.invalid">Save</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+</div>

@@ -1,0 +1,302 @@
+<div class="content-wrapper ps-2 pe-2 pt-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img src="/assets/img/broadcast.png" alt="icon" height="40px" width="auto">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a [routerLink]="'/pages/broadcast'" class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d;">
+                Broadcast SMS
+              </a>
+            </li>
+            <li class="breadcrumb-item active" style="margin-top: 22px; color: #7B3031; font-size: 18px;"
+              aria-current="page">
+              <label class="mt-1">View Broadcast SMS</label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="d-flex pb-2 mt-4 border-bottom">
+      <h4 class="fw-bold">Broadcast Settings</h4>
+      <div class="ms-auto">
+        <button class="btn btn-success me-2" (click)="openConfirmation('APPROVED')" *ngIf="canApprove">Approve</button>
+        <button class="btn btn-red me-2" (click)="openConfirmation('REJECTED')" *ngIf="canReject">Reject</button>
+        <button class="btn btn-secondary" (click)="openConfirmation('CANCELED')" *ngIf="canCancel">Cancel</button>
+      </div>
+    </div>
+    <br>
+    <form class="row g-3 d-flex justify-content-center">
+      <!-- Basic Settings -->
+      <h5 class="fw-bold border-bottom pb-1 mb-3">Basic Settings</h5>
+      <div class="col-12">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group row mb-3">
+              <label class="col-sm-6 label">Service Provider</label>
+              <div class="col-sm-6">
+                <input class="form-control" [value]="providerName" disabled />
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <label class="col-sm-6 label">Name</label>
+              <div class="col-sm-6">
+                <input class="form-control" [value]="data?.broadcast?.name" disabled />
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-4">
+
+            <div class="form-group row mb-3">
+              <label class="col-sm-6 label">Sender Id</label>
+              <div class="col-sm-6">
+                <input class="form-control" [value]="data?.broadcast?.sender_id" disabled />
+              </div>
+            </div>
+
+            <div class="form-group row mb-3">
+              <label class="col-sm-6 label">Total Devices </label>
+              <div class="col-sm-6">
+                <input class="form-control" disabled [value]="data?.statistics?.total_message" />
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-4">
+
+            <div class="form-group row">
+              <label class="col-sm-3 label">Description</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" [value]="data?.broadcast?.description" disabled rows="3"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Advanced Settings -->
+        <div class="d-flex align-items-center border-bottom pb-1 mb-3">
+          <h5 class="fw-bold mb-0 me-2">Advanced Settings</h5>
+          <div class="form-check form-switch m-0">
+            <input type="checkbox" class="form-check-input" id="toggleAdvancedSettings" [checked]="showAdvancedSettings"
+              (change)="toggleAdvancedSettings()" />
+          </div>
+        </div>
+
+        <div class="col-12" *ngIf="showAdvancedSettings">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group row mb-3">
+                <label for="source_addr_ton" class="col-sm-6 label">Source Address TON</label>
+                <div class="col-sm-6">
+                  <select class="form-select" id="source_addr_ton" [value]="data?.broadcast?.source_addr_ton" disabled>
+                    <option [ngValue]="null"></option>
+                    @for (item of tonCatalog; track $index) {
+                    <option [value]="item.id">{{ item.description }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row mb-3">
+                <label for="source_addr_npi" class="col-sm-6 label">Source Address NPI</label>
+                <div class="col-sm-6">
+                  <select class="form-select" id="source_addr_npi" [value]="data?.broadcast?.source_addr_npi" disabled>
+                    <option [ngValue]="null"></option>
+                    @for (item of npiCatalog; track $index) {
+                    <option value="{{ item.id }}">{{ item.description }}</option>
+                    }
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div class="col-md-4">
+
+              <div class="form-group row mb-3">
+                <label for="dest_addr_ton" class="col-sm-6 label">Destination Address TON</label>
+                <div class="col-sm-6">
+                  <select class="form-select" id="dest_addr_ton" [value]="data?.broadcast?.dest_addr_ton" disabled>
+                    <option [ngValue]="null"></option>
+                    @for (item of tonCatalog; track $index) {
+                    <option value="{{ item.id }}">{{ item.description }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row mb-3">
+                <label for="dest_addr_npi" class="col-sm-6 label">Destination Address NPI</label>
+                <div class="col-sm-6">
+                  <select class="form-select" id="dest_addr_npi" [value]="data?.broadcast?.dest_addr_npi" disabled>
+                    <option [ngValue]="null"></option>
+                    @for (item of npiCatalog; track $index) {
+                    <option value="{{ item.id }}">{{ item.description }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+              <div class="form-group row mb-3">
+                <label for="data_coding" class="col-sm-6 label">Data Coding</label>
+                <div class="col-sm-6">
+                  <select class="form-select" id="data_coding" [value]="data?.broadcast?.data_coding" disabled>
+                    <option [ngValue]="null"></option>
+                    @for (item of encodingList; track $index) {
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row mb-3">
+                <label for="request_dlr" class="col-sm-6 label">Request DLR</label>
+                <div class="col-sm-6 d-flex align-items-center">
+                  <input type="checkbox" class="form-check-input me-2" id="request_dlr"
+                    [value]="data?.broadcast?.request_dlr" disabled />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Column Mapping -->
+      <h4 class="fw-bold">Column Mapping</h4>
+      <p class="text-muted d-flex align-items-start flex-column m-0" style="font-size: 0.9rem;">
+        <span>
+          <i class='bx bx-info-circle me-1' style="color: #7B3031;"></i>
+          - Only the Recipient parameter is mandatory and must be mapped from the template.
+        </span>
+        <span class="ms-4">
+          - Other columns can be used in the message content without needing to be mapped.
+        </span>
+        <span class="ms-4">
+          - Mapping the Sender parameter is only necessary if a default sender is not specified in the Broadcast's Basic
+          Settings section.
+        </span>
+      </p>
+      <hr class="mt-1 mb-3">
+      <div class="col-12">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto; border: 1px solid #dee2e6;">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="min-width: 150px;">Column</th>
+                <th style="min-width: 200px;">Preview</th>
+                <th style="min-width: 200px;">Parameter</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="data?.broadcast?.column_mapping">
+              <tr *ngFor="let col of objectKeys(data.broadcast.column_mapping)">
+                <td>{{ col }}</td>
+                <td>{{ data.first_record_mapping[col] || '' }}</td>
+                <td>{{ data.broadcast.column_mapping[col] }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Message Configuration -->
+      <h4 class="fw-bold border-bottom pb-1 mb-3 mt-4">Message Configuration</h4>
+      <div class="row mt-2">
+        <div class="col-5">
+          <div class="device-preview-container">
+            <div class="device-sender">
+              {{ data?.broadcast?.sender_id || '00000000' }}
+            </div>
+            <div class="device-message-bubble">
+              {{ messagePreview|| 'This is a message preview.' }}
+            </div>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="form-group row mb-3">
+            <label for="message_template" class="col-sm-3 label">Message</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="message_template" [value]="data?.broadcast?.message_template" rows="6"
+                disabled>
+                    </textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Setting -->
+      <h4 class="fw-bold border-bottom pb-1 mb-3 mt-4">Schedule Setting</h4>
+      <div class="col-12 mb-5">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group row mb-3">
+              <label class="col-sm-4 label">Start Date</label>
+              <div class="col-sm-8">
+                <input class="form-control" [value]="getDate(data?.broadcast?.start_datetime)" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group row mb-3">
+              <label class="col-sm-4 label">Max Execution Date</label>
+              <div class="col-sm-8">
+                <input class="form-control" [value]="getDate(data?.broadcast?.max_execution_datetime)" disabled />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" id="modalChangeStatusBroadcast"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal-delete-m">
+      <div class="text-start">
+        <div class="modal-body" style="font-size: 0.875rem;">
+          <div *ngIf="selectedAction === 'APPROVED' && confirmationSubMessage">
+            <div class="alert alert-warning text-center" role="alert" style="font-size: 0.875rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                <path
+                  d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+              </svg>
+              <strong>{{ confirmationMessage }}</strong>
+            </div>
+            <p class="mb-0" [innerHTML]="confirmationSubMessage"></p>
+            <p class="mb-0" *ngIf="confirmationNote1" [innerHTML]="confirmationNote1"></p>
+            <p class="mb-0" *ngIf="confirmationNote2" [innerHTML]="confirmationNote2"></p>
+          </div>
+
+          <p *ngIf="selectedAction !== 'APPROVED' || !confirmationSubMessage" class="text-center">{{ confirmationMessage
+            }}</p>
+
+          <div class="form-group row mt-3 mb-2">
+            <label for="message_template" class="col-sm-3 label">Comment</label>
+            <div class="col-sm-9">
+              <textarea class="form-control" id="comment" [(ngModel)]="actionComment" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="formModal.hide()">Cancel</button>
+          <button type="button" class="btn btn-red" (click)="confirmStatusChange()">Confirm</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

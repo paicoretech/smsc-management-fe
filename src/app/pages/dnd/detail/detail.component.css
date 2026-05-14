@@ -1,0 +1,28 @@
+::ng-deep #tableDndEntries_filter {
+    display: none !important;
+}
+
+::ng-deep table.dataTable {
+  border-top: 1px solid #dee2e6 !important;
+}
+
+::ng-deep table.dataTable th {
+  white-space: nowrap;
+  width: 100% !important;
+  text-align: center;
+}
+
+::ng-deep table.dataTable thead th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+::ng-deep .dataTables_scrollHeadInner,
+::ng-deep .dataTables_scrollHeadInner table {
+  width: 100% !important;
+}
+
+::ng-deep table.dataTable tbody td {
+  border-bottom: 1px solid #dee2e6 !important;
+  text-align: center;
+}

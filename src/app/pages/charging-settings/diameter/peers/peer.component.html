@@ -1,0 +1,66 @@
+<h5 class="fw-bold border-bottom pb-1 mb-3">Peer</h5>
+<div class="d-flex align-items-center justify-content-between">
+    <div class="ms-auto">
+        <button type="button" class="btn btn-red" [disabled]="isDisabled" (click)="showModal()"
+            style="margin-right: 10px;">
+            <i class='bx bx-plus'></i>
+            Create
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive mt-4">
+    <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>URI</th>
+                <th>Ip</th>
+                <th>Attempt_connect</th>
+                <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of peerList; let i = index">
+                <td class="align-middle">{{ i + 1 }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.uri }}</td>
+                <td class="align-middle">{{ item?.ip }}</td>
+                <td class="align-middle">{{ item?.attempt_connect }}</td>
+                <td class="align-center">
+                    <button class="btn btn-sm btn-red me-2" title="Edit record" [disabled]="isDisabled"
+                        (click)="editPeer(item)"><i class='bx bxs-pencil'></i></button>
+                    <button class="btn btn-sm btn-secondary me-2" title="Delete record" [disabled]="isDisabled"
+                        (click)="deletePeer(item)"><i class='bx bxs-trash-alt'></i></button>
+
+                    <button class="btn btn-sm btn-success me-2" title="Start Peer" *ngIf="!isTemporaryId(item.id)"
+                        [disabled]="!isDisabled || item.started" (click)="togglePeerStatus(item)">
+                        <i class='bx bx-play'></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-danger me-2" title="Stop Peer" *ngIf="!isTemporaryId(item.id)"
+                        [disabled]="!isDisabled || !item.started" (click)="togglePeerStatus(item)">
+                        <i class='bx bx-pause'></i>
+                    </button>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalPeer" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-add-peer (closeModal)="onCloseModal($event)" [dataUpdate]="selectedPeer"></app-add-peer>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeletePeer" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)"></app-modal-delete>
+    </div>
+</div>

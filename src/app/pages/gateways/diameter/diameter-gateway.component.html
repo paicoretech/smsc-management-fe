@@ -1,0 +1,99 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img
+          src="/assets/img/base-station-icon-1.png"
+          alt="icon"
+          height="40px"
+          width="auto"
+        />
+        <label
+          class="card-header title-content mb-0 ml-2"
+          style="font-size: 20px; font-weight: 500; padding-bottom: 10px"
+        >
+          Diameter
+        </label>
+      </div>
+      <div>
+        <a
+          class="btn btn-red mt-3"
+          style="margin-right: 10px"
+          [routerLink]="'./add'"
+        >
+          <i class="bx bx-plus"></i>
+          Create
+        </a>
+        <button type="button" class="btn btn-red mt-3" (click)="refresh()">
+          <i class="bx bx-refresh"></i>
+        </button>
+      </div>
+    </div>
+    <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+      <div class="table-responsive mt-4">
+        <table
+          id="table-ss7"
+          class="table"
+          style="width: 100%"
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+        >
+          <thead>
+            <tr>
+              <th>Network ID</th>
+              <th>Name</th>
+              <th class="align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of chargingList; let i = index">
+              <td class="align-middle">{{ item.network_id }}</td>
+              <td class="align-middle">{{ item?.name }}</td>
+              <td class="align-center">
+                <a
+                  class="btn btn-sm btn-red me-2"
+                  title="Edit record"
+                  [routerLink]="'./edit/' + item.id"
+                  ><i class="bx bxs-pencil"></i
+                ></a>
+                <button
+                  class="btn btn-sm btn-secondary me-2"
+                  [disabled]="item.started"
+                  title="Delete record"
+                  (click)="openConfirm('deleteGateway', item)"
+                >
+                  <i class="bx bxs-trash-alt"></i>
+                </button>
+                <button
+                  [disabled]="item.started"
+                  class="btn btn-sm btn-success me-2"
+                   (click)="openConfirm('toggleGateway', item)"
+                  title="Start"
+                >
+                  <i class="bx bx-play"></i>
+                </button>
+                <button
+                  [disabled]="!item.started"
+                  class="btn btn-sm btn-danger"
+                   (click)="openConfirm('toggleGateway', item)"
+                  title="Stop"
+                >
+                  <i class="bx bx-pause"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteDiameterGateway" data-bs-backdrop="static"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)"></app-modal-delete>
+  </div>
+</div>

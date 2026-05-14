@@ -1,0 +1,61 @@
+<div class="content-wrapper ps-2 pe-2">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center mt-3">
+                <img src="/assets/img/base-station-icon-1.png" alt="icon" height="40px" width="auto">
+  
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item mt-4 not-bredcrumb">
+                            <a [routerLink]="'../../../'" class="card-header title-content mb-0 ml-2"
+                                    style="font-size: 20px; font-weight: 500; color: #1d609d;">
+                                Gateways SS7
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item mt-4">
+                            <a [routerLink]="'../'" class="card-header title-content mb-0 ml-2"
+                                    style="font-size: 20px; font-weight: 500; color: #1d609d; margin-left: 0px;">
+                                {{ gatewaySs7 ? gatewaySs7.name : '' }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" style="margin-top: 22px; color: #7B3031; font-size: 18px;" aria-current="page">
+                            <label class="mt-1">M3UA</label>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="ps-3 pe-3 pb-4 mt-2 bg-white pt-10">
+            <!-- tabs -->
+            <ul class="nav nav-tabs mt-4 pt-4" (click)="changeTab($event)" id="options">
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'general'" aria-current="page">General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'associations'">Associations</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'application'">Application Servers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [class.active]="activeTab === 'routes'">Routes</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade" [class.show]="activeTab === 'general'" [class.active]="activeTab === 'general'" id="general">
+                    <app-general *ngIf="activeTab === 'general'" />
+                </div>
+                <div class="tab-pane fade" [class.show]="activeTab === 'associations'" [class.active]="activeTab === 'associations'" id="associations">
+                   <app-associations *ngIf="activeTab === 'associations'" />
+                </div>
+                <div class="tab-pane fade" [class.show]="activeTab === 'application'" [class.active]="activeTab === 'application'" id="application">
+                    <app-application-servers *ngIf="activeTab === 'application'" />
+                </div>
+                <div class="tab-pane fade" [class.show]="activeTab === 'routes'" [class.active]="activeTab === 'routes'" id="routes">
+                    <app-routes *ngIf="activeTab === 'routes'" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

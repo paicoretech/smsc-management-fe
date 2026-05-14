@@ -1,0 +1,69 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-4">
+        <img alt="icon" height="40px" src="/assets/img/desktop-smartphone-transfer-icon-2.png" width="auto">
+        <label class="card-header title-content mb-0 ml-2" style="font-size: 20px; font-weight: 500; padding-bottom: 10px;">
+          HTTP Service Providers
+        </label>
+      </div>
+      <div>
+        <button (click)="newServiceProvider()" class="btn btn-red mt-3" style="margin-right: 10px;" type="button">
+          <i class='bx bx-plus'></i>
+          Create
+        </button>
+        <button (click)="refresh()" class="btn btn-red mt-3" type="button">
+          <i class='bx bx-refresh'></i>
+        </button>
+      </div>
+    </div>
+    <div class="card ps-3 pe-3 pb-4 mt-2 bg-white">
+      <div class="table-responsive mt-4">
+        <table [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table" datatable id="tableExample" style="width:100%">
+          <thead>
+            <tr>
+              <th>Network ID</th>
+              <th>Name</th>
+              <th>SystemId</th>
+              <th>Sessions</th>
+              <th>State</th>
+              <th>Active Sessions</th>
+              <th class="align-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of providers; let i = index">
+              <td class="align-middle">{{ item.network_id }}</td>
+              <td class="align-middle">{{ item?.name }}</td>
+              <td class="align-middle">{{ item?.system_id }}</td>
+              <td class="align-middle">{{ item?.sessions_number }}</td>
+              <td class="align-middle">{{ item?.status }}</td>
+              <td class="align-middle">{{ item?.active_sessions_numbers }}</td>
+              <td class="align-center">
+                <a (click)="editData(item, true)" class="btn btn-sm btn-outline-secondary me-2" title="view record"><i class='bx bxs-show'></i></a>
+                <button (click)="showCreditBalance(item)" class="btn btn-sm btn-outline-secondary me-2" title="Credit Balance"><i class='bx bx-dollar-circle'></i></button>
+                <button (click)="editData(item)" [disabled]="item.enabled!==0" class="btn btn-sm btn-red me-2" title="Edit record"><i class='bx bxs-pencil' ></i></button>
+                <button (click)="deleteServiceProveider(item)" [disabled]="item.enabled!==0" class="btn btn-sm btn-secondary me-2" title="Delete record"><i class='bx bxs-trash-alt' ></i></button>
+                <button (click)="runServiceProviders(item)" [disabled]="item.enabled!==0" class="btn btn-sm btn-success me-2" title="Start"><i class='bx bx-play' ></i></button>
+                <button (click)="stopServiceProviders(item)"  [disabled]="item.enabled ==0" class="btn btn-sm btn-danger" title="Stop"><i class='bx bx-pause'></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static" id="modalDeleteHTTPServiceProvider" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete (confirmAction)="onCloseModalDelete($event)" [mensaje]="messageShow"></app-modal-delete>
+  </div>
+</div>
+
+<div aria-labelledby="staticBackdropLabel" class="modal fade" id="modalBalanceHTTPServiceProvider" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
+    <app-modal-balance (closeModal)="onCloseModalBalance($event)" *ngIf="creditBalance !== null && creditBalance !== undefined" [setCreditBalance]="creditBalance"></app-modal-balance>
+  </div>
+</div>
+

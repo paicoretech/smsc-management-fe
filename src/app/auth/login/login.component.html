@@ -1,0 +1,35 @@
+<div class="div-fullscreen2">
+    <div class="container centrar">
+      <div style="margin: auto;">
+        <div style="text-align: center;" class="card-login">
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <img [src]="brandingPaic" style="width: 80%; height: auto;" alt="PAiCore Tech">
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col">
+                <h5 style="font-weight: 700; font-size: 32px;">Welcome to SMSC Management</h5>
+              </div>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="on">
+              <div class="row mt-5">
+                <div class="col">
+                  <input type="text" class="input-style-top" placeholder="User" id="username" name="username" formControlName="userName" autocomplete="username">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <input type="password" class="input-style-bottom" placeholder="Password" autocomplete="current-password" id="password" name="password" formControlName="password">
+                </div>
+              </div>
+              <div class="row mt-4">
+                <div class="col">
+                  <button class="btn button-style" [disabled]="form.invalid">Sign in</button>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+  </div>

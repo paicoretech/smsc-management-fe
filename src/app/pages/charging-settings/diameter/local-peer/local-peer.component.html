@@ -1,0 +1,161 @@
+<h5 class="fw-bold border-bottom pb-1 mb-3">Local Peer</h5>
+<form [formGroup]="localPeerForm" class="row g-3 d-flex justify-content-center">
+    <div class="row mt-5">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="form-group row mb-2">
+                <label for="product_name" class="col-sm-6 label">Product name</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="product_name" formControlName="product_name"
+                        [class.is-invalid]="validInput('product_name')">
+                    <span class="text-danger mt-2" *ngIf="validInput('product_name')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('product_name')">
+                        {{ getPatternMessage('product_name') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="vendor_id" class="col-sm-6 label">Vendor Id</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="vendor_id" formControlName="vendor_id"
+                        [class.is-invalid]="validInput('vendor_id')">
+                    <span class="text-danger mt-2" *ngIf="validInput('vendor_id')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('vendor_id')">
+                        {{ getPatternMessage('vendor_id') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="firmware_version" class="col-sm-6 label">Firmware version</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="firmware_version" formControlName="firmware_version"
+                        [class.is-invalid]="validInput('firmware_version')">
+                    <span class="text-danger mt-2" *ngIf="validInput('firmware_version')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('firmware_version')">
+                        {{ getPatternMessage('firmware_version') }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 position-relative">
+
+            <div class="form-group row mb-2">
+                <label for="uri" class="col-sm-6 label">URI</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="uri" formControlName="uri"
+                        [class.is-invalid]="validInput('uri')">
+                    <span class="text-danger mt-2" *ngIf="validInput('uri')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('uri')">
+                        {{ getPatternMessage('uri') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="realm" class="col-sm-6 label">Realm</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="realm" formControlName="realm"
+                        [class.is-invalid]="validInput('realm')">
+                    <span class="text-danger mt-2" *ngIf="validInput('realm')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('realm')">
+                        {{ getPatternMessage('realm') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label for="ip_addresses" class="col-sm-6 label">IP Addresses</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="ip_addresses" formControlName="ip_addresses"
+                        [class.is-invalid]="validInput('ip_addresses')">
+                    <span class="text-danger mt-2" *ngIf="validInput('ip_addresses')">
+                        the field is required
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validMinLength('ip_addresses')">
+                        Minimum length is {{ getMinLength('ip') }}
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validMaxLength('ip_addresses')">
+                        Maximum length is {{ getMaxLength('ip') }}
+                    </span>
+                    <span class="text-danger mt-2" *ngIf="validPattern('ip_addresses')">
+                        {{ getPatternMessage('ip') }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+<br>
+
+<h5 class="fw-bold border-bottom pb-1 mb-3">Applications</h5>
+<div class="d-flex align-items-center justify-content-between">
+    <div class="ms-auto">
+        <button type="button" class="btn btn-red mt-3" (click)="showModal()" style="margin-right: 10px;"
+            [disabled]="isDisabled">
+            <i class='bx bx-plus'></i>
+            Create
+        </button>
+    </div>
+</div>
+
+<div class="table-responsive mt-2">
+
+    <table id="tableExample" class="table" style="width:100%" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Vendor Id</th>
+                <th>Auth Appl Id</th>
+                <th>Acct Appl Id</th>
+                <th class="align-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of applicationList; let i = index">
+                <td class="align-middle">{{ i+1 }}</td>
+                <td class="align-middle">{{ item?.name }}</td>
+                <td class="align-middle">{{ item?.vendor_id }}</td>
+                <td class="align-middle">{{ item?.auth_appl_id }}</td>
+                <td class="align-middle">{{ item?.acct_appl_id }}</td>
+                <td class="align-center">
+                    <button class="btn btn-sm btn-red me-2" title="Edit record" [disabled]="isDisabled"
+                        (click)="editApplication(item)">
+                        <i class='bx bxs-pencil'></i>
+                    </button>
+                    <button class="btn btn-sm btn-secondary me-2" title="Delete record" [disabled]="isDisabled"
+                        (click)="deleteApplication(item)"><i class='bx bxs-trash-alt'></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br>
+<!-- MODALS -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modalLocalPeer" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <app-add-local-peer (closeModal)="onCloseModal($event)" [dataUpdate]="selectedApplication"></app-add-local-peer>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modalDeleteLocalPeer" data-bs-backdrop="static"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <app-modal-delete [mensaje]="messageShow" (confirmAction)="onCloseModalDelete($event)"></app-modal-delete>
+    </div>
+</div>

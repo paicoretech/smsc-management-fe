@@ -1,0 +1,48 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="close()">X</button>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form  [formGroup]="form" (ngSubmit)="save()" class="row g-3 d-flex justify-content-center">
+
+      <input type="text" hidden id="id" formControlName="id">
+
+      <div class="form-group row mb-2">
+        <label for="name" class="col-sm-6 label">Name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="name" formControlName="name"
+            >
+          <span class="text-danger mt-2"  *ngIf="validInput('name')">
+            the field is required
+          </span>
+        </div>
+      </div>
+      <div class="form-group row mb-2">
+        <label for="tlv_message_receipt_id" class="col-sm-6 label">TLV Message Recipe Id</label>
+        <div class="col-sm-6">
+          <input type="checkbox" class="form-check-input check_form" id="tlv_message_receipt_id" name="tlv_message_receipt_id" formControlName="tlv_message_receipt_id"
+            [class.is-invalid]="validInput('tlv_message_receipt_id')">
+          <span class="text-danger mt-2" *ngIf="validInput('tlv_message_receipt_id')">
+            the field is required
+          </span>
+        </div>
+      </div>
+      <div class="form-group row mb-2">
+        <label for="message_id_decimal_format" class="col-sm-6 label">Message Id Decimal Format</label>
+        <div class="col-sm-6">
+          <input type="checkbox" class="form-check-input check_form" id="message_id_decimal_format" name="message_id_decimal_format" formControlName="message_id_decimal_format"
+            [class.is-invalid]="validInput('message_id_decimal_format')">
+          <span class="text-danger mt-2" *ngIf="validInput('message_id_decimal_format')">
+            the field is required
+          </span>
+        </div>
+      </div>
+
+      <button class="btn btn-red" style="width: 60%;" [disabled]="form.invalid">Save</button>
+
+    </form>
+  </div>
+</div>

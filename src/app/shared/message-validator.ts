@@ -16,6 +16,29 @@ export function priorityRequiredValidator(
   };
 }
 
+export function maxResponseGteRequestValidator(
+  maxField: string,
+  requestField: string,
+): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const maxRaw = control.get(maxField)?.value;
+    const reqRaw = control.get(requestField)?.value;
+
+    if (maxRaw == null || maxRaw === '' || reqRaw == null || reqRaw === '') {
+      return null;
+    }
+
+    const max = Number(maxRaw);
+    const req = Number(reqRaw);
+
+    if (!Number.isFinite(max) || !Number.isFinite(req)) {
+      return null;
+    }
+
+    return max >= req ? null : { maxResponseLtRequest: true };
+  };
+}
+
 export function hasPriorityGroupError(
   form: FormGroup,
   errorKey: string,

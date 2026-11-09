@@ -10,6 +10,9 @@ export interface ChargingSetting {
     messages_per_second_medium?: number;
     messages_per_second_low?: number;
     tps?: number;
+    auto_retry_error_code?: string | null;
+    no_retry_error_code?: string | null;
+    retry_alternate_destination_error_code?: string | null;
     local_peer: LocalPeer;
     parameters: Parameters;
     peers: Peer[] | null;

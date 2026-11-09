@@ -35,6 +35,28 @@ export const environment = {
     import.meta.env.NG_APP_ENABLE_IP_SM_GW
   ),
 
+  VasModule: resolveBoolean(
+    '___NG_APP_ENABLE_VAS___',
+    import.meta.env.NG_APP_ENABLE_VAS
+  ),
+
+  PlmnNetworkModule: resolveBoolean(
+    '___NG_APP_ENABLE_PLMN_NETWORK___',
+    import.meta.env.NG_APP_ENABLE_PLMN_NETWORK,
+    false
+  ),
+
+  showHttpDlrHealthCheckConfig: resolveBoolean(
+    '___NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG___',
+    import.meta.env.NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG,
+    false
+  ),
+
+  Http2Module: resolveBoolean(
+    '___NG_APP_ENABLE_HTTP2___',
+    import.meta.env.NG_APP_ENABLE_HTTP2
+  ),
+
   ServiceProviderDefaults: {
     bind_type: resolveString('___NG_APP_SP_BIND_TYPE___', import.meta.env.NG_APP_SP_BIND_TYPE),
     interface_version: resolveString('___NG_APP_SP_INTERFACE_VERSION___', import.meta.env.NG_APP_SP_INTERFACE_VERSION),
@@ -263,6 +285,28 @@ export const environment = {
     subscribe_target_transport: resolveString('___NG_APP_SIP_SUBSCRIBE_TARGET_TRANSPORT___', import.meta.env.NG_APP_SIP_SUBSCRIBE_TARGET_TRANSPORT),
     local_via_host: resolveString('___NG_APP_SIP_LOCAL_VIA_HOST___', import.meta.env.NG_APP_SIP_LOCAL_VIA_HOST),
     global_title: resolveNumber('___NG_APP_SIP_GLOBAL_TITLE___', import.meta.env.NG_APP_SIP_GLOBAL_TITLE),
-    ussi_default_datacoding_id: resolveNumber('___NG_APP_SIP_USSI_DEFAULT_DATACODING_ID___', import.meta.env.NG_APP_SIP_USSI_DEFAULT_DATACODING_ID)  
+    ussi_default_datacoding_id: resolveNumber('___NG_APP_SIP_USSI_DEFAULT_DATACODING_ID___', import.meta.env.NG_APP_SIP_USSI_DEFAULT_DATACODING_ID)
+  },
+
+  GatewayHttp2: {
+    tls_enabled: resolveBoolean('___NG_APP_GA_HTTP2_TLS_ENABLED___', import.meta.env.NG_APP_GA_HTTP2_TLS_ENABLED),
+    oauth2_enabled: resolveBoolean('___NG_APP_GA_HTTP2_OAUTH2_ENABLED___', import.meta.env.NG_APP_GA_HTTP2_OAUTH2_ENABLED),
+    require_bearer_token: resolveBoolean('___NG_APP_GA_HTTP2_REQUIRE_BEARER_TOKEN___', import.meta.env.NG_APP_GA_HTTP2_REQUIRE_BEARER_TOKEN),
+    max_message_size: resolveNumber('___NG_APP_GA_HTTP2_MAX_MESSAGE_SIZE___', import.meta.env.NG_APP_GA_HTTP2_MAX_MESSAGE_SIZE),
+    request_timeout_ms: resolveNumber('___NG_APP_GA_HTTP2_REQUEST_TIMEOUT_MS___', import.meta.env.NG_APP_GA_HTTP2_REQUEST_TIMEOUT_MS),
+    connection_timeout_ms: resolveNumber('___NG_APP_GA_HTTP2_CONNECTION_TIMEOUT_MS___', import.meta.env.NG_APP_GA_HTTP2_CONNECTION_TIMEOUT_MS),
+    idle_timeout_ms: resolveNumber('___NG_APP_GA_HTTP2_IDLE_TIMEOUT_MS___', import.meta.env.NG_APP_GA_HTTP2_IDLE_TIMEOUT_MS),
+    max_response_time_ms: resolveNumber('___NG_APP_GA_HTTP2_MAX_RESPONSE_TIME_MS___', import.meta.env.NG_APP_GA_HTTP2_MAX_RESPONSE_TIME_MS),
+    thread_pool_size: resolveNumber('___NG_APP_GA_HTTP2_THREAD_POOL_SIZE___', import.meta.env.NG_APP_GA_HTTP2_THREAD_POOL_SIZE),
+    messages_per_second_high: resolveNumber('___NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_HIGH___', import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_HIGH),
+    messages_per_second_medium: resolveNumber('___NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_MEDIUM___', import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_MEDIUM),
+    messages_per_second_low: resolveNumber('___NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_LOW___', import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_LOW),
+    rate_limiting_enabled: resolveBoolean('___NG_APP_GA_HTTP2_RATE_LIMITING_ENABLED___', import.meta.env.NG_APP_GA_HTTP2_RATE_LIMITING_ENABLED),
+    default_data_coding: resolveNumber('___NG_APP_GA_HTTP2_DEFAULT_DATA_CODING___', import.meta.env.NG_APP_GA_HTTP2_DEFAULT_DATA_CODING),
+  },
+
+  pmsVas: {
+    apiBaseUrl: resolveString('___NG_APP_PMS_VAS_API_BASE_URL___', import.meta.env["NG_APP_PMS_VAS_API_BASE_URL"], '/pms/api/v1'),
+    internalMessagingApiKey: resolveString('___NG_APP_PMS_VAS_INTERNAL_API_KEY___', import.meta.env["NG_APP_PMS_VAS_INTERNAL_API_KEY"], ''),
   },
 };

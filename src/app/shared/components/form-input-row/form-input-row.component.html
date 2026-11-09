@@ -4,14 +4,36 @@
   </label>
 
   <div [class]="inputCol">
-    <input
-      [type]="type"
-      class="form-control"
-      [id]="elementId"
-      [formControl]="control"
-      [readOnly]="readonly"
-      [class.is-invalid]="(control.touched && control.invalid) || hasGroupError"
-    />
+    <ng-container *ngIf="isPasswordField; else plainInput">
+      <div style="display: inline-flex; align-items: center; width: 100%;">
+        <input
+          [type]="displayType"
+          class="form-control"
+          [id]="elementId"
+          [formControl]="control"
+          [readOnly]="readonly"
+          [placeholder]="placeholder"
+          [class.is-invalid]="(control.touched && control.invalid) || hasGroupError"
+          autocomplete="new-password"
+        />
+        <span style="margin-left: -30px; cursor: pointer;" (click)="togglePasswordVisibility()">
+          <i *ngIf="isPasswordVisible" class="bx bxs-low-vision"></i>
+          <i *ngIf="!isPasswordVisible" class="bx bxs-show"></i>
+        </span>
+      </div>
+    </ng-container>
+
+    <ng-template #plainInput>
+      <input
+        [type]="displayType"
+        class="form-control"
+        [id]="elementId"
+        [formControl]="control"
+        [readOnly]="readonly"
+        [placeholder]="placeholder"
+        [class.is-invalid]="(control.touched && control.invalid) || hasGroupError"
+      />
+    </ng-template>
 
     <span class="text-danger mt-2" *ngIf="showRequired && hasError('required')">
       the field is required

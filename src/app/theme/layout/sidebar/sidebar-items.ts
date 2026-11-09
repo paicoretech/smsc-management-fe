@@ -2,30 +2,47 @@ import { FEATURE_FLAGS } from "@app/core/config/feeature-flag";
 import { RouteInfo } from "@core/interfaces/RouteInfo";
 import { SMSC_BASE, IP_SM_GW_BASE } from "@core/utils/global.constants";
 
-
-
-
-
 function removeIpSmGwSection(routes: RouteInfo[]): RouteInfo[] {
-
   if (FEATURE_FLAGS.ipSmGwEnabled) return routes;
 
-
   return routes
-    .filter((r) => {
-      const isIpSmGwGroupTitle = r.groupTitle === true && r.title === 'IP-SM-GW';
-      const isIpSmGwPath = typeof r.path === 'string' && r.path.startsWith(IP_SM_GW_BASE);
-      return !isIpSmGwGroupTitle && !isIpSmGwPath;
+    .filter((route) => {
+      const isGroupTitle = route.groupTitle && route.title === 'IP-SM-GW';
+      const isIpSmGwPath = route.path?.startsWith(IP_SM_GW_BASE);
+      return !isGroupTitle && !isIpSmGwPath;
     })
-    .map((r) => ({
-      ...r,
-      submenu: (r.submenu || []).filter(
-        (s) => !(typeof s.path === 'string' && s.path.startsWith(IP_SM_GW_BASE))
+    .map((route) => ({
+      ...route,
+      submenu: (route.submenu || []).filter(
+        (item) => !item.path?.startsWith(IP_SM_GW_BASE)
       ),
     }));
 }
 
-export const ROUTES: RouteInfo[] = removeIpSmGwSection([
+function removeVasSection(routes: RouteInfo[]): RouteInfo[] {
+  if (FEATURE_FLAGS.vasEnabled) return routes;
+
+  return routes.filter((route) => route.moduleKey !== 'pms-vas');
+}
+
+function removePlmnNetworkSection(routes: RouteInfo[]): RouteInfo[] {
+  if (FEATURE_FLAGS.plmnNetworkEnabled) return routes;
+
+  return routes.filter((route) => route.moduleKey !== 'plmn-network');
+}
+
+function removeHttp2Entry(routes: RouteInfo[]): RouteInfo[] {
+  if (FEATURE_FLAGS.http2Enabled) return routes;
+
+  return routes.map((r) => ({
+    ...r,
+    submenu: (r.submenu || []).filter(
+      (s) => !(typeof s.path === 'string' && s.path === '/pages/gateways/http2')
+    ),
+  }));
+}
+
+export const ROUTES: RouteInfo[] = removeHttp2Entry(removePlmnNetworkSection(removeVasSection(removeIpSmGwSection([
   {
     path: "/pages/home",
     title: "Home",
@@ -115,6 +132,14 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
         role: ["All"],
         submenu: [],
       },
+      {
+        path: "/pages/gateways/http2",
+        title: "HTTP/2",
+        icon: "gateway-icon",
+        groupTitle: false,
+        role: ["All"],
+        submenu: [],
+      },
     ],
     show: false,
   },
@@ -190,7 +215,6 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     ],
     show: false,
   },
-
   {
     path: "/pages/analyze",
     title: "Analyze",
@@ -236,6 +260,17 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     isRoot: true, 
   },
   {
+    path: "/pages/retries",
+    title: "Retries",
+    icon: "settings-icon",
+    boxIcon: "bx-refresh",
+    groupTitle: false,
+    role: ["All"],
+    submenu: [],
+    show: false,
+    isRoot: true,
+  },
+  {
     path: "/pages/rules-and-routing",
     title: "Rules and Routing",
     icon: "rules_and_Routing_icon",
@@ -244,6 +279,18 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     submenu: [],
     show: false,
     isRoot: true,
+  },
+  {
+    path: "/pages/plmn-network",
+    title: "PLMN Network",
+    icon: "menu-icon",
+    boxIcon: "bx-network-chart",
+    groupTitle: false,
+    role: ["All"],
+    submenu: [],
+    show: false,
+    isRoot: true,
+    moduleKey: "plmn-network",
   },
 
   {
@@ -255,7 +302,6 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     submenu: [],
     show: false,
   },
-
   {
     path: `${IP_SM_GW_BASE}`,
     title: "Gateways",
@@ -289,10 +335,128 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     title: "SIP Gateways",
     icon: "settings-icon",
     groupTitle: false,
+    externalUrl: "https://github.com/paicoretech/ip-sm-gw",
     role: ["All"],
     submenu: [],
     show: false,
   },
+
+  {
+    path: "",
+    title: "VAS",
+    icon: "",
+    groupTitle: true,
+    role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+    submenu: [],
+    show: false,
+    moduleKey: "pms-vas",
+  },
+  {
+    path: "/pages/pms-vas",
+    title: "VAS",
+    icon: "settings-icon",
+    groupTitle: false,
+    role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+    submenu: [
+      {
+        path: "/pages/pms-vas/overview",
+        title: "Overview",
+        icon: "reports",
+        groupTitle: false,
+        role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+        submenu: [
+          {
+            path: "/pages/pms-vas/overview/dashboards",
+            title: "Dashboards",
+            icon: "reports",
+            groupTitle: false,
+            role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+            submenu: [],
+            moduleKey: "pms-vas",
+          },
+          {
+            path: "/pages/pms-vas/overview/logs",
+            title: "Logs",
+            icon: "reports",
+            groupTitle: false,
+            role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+            submenu: [],
+            moduleKey: "pms-vas",
+          },
+          {
+            path: "/pages/pms-vas/overview/reports",
+            title: "Reports",
+            icon: "reports",
+            groupTitle: false,
+            role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+            submenu: [],
+            moduleKey: "pms-vas",
+          },
+        ],
+        show: false,
+        moduleKey: "pms-vas",
+      },
+      {
+        path: "/pages/pms-vas/operators",
+        title: "Operators",
+        icon: "settings-icon",
+        groupTitle: false,
+        role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+        submenu: [],
+        moduleKey: "pms-vas",
+      },
+      {
+        path: "/pages/pms-vas/packages",
+        title: "Packages",
+        icon: "settings-icon",
+        groupTitle: false,
+        role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+        submenu: [],
+        moduleKey: "pms-vas",
+      },
+      {
+        path: "/pages/pms-vas/subscriptions",
+        title: "Subscriptions",
+        icon: "settings-icon",
+        groupTitle: false,
+        role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+        submenu: [],
+        moduleKey: "pms-vas",
+      },
+      {
+        path: "/pages/pms-vas/campaigns",
+        title: "Campaigns",
+        icon: "broadcast",
+        groupTitle: false,
+        role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+        submenu: [
+          {
+            path: "/pages/pms-vas/campaigns",
+            title: "Campaigns",
+            icon: "broadcast",
+            groupTitle: false,
+            role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+            submenu: [],
+            moduleKey: "pms-vas",
+          },
+          {
+            path: "/pages/pms-vas/targets",
+            title: "Targets",
+            icon: "broadcast",
+            groupTitle: false,
+            role: ["ROOT", "ADMINISTRATOR", "PMS_VAS_ACCESS"],
+            submenu: [],
+            moduleKey: "pms-vas",
+          },
+        ],
+        show: false,
+        moduleKey: "pms-vas",
+      },
+    ],
+    show: false,
+    moduleKey: "pms-vas",
+  },
+
     // {
   //   path: "/pages/reports",
   //   title: "Reports",
@@ -352,4 +516,4 @@ export const ROUTES: RouteInfo[] = removeIpSmGwSection([
     show: false,
     isRoot: true
   },
-]);
+]))));

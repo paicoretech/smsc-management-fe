@@ -26,6 +26,7 @@ export interface ServiceProvider {
   protocol: string;
   bind_type: string;
   callback_url?: string;
+  http_dlr_health_check_enabled?: boolean;
   authentication_types?: string;
   header_security_name?: string;
   token?: string;

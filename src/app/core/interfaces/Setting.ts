@@ -26,10 +26,3 @@ export interface HttpServerConfig {
     protocol: string,
     state: string
 }
-
-export interface Retries {
-    id: number,
-    firstRetryDelay: number,
-    maxDueDelay: number,
-    retryDelayMultiplier: number,
-}

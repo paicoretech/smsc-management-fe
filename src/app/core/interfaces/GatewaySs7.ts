@@ -288,6 +288,10 @@ export interface GatewaySs7 {
     hlr_ssn: number;
     msc_ssn: number;
     map_version: number;
+    report_sm_delivery_status: boolean;
+    auto_retry_error_code: string;
+    no_retry_error_code: string;
+    retry_alternate_destination_error_code: string;
     split_message: boolean;
     home_routing: boolean;
     allowed_traffic:boolean;

@@ -1,4 +1,5 @@
 <h5
+  *ngIf="config.showTitle !== false"
   class="fw-bold border-bottom pb-1 mb-3"
   [class.mt-3]="config.topMargin !== false">
   {{ config.title }}
@@ -40,12 +41,46 @@
               [form]="form"
               [controlName]="field.controlName"
               [label]="field.label"
+              [tooltip]="field.tooltip || ''"
               [labelCol]="field.labelCol || 'col-sm-6'"
               [inputCol]="field.inputCol || 'col-sm-6'">
             </app-form-checkbox-row>
           </div>
         </ng-container>
+
+        <app-form-radio-row
+          *ngIf="isRadioField(field)"
+          [form]="form"
+          [controlName]="field.controlName"
+          [label]="field.label"
+          [options]="field.options || []"
+          [labelCol]="field.labelCol || 'col-sm-4'"
+          [inputCol]="field.inputCol || 'col-sm-8'">
+        </app-form-radio-row>
       </ng-container>
     </ng-container>
   </div>
 </div>
+
+<ng-container *ngIf="config.subsectionTitle && config.subsectionColumns">
+  <h6 class="fw-bold border-bottom pb-1 mt-3 mb-3">
+    {{ config.subsectionTitle }}
+  </h6>
+
+  <div class="row" [formGroup]="form">
+    <div class="col-md-6" *ngFor="let column of config.subsectionColumns">
+      <ng-container *ngFor="let field of column">
+        <app-form-select-row
+          *ngIf="isVisible(field) && isSelectField(field)"
+          [form]="form"
+          [controlName]="field.controlName"
+          [label]="field.label"
+          [options]="field.options || []"
+          [id]="field.id"
+          [labelCol]="field.labelCol || 'col-sm-4'"
+          [inputCol]="field.inputCol || 'col-sm-8'">
+        </app-form-select-row>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

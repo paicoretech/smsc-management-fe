@@ -11,5 +11,8 @@ function toBool(value: unknown, fallback: boolean): boolean {
 }
 
 export const FEATURE_FLAGS = Object.freeze({
-  ipSmGwEnabled: toBool(environment.IpSmGwModule, true), 
+  ipSmGwEnabled: toBool(environment.IpSmGwModule, true),
+  vasEnabled: false,
+  plmnNetworkEnabled: toBool(environment.PlmnNetworkModule, false),
+  http2Enabled: toBool(environment.Http2Module, true),
 });

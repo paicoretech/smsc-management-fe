@@ -33,4 +33,8 @@ export class FormSelectRowComponent {
   get elementId(): string {
     return this.id || this.controlName;
   }
+
+  get showRequiredError(): boolean {
+    return this.control.touched && this.control.hasError('required');
+  }
 }

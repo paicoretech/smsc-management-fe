@@ -14,7 +14,11 @@ export const environment = {
   filterOnlyGateways: import.meta.env.NG_APP_FILTER_ONLY_GATEWAYS,
   logoPaicore: import.meta.env["NG_APP_LOGO_PAICORE"],
   productPaic: import.meta.env["NG_APP_PRODUCT_PAIC"],
-  IpSmGwModule: true,
+  IpSmGwModule: import.meta.env.NG_APP_ENABLE_IP_SM_GW,
+  VasModule: import.meta.env.NG_APP_ENABLE_VAS,
+  PlmnNetworkModule: import.meta.env.NG_APP_ENABLE_PLMN_NETWORK,
+  showHttpDlrHealthCheckConfig: import.meta.env.NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG,
+  Http2Module: import.meta.env.NG_APP_ENABLE_HTTP2,
   ServiceProviderDefaults: {
     bind_type: import.meta.env.NG_APP_SP_BIND_TYPE,
     interface_version: import.meta.env.NG_APP_SP_INTERFACE_VERSION,
@@ -228,6 +232,26 @@ export const environment = {
     ussi_default_datacoding_id: import.meta.env.NG_APP_SIP_USSI_DEFAULT_DATACODING_ID,
   },
 
+  pmsVas: {
+    apiBaseUrl: import.meta.env["NG_APP_PMS_VAS_API_BASE_URL"] || '/pms/api/v1',
+    internalMessagingApiKey: import.meta.env["NG_APP_PMS_VAS_INTERNAL_API_KEY"] || '',
+  },
+  GatewayHttp2: {
+    tls_enabled: import.meta.env.NG_APP_GA_HTTP2_TLS_ENABLED,
+    oauth2_enabled: import.meta.env.NG_APP_GA_HTTP2_OAUTH2_ENABLED,
+    require_bearer_token: import.meta.env.NG_APP_GA_HTTP2_REQUIRE_BEARER_TOKEN,
+    max_message_size: import.meta.env.NG_APP_GA_HTTP2_MAX_MESSAGE_SIZE,
+    request_timeout_ms: import.meta.env.NG_APP_GA_HTTP2_REQUEST_TIMEOUT_MS,
+    connection_timeout_ms: import.meta.env.NG_APP_GA_HTTP2_CONNECTION_TIMEOUT_MS,
+    idle_timeout_ms: import.meta.env.NG_APP_GA_HTTP2_IDLE_TIMEOUT_MS,
+    max_response_time_ms: import.meta.env.NG_APP_GA_HTTP2_MAX_RESPONSE_TIME_MS,
+    thread_pool_size: import.meta.env.NG_APP_GA_HTTP2_THREAD_POOL_SIZE,
+    messages_per_second_high: import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_HIGH,
+    messages_per_second_medium: import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_MEDIUM,
+    messages_per_second_low: import.meta.env.NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_LOW,
+    rate_limiting_enabled: import.meta.env.NG_APP_GA_HTTP2_RATE_LIMITING_ENABLED,
+    default_data_coding: import.meta.env.NG_APP_GA_HTTP2_DEFAULT_DATA_CODING,
+  }
 };
 
 export const IMAGES = {

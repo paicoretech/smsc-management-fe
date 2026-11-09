@@ -21,6 +21,10 @@ export class AddComponent implements OnInit {
   public destinationDelete: any[] = [];
   public customParamsList: CustomParams[] = [];
   public customParamsDelete: CustomParams[] = [];
+  public readonly chargingTypeOptions = [
+    { label: 'ECUR', value: 'ECUR' },
+    { label: 'IEC', value: 'IEC' }
+  ];
 
   private env = environment;
   private sourceAddressTon = this.env.RulesServiceProviderDefaults.source_addr_ton;
@@ -67,6 +71,13 @@ export class AddComponent implements OnInit {
         this.form.get('new_dest_addr_ton')?.setValue(this.destAddrTon);
         this.form.get('new_dest_addr_npi')?.setValue(this.destAddrNpi);
         this.applyDefaultDisabledState();
+        this.form.get('retry_all_parts')?.setValue(true);
+        this.form.get('charging_type')?.setValue('IEC');
+        this.form.get('destination_charging')?.setValue(false);
+        this.form.get('sri_for_charging')?.setValue(false);
+        this.form.get('network_id_sri_for_charging')?.setValue(null);
+        this.form.get('plmn_lookup_enabled')?.setValue(false);
+        this.updateChargingControls();
       }
     }
   }
@@ -103,7 +114,7 @@ export class AddComponent implements OnInit {
       regex_source_addr_npi: ['', []],
       regex_destination_addr: ['', []],
       regex_dest_addr_ton: ['', [Validators.pattern('^[0-9]+$')]],
-      regex_dest_addr_npi: ['', [Validators.pattern('^[34]+$')]],
+      regex_dest_addr_npi: ['', []],
       regex_imsi_digits_mask: ['', []],
       regex_network_node_number: ['', []],
       regex_calling_party_address: ['', []],
@@ -133,12 +144,21 @@ export class AddComponent implements OnInit {
       ]),
       regex_short_message: ['', []],
       new_short_message: ['', []],
+      retry_all_parts: [true, []],
       diameter_charging: [false, []],
+      charging_type: [{ value: 'IEC', disabled: true }, []],
+      destination_charging: [{ value: false, disabled: true }, []],
+      sri_for_charging: [{ value: false, disabled: true }, []],
+      network_id_sri_for_charging: [{ value: null, disabled: true }, []],
+      plmn_lookup_enabled: [{ value: false, disabled: true }, []],
       apply_for_refund: [false, []],
       action_advanced: this.initializeFormActionAdvanced()
     });
 
     this.form.get('apply_for_refund')?.disable();
+    this.form.get('diameter_charging')?.valueChanges.subscribe(() => this.updateChargingControls());
+    this.form.get('charging_type')?.valueChanges.subscribe(() => this.updateChargingControls());
+    this.form.get('sri_for_charging')?.valueChanges.subscribe(() => this.updateChargingControls());
   }
 
   initializeTarget(): void {
@@ -271,11 +291,19 @@ export class AddComponent implements OnInit {
         is_sri_response: (data.is_sri_response == null || data.is_sri_response == undefined) ? false : data.is_sri_response,
         regex_short_message: (data.regex_short_message == null || data.regex_short_message == undefined) ? '' : data.regex_short_message,
         new_short_message: (data.new_short_message == null || data.new_short_message == undefined) ? '' : data.new_short_message,
+        retry_all_parts: (data.retry_all_parts == null || data.retry_all_parts == undefined) ? true : data.retry_all_parts,
         diameter_charging: (data.diameter_charging == null || data.diameter_charging == undefined) ? false : data.diameter_charging,
+        charging_type: (data.charging_type === 'ECUR' || data.charging_type === 'IEC') ? data.charging_type : 'IEC',
+        destination_charging: (data.destination_charging == null || data.destination_charging == undefined) ? false : data.destination_charging,
+        sri_for_charging: (data.sri_for_charging == null || data.sri_for_charging == undefined) ? false : data.sri_for_charging,
+        network_id_sri_for_charging: (data.network_id_sri_for_charging == null || data.network_id_sri_for_charging == undefined)
+          ? null : data.network_id_sri_for_charging,
+        plmn_lookup_enabled: (data.plmn_lookup_enabled == null || data.plmn_lookup_enabled == undefined) ? false : data.plmn_lookup_enabled,
         apply_for_refund: (data.apply_for_refund == null || data.apply_for_refund == undefined) ? false : data.apply_for_refund
       });
       this.applyDefaultDisabledState();
       this.customParamsList = data.custom_params_matcher;
+      this.updateChargingControls();
 
       if (data.drop_temp_failure == true && data.network_id_temp_failure != null && data.network_id_temp_failure != undefined) {
         this.form.get('drop_temp_failure')?.setValue(true);
@@ -306,10 +334,6 @@ export class AddComponent implements OnInit {
 
         let priority = this.destinationList.length + 1;
         this.formTarget.get('priority')?.setValue(priority);
-
-        const diameter_charging = this.form.get('diameter_charging')?.value === true;
-        this.form.get('apply_for_refund')?.setValue(diameter_charging && data.apply_for_refund === true);
-        this.form.get('apply_for_refund')?.[diameter_charging ? 'enable' : 'disable']();
 
         // Advanced actions
         const actionAdvanced = data.action_advanced;
@@ -360,13 +384,60 @@ export class AddComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onChangeDiameterCharging() {
-    if (this.form.get('diameter_charging')?.value) {
-      this.form.get('apply_for_refund')?.enable();
+  private updateChargingControls(): void {
+    const diameterCharging = this.form.get('diameter_charging')?.value === true;
+    const chargingType = this.form.get('charging_type');
+    const destinationCharging = this.form.get('destination_charging');
+    const sriForCharging = this.form.get('sri_for_charging');
+    const networkIdSriForCharging = this.form.get('network_id_sri_for_charging');
+    const plmnLookupEnabled = this.form.get('plmn_lookup_enabled');
+    const applyForRefund = this.form.get('apply_for_refund');
+
+    if (diameterCharging) {
+      chargingType?.enable({ emitEvent: false });
+    } else {
+      if (chargingType?.value !== 'IEC') {
+        chargingType?.setValue('IEC', { emitEvent: false });
+      }
+      chargingType?.disable({ emitEvent: false });
     }
-    else {
-      this.form.get('apply_for_refund')?.disable();
-      this.form.get('apply_for_refund')?.setValue(false);
+
+    if (diameterCharging && chargingType?.value === 'ECUR') {
+      destinationCharging?.enable({ emitEvent: false });
+      sriForCharging?.enable({ emitEvent: false });
+      plmnLookupEnabled?.enable({ emitEvent: false });
+    } else {
+      if (destinationCharging?.value) {
+        destinationCharging?.setValue(false, { emitEvent: false });
+      }
+      if (sriForCharging?.value) {
+        sriForCharging?.setValue(false, { emitEvent: false });
+      }
+      if (plmnLookupEnabled?.value) {
+        plmnLookupEnabled?.setValue(false, { emitEvent: false });
+      }
+      destinationCharging?.disable({ emitEvent: false });
+      sriForCharging?.disable({ emitEvent: false });
+      plmnLookupEnabled?.disable({ emitEvent: false });
+    }
+
+    if (diameterCharging && chargingType?.value === 'ECUR' && sriForCharging?.value === true) {
+      networkIdSriForCharging?.setValidators([Validators.required]);
+      networkIdSriForCharging?.enable({ emitEvent: false });
+    } else {
+      networkIdSriForCharging?.clearValidators();
+      networkIdSriForCharging?.setValue(null, { emitEvent: false });
+      networkIdSriForCharging?.disable({ emitEvent: false });
+    }
+    networkIdSriForCharging?.updateValueAndValidity({ emitEvent: false });
+
+    if (diameterCharging && chargingType?.value === 'IEC') {
+      applyForRefund?.enable({ emitEvent: false });
+    } else {
+      if (applyForRefund?.value) {
+        applyForRefund?.setValue(false, { emitEvent: false });
+      }
+      applyForRefund?.disable({ emitEvent: false });
     }
   }
 
@@ -461,8 +532,6 @@ export class AddComponent implements OnInit {
   getPatternMessage(name: string) {
     if (this.form.get(name)?.errors?.['pattern']?.requiredPattern == '^[a-z]+$') {
       return 'Only letters are allowed';
-    } else if (this.form.get(name)?.errors?.['pattern']?.requiredPattern == '^[34]+$') {
-      return 'Only numbers 3 or 4 are allowed';
     } else {
       return 'Only numbers are allowed';
     }

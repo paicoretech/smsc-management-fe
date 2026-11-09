@@ -61,6 +61,13 @@
           <span class="text-danger mt-2" *ngIf="fileError">{{ fileError }}</span>
         </div>
       </div>
+
+      <div class="form-group row mb-2">
+        <label for="has_header" class="col-sm-5 label">File has header</label>
+        <div class="col-sm-7">
+          <input type="checkbox" class="form-check-input" id="has_header" formControlName="has_header" />
+        </div>
+      </div>
  
       <button class="btn btn-red m-auto mt-5" style="width: 60%;" [disabled]="form.invalid || !selectedFile" type="submit">Save</button>
 

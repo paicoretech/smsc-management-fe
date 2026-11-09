@@ -37,6 +37,7 @@ export class AddComponent implements OnInit {
       name: ['', Validators.required],
       dnd_type: ['GLOBAL', Validators.required],
       dnd_value: [''],
+      has_header: [false],
     });
   }
 
@@ -98,6 +99,7 @@ export class AddComponent implements OnInit {
       name: this.form.value.name,
       dnd_type: this.form.value.dnd_type,
       dnd_value: this.form.value.dnd_value,
+      has_header: this.form.value.has_header,
     };
 
     formData.append('file', this.selectedFile);

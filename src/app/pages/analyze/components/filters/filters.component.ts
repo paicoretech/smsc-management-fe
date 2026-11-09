@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AlertService } from '@app/core';
+import { AlertService, DLR_STATUS_LIST } from '@app/core';
 import { DateTime } from 'luxon';
 import { environment } from '@env/environment';
 
@@ -83,6 +83,7 @@ export class LogFiltersComponent {
   filtersForm!: FormGroup;
   broadcastNameList: any[] = [];
   broadcastUserList: any[] = [];
+  dlrStatusList = DLR_STATUS_LIST;
 
   constructor(
     private fb: FormBuilder,
@@ -98,6 +99,7 @@ export class LogFiltersComponent {
       origin_network: [null],
       destination_network: [null],
       status: [null],
+      dlr_status: [null],
       message_type: [null],
       origin_type: [null],
       destination_type: [null],
@@ -229,6 +231,7 @@ export class LogFiltersComponent {
       origin_network: null,
       destination_network: null,
       status: null,
+      dlr_status: null,
       message_type: null,
       origin_type: null,
       destination_type: null,

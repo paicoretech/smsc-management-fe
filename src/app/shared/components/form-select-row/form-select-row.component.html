@@ -7,10 +7,14 @@
     <select
       class="form-select"
       [id]="elementId"
+      [class.is-invalid]="control.touched && control.invalid"
       [formControl]="control">
       <option *ngFor="let option of options" [ngValue]="option.value">
         {{ option.label }}
       </option>
     </select>
+    <span class="text-danger mt-2" *ngIf="showRequiredError">
+      the field is required
+    </span>
   </div>
 </div>

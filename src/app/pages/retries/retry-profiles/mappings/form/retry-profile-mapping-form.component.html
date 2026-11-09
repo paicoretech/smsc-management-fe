@@ -1,0 +1,121 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-fluid flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <img src="/assets/img/settings-icon-2.png" alt="Retries" height="40px" width="auto">
+
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a class="card-header title-content mb-0 ml-2" style="font-size: 20px; font-weight: 500; color: #1d609d; cursor: pointer;" (click)="goBack()">
+                Routing Retry Profile
+              </a>
+            </li>
+
+            <li class="breadcrumb-item active" style="margin-top: 22px; color: #7b3031; font-size: 18px;" aria-current="page">
+              <label class="mt-1">{{ pageTitle }}</label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <br>
+
+    <form class="card ps-3 pe-3 pb-4 bg-white" [formGroup]="form" (ngSubmit)="save()">
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mt-3">
+        <div>
+          <h5 class="fw-bold mb-1">{{ pageTitle }}</h5>
+          <p class="text-muted small mb-0">
+            Define the routing conditions and select the retry profile that will be applied.
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="alert alert-info d-flex align-items-center mt-3 mb-0" role="status">
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+        Loading routing retry profile...
+      </div>
+
+      <div *ngIf="showValidationMessage && form.invalid" class="alert alert-danger mt-3 mb-0" role="alert">
+        <i class="bx bx-error-circle me-1"></i>
+        Error Code and Retry Profile are required. Review the highlighted fields before continuing.
+      </div>
+
+      <div class="accordion mt-4" id="routingRetryProfileSections">
+        <app-accordion-section sectionId="routing-retry-criteria" title="Routing Filters" [expanded]="true">
+          <p class="text-muted small mb-3">
+            Leave optional criteria empty to match any value. Enter multiple error codes separated by commas.
+          </p>
+
+          <app-form-input-row [form]="form" controlName="errorCodes" label="Error Code" labelCol="col-sm-2" inputCol="col-sm-10">
+          </app-form-input-row>
+
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <h6 class="fw-bold border-bottom pb-1 mb-3">Origin</h6>
+
+              <app-form-select-row [form]="form" controlName="originNetworkId" label="Network" [options]="networkOptions" labelCol="col-sm-5" inputCol="col-sm-7">
+              </app-form-select-row>
+
+              <app-form-select-row [form]="form" controlName="originProtocol" label="Protocol" [options]="protocolOptions" labelCol="col-sm-5" inputCol="col-sm-7">
+              </app-form-select-row>
+
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="fw-bold border-bottom pb-1 mb-3">Destination</h6>
+
+              <app-form-select-row [form]="form" controlName="destinationNetworkId" label="Network" [options]="networkOptions" labelCol="col-sm-5" inputCol="col-sm-7">
+              </app-form-select-row>
+
+              <app-form-select-row [form]="form" controlName="destinationProtocol" label="Protocol" [options]="protocolOptions" labelCol="col-sm-5" inputCol="col-sm-7">
+              </app-form-select-row>
+
+            </div>
+          </div>
+        </app-accordion-section>
+
+        <app-accordion-section sectionId="property-matchers" title="Property Matchers (Optional)" [expanded]="false">
+          <p class="text-muted small mb-3">
+            Select Message for standard message fields or Custom to enter a custom property name.
+          </p>
+
+          <app-form-array-table [rows]="propertyMatchers" [columns]="propertyMatcherColumns" addLabel="Add Property Matcher" emptyMessage="No property matchers configured" [minimumRows]="0" [disabled]="isLoading || isSaving" (addRow)="addPropertyMatcher()" (removeRow)="removePropertyMatcher($event)">
+          </app-form-array-table>
+        </app-accordion-section>
+
+        <app-accordion-section sectionId="routing-retry-profile" title="Retry Action" [expanded]="true">
+          <p class="text-muted small mb-3">
+            Choose the retry profile to execute when all configured routing criteria match.
+          </p>
+
+          <app-form-section [form]="form" [config]="profileSectionConfig">
+          </app-form-section>
+
+          <div *ngIf="form.get('retryProfileId')?.touched && form.get('retryProfileId')?.hasError('required')" class="text-danger small mt-1">
+            Retry Profile is required.
+          </div>
+        </app-accordion-section>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-4">
+        <small class="text-muted">
+          <span class="text-danger">*</span>
+          Error Code and Retry Profile are required
+        </small>
+
+        <div>
+          <button type="button" class="btn btn-secondary me-2" [disabled]="isSaving" (click)="goBack()">
+            Cancel
+          </button>
+
+          <button type="submit" class="btn btn-red" [disabled]="!canSubmit">
+            <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
+            {{ submitButtonText }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

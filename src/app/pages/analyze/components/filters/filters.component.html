@@ -42,8 +42,12 @@
         </ng-select>
       </div>
       <div class="mb-3" *ngIf="!hideAdvancedFilters">
-        <label>Status</label>
+        <label>SMSC Status</label>
         <ng-select [items]="['SUCCESS', 'FAILED']" bindLabel="" bindValue="" formControlName="status" placeholder="ALL" [clearable]="true"></ng-select>
+      </div>
+      <div class="mb-3" *ngIf="!hideAdvancedFilters">
+        <label>DLR Status</label>
+        <ng-select [items]="dlrStatusList" bindLabel="" bindValue="" formControlName="dlr_status" placeholder="ALL" [clearable]="true"></ng-select>
       </div>
       <div class="mb-3">
         <label>Message Type</label>

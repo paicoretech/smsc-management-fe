@@ -1,0 +1,136 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-fluid flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center mt-3">
+        <i
+          class="bx bx-refresh"
+          aria-hidden="true"
+          style="font-size: 40px; color: #7b3031;"
+        ></i>
+
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item not-bredcrumb mt-4">
+              <a
+                class="card-header title-content mb-0 ml-2"
+                style="font-size: 20px; font-weight: 500; color: #1d609d; cursor: pointer;"
+                (click)="goBack()"
+              >
+                Retry Profiles
+              </a>
+            </li>
+
+            <li
+              class="breadcrumb-item active"
+              style="margin-top: 22px; color: #7b3031; font-size: 18px;"
+              aria-current="page"
+            >
+              <label class="mt-1">
+                {{ pageTitle }}
+              </label>
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <br>
+
+    <form
+      class="card ps-3 pe-3 pb-4 bg-white"
+      [formGroup]="form"
+      (ngSubmit)="save()"
+    >
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mt-3">
+        <h5 class="fw-bold mb-0">
+          {{ pageTitle }}
+        </h5>
+      </div>
+
+      <div
+        *ngIf="showValidationMessage || form.hasError('exitActionConflict') || form.hasError('messagePriorityConflict')"
+        class="alert alert-danger mt-3 mb-0"
+        role="alert"
+      >
+        <i class="bx bx-error-circle me-1"></i>
+        <ng-container *ngIf="form.hasError('exitActionConflict'); else priorityValidation">
+          Recovery Profile and Reroute Network ID cannot be configured at the same time.
+        </ng-container>
+        <ng-template #priorityValidation>
+          <ng-container *ngIf="form.hasError('messagePriorityConflict'); else requiredValidation">
+            Message Priority Staggered and Override Message Priority cannot be configured at the same time.
+          </ng-container>
+        </ng-template>
+        <ng-template #requiredValidation>
+          Review the highlighted required fields and step values before continuing.
+        </ng-template>
+      </div>
+
+      <div
+        class="accordion mt-4"
+        id="retryProfileSections"
+      >
+        <app-accordion-section
+          sectionId="retry-profile-general"
+          title="General"
+          [expanded]="true"
+        >
+          <app-form-section
+            [form]="form"
+            [config]="generalSectionConfig"
+          >
+          </app-form-section>
+        </app-accordion-section>
+
+        <app-accordion-section
+          sectionId="retry-profile-actions"
+          title="Actions"
+          [expanded]="true"
+        >
+          <app-form-section
+            [form]="form"
+            [config]="actionsSectionConfig"
+          >
+          </app-form-section>
+        </app-accordion-section>
+
+        <app-accordion-section
+          sectionId="retry-profile-steps"
+          title="Steps"
+          [expanded]="true"
+        >
+          <app-form-array-table
+            [rows]="steps"
+            [columns]="stepColumns"
+            addLabel="Add Step"
+            emptyMessage="No retry steps configured"
+            [minimumRows]="1"
+            [disabled]="isLoading || isSaving"
+            (addRow)="addStep()"
+            (removeRow)="removeStep($event)"
+          >
+          </app-form-array-table>
+        </app-accordion-section>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button
+          type="button"
+          class="btn btn-secondary me-2"
+          [disabled]="isSaving"
+          (click)="goBack()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-red"
+          [disabled]="!canSubmit"
+        >
+          {{ submitButtonText }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

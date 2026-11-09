@@ -1,0 +1,80 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="cancel()" aria-label="Close">X</button>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="mcc" class="col-sm-4 label">MCC</label>
+            <div class="col-sm-8">
+              <select id="mcc" class="form-select" formControlName="mcc" (change)="onMccChange()" [class.is-invalid]="isInvalid('mcc')">
+                <option value="">Select an MCC</option>
+                <option *ngFor="let option of mccOptions" [value]="option.mcc">
+                  {{ option.mcc }} ({{ option.country }})
+                </option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="isInvalid('mcc')">The field is required.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="mnc" class="col-sm-4 label">MNC</label>
+            <div class="col-sm-8">
+              <input
+                id="mnc"
+                type="text"
+                inputmode="numeric"
+                maxlength="3"
+                class="form-control"
+                formControlName="mnc"
+                [class.is-invalid]="isInvalid('mnc')"
+              >
+              <span class="text-danger mt-2" *ngIf="hasError('mnc', 'required')">The field is required.</span>
+              <span class="text-danger mt-2" *ngIf="hasError('mnc', 'pattern')">Enter 2 or 3 digits.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="network_name" class="col-sm-4 label">Network</label>
+            <div class="col-sm-8">
+              <input id="network_name" type="text" class="form-control" formControlName="network_name" [class.is-invalid]="isInvalid('network_name')">
+              <span class="text-danger mt-2" *ngIf="isInvalid('network_name')">The field is required.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="plmn_country_id" class="col-sm-4 label">Country Code</label>
+            <div class="col-sm-8">
+              <select id="plmn_country_id" class="form-select" formControlName="plmn_country_id" title="Example: +34 (Spain)" [class.is-invalid]="isInvalid('plmn_country_id')">
+                <option value="">Select a country code</option>
+                <option *ngFor="let option of countryCodeOptions" [value]="option.id">
+                  +{{ option.phone_code }}
+                </option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="hasError('plmn_country_id', 'required')">The field is required.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-red">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

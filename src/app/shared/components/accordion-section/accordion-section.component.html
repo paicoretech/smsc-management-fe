@@ -1,0 +1,28 @@
+<div class="accordion-item">
+  <h2
+    class="accordion-header"
+    [id]="headingId"
+  >
+    <button
+      type="button"
+      class="accordion-button custom-accordion-header"
+      [class.collapsed]="!expanded"
+      [attr.aria-expanded]="expanded"
+      [attr.aria-controls]="contentId"
+      (click)="toggle()"
+    >
+      {{ title }}
+    </button>
+  </h2>
+
+  <div
+    class="accordion-collapse collapse"
+    [id]="contentId"
+    [class.show]="expanded"
+    [attr.aria-labelledby]="headingId"
+  >
+    <div class="accordion-body mt-4">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

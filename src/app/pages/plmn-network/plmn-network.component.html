@@ -1,0 +1,45 @@
+<div class="content-wrapper ps-2 pe-2">
+  <div class="container-fluid flex-grow-1 container-p-y">
+    <div class="d-flex align-items-center mt-3">
+      <i class="bx bx-network-chart" aria-hidden="true" style="font-size: 40px; color: #7b3031;"></i>
+      <label class="card-header title-content mb-0 ms-2" style="font-size: 20px; font-weight: 500;">
+        PLMN Network
+      </label>
+    </div>
+
+    <p class="text-secondary mt-2 mb-0" style="font-size: 14px;">
+      Manage destination networks and the number prefixes associated with each operator.
+    </p>
+
+    <ul class="nav nav-tabs mt-3" role="tablist" aria-label="PLMN Network sections">
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          role="tab"
+          routerLink="./networks"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="bx bx-network-chart me-1" aria-hidden="true"></i>
+          Networks
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a
+          class="nav-link"
+          role="tab"
+          routerLink="./prefixes"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="bx bx-hash me-1" aria-hidden="true"></i>
+          Prefixes
+        </a>
+      </li>
+    </ul>
+
+    <div class="card p-4" style="border-top-left-radius: 0;">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

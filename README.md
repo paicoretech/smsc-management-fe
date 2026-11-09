@@ -76,6 +76,10 @@ NG_APP_TIMEOUT_WEBSOCKET=1000
 #### Filter Configuration
 Controls the filters in the Analyze Log page. Both filters work independently:
 
+* **NG_APP_ENABLE_HTTP2** - Enables HTTP/2 support when set to `true`.
+  - Default: `false`
+  - Example: `NG_APP_ENABLE_HTTP2=true`
+
 * **NG_APP_FILTER_ONLY_SERVICE_PROVIDERS** - Controls the **Account** filter
   - Set to `true` to show only Service Providers (excludes Gateways)
   - Set to `false` to show all accounts (Service Providers and Gateways)
@@ -87,6 +91,11 @@ Controls the filters in the Analyze Log page. Both filters work independently:
   - Set to `false` to show all accounts (Service Providers and Gateways)
   - Default: `false`
   - Example: `NG_APP_FILTER_ONLY_GATEWAYS=true`
+
+* **NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG** - Controls whether the HTTP DLR health check configuration is displayed.
+  - Set to `true` to display the configuration.
+  - Default: `false`
+  - Example: `NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG=true`
 
 #### IP address regex
 
@@ -328,81 +337,6 @@ Gateway Form Default Values
 
 * NG_APP_GA_SS7_MAP_FORWARD_SM_SERVICE=44
 
-#### Variables for Gateway SIP
-
-SIP Gateway form default values.
-
-* NG_APP_SIP_PROTOCOL=SIP
-
-* NG_APP_SIP_PORT=5060
-
-* NG_APP_SIP_TRANSPORT=udp
-
-* NG_APP_SIP_MESSAGES_PER_SECOND=100
-
-* NG_APP_SIP_MESSAGES_PER_SECOND_HIGH=70
-
-* NG_APP_SIP_MESSAGES_PER_SECOND_MEDIUM=20
-
-* NG_APP_SIP_MESSAGES_PER_SECOND_LOW=10
-
-* NG_APP_SIP_TRANSACTION_TIMEOUT=32000
-
-* NG_APP_SIP_RETRANSMISSION_BASE_INTERVAL_MS=500
-
-* NG_APP_SIP_RETRANSMISSION_MAX_INTERVAL_MS=4000
-
-* NG_APP_SIP_NETWORK_TIMEOUT_MS=5000
-
-* NG_APP_SIP_THREAD_POOL_SIZE=8
-
-* NG_APP_SIP_RETRANSMISSION_FILTER=true
-
-* NG_APP_SIP_MAX_MESSAGE_SIZE=1048576
-
-* NG_APP_SIP_RECEIVE_UDP_BUFFER_SIZE=8388608
-
-* NG_APP_SIP_SEND_UDP_BUFFER_SIZE=8388608
-
-* NG_APP_SIP_AGGRESSIVE_CLEANUP=true
-
-* NG_APP_SIP_ROUTING_ENABLE_SS7=false
-
-* NG_APP_SIP_ROUTING_ENABLE_DIAMETER=false
-
-* NG_APP_SIP_ENABLED=1
-
-* NG_APP_SIP_REGISTER_MAX_EXPIRES=3600
-
-* NG_APP_SIP_IPSMGW_USER=
-
-* NG_APP_SIP_IPSMGW_DOMAIN=
-
-* NG_APP_SIP_IMS_DOMAIN=
-
-* NG_APP_SIP_IMS_CCF=
-
-* NG_APP_SIP_IMS_ECF=
-
-* NG_APP_SIP_SUBSCRIBE_TARGET_HOST=
-
-* NG_APP_SIP_SUBSCRIBE_TARGET_PORT=5060
-
-* NG_APP_SIP_SUBSCRIBE_TARGET_TRANSPORT=udp
-
-* NG_APP_SIP_LOCAL_VIA_HOST=
-
-* NG_APP_SIP_GLOBAL_TITLE=22020
-
-* NG_APP_SIP_USSI_DEFAULT_DATACODING_ID=1
-
-* NG_APP_SIP_STATUS=CLOSED
-
-* NG_APP_SIP_IP=
-
-* NG_APP_SIP_NAME=
-
-* NG_APP_SIP_SPLIT_MESSAGE=false
 
 #### Variables for Rules Service Provider
 

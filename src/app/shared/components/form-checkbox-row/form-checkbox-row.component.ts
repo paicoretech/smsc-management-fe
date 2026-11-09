@@ -10,6 +10,7 @@ export class FormCheckboxRowComponent {
   @Input() form!: FormGroup;
   @Input() controlName!: string;
   @Input() label = '';
+  @Input() tooltip = '';
   @Input() labelCol = 'col-sm-6';
   @Input() inputCol = 'col-sm-6';
 

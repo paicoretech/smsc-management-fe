@@ -1,0 +1,107 @@
+<div class="d-flex justify-content-end mb-3">
+  <button
+    type="button"
+    class="btn btn-red"
+    [disabled]="disabled"
+    (click)="addRow.emit()"
+  >
+    <i class="bx bx-plus"></i>
+    {{ addLabel }}
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of columns"
+          [style.width]="column.width || null"
+        >
+          {{ column.header }}
+        </th>
+
+        <th class="align-center" style="width: 90px;">
+          Actions
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let row of rows.controls; let rowIndex = index; trackBy: trackByIndex"
+        [formGroup]="getGroup(rowIndex)"
+      >
+        <td
+          *ngFor="let column of columns"
+          class="align-top"
+        >
+          <span *ngIf="column.type === 'index'">
+            {{ rowIndex + 1 }}
+          </span>
+
+          <ng-container *ngIf="column.type !== 'index' && column.controlName">
+            <select
+              *ngIf="column.type === 'select' || isConditionalSelect(rowIndex, column)"
+              class="form-select"
+              [formControl]="getControl(rowIndex, column.controlName)"
+              [class.is-invalid]="getControl(rowIndex, column.controlName).touched && getControl(rowIndex, column.controlName).invalid"
+            >
+              <option
+                *ngFor="let option of column.options || []"
+                [ngValue]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+
+            <input
+              *ngIf="column.type === 'text' || column.type === 'number' || (column.type === 'conditional' && !isConditionalSelect(rowIndex, column))"
+              class="form-control"
+              [type]="column.type === 'number' ? 'number' : 'text'"
+              [attr.min]="column.min ?? null"
+              [placeholder]="column.placeholder || ''"
+              [formControl]="getControl(rowIndex, column.controlName)"
+              [class.is-invalid]="getControl(rowIndex, column.controlName).touched && getControl(rowIndex, column.controlName).invalid"
+            >
+
+            <span
+              class="text-danger small mt-1 d-block"
+              *ngIf="getControl(rowIndex, column.controlName).touched && getControl(rowIndex, column.controlName).hasError('required')"
+            >
+              the field is required
+            </span>
+
+            <span
+              class="text-danger small mt-1 d-block"
+              *ngIf="getControl(rowIndex, column.controlName).touched && getControl(rowIndex, column.controlName).hasError('min')"
+            >
+              Min: {{ getControl(rowIndex, column.controlName).getError('min')?.min }}
+            </span>
+          </ng-container>
+        </td>
+
+        <td class="align-center align-top">
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            title="Remove row"
+            [disabled]="!canRemoveRow()"
+            (click)="removeRow.emit(rowIndex)"
+          >
+            <i class="bx bxs-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="rows.length === 0">
+        <td
+          class="text-center"
+          [attr.colspan]="columns.length + 1"
+        >
+          {{ emptyMessage }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

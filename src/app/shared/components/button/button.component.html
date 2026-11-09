@@ -1,0 +1,12 @@
+<button
+  [type]="type"
+  class="btn"
+  [ngClass]="buttonClasses"
+  [disabled]="disabled || loading"
+  (click)="buttonClick.emit($event)"
+>
+  <ng-container *ngIf="loading; else content">{{ loadingText }}</ng-container>
+  <ng-template #content>
+    <ng-content></ng-content>
+  </ng-template>
+</button>

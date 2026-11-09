@@ -29,6 +29,7 @@ export class UserComponent implements OnInit {
   formModalChangePassword: any;
   messageShow: string = '';
   permission: boolean = false;
+  roleDisplayNames: Record<string, string> = {};
   private isUnlockAction: boolean = false;
 
   constructor(
@@ -57,11 +58,21 @@ export class UserComponent implements OnInit {
     }
 
     this.permission = true;
-    this.response = await this.userService.getUsers();
+    const [usersResponse, rolesResponse] = await Promise.all([
+      this.userService.getUsers(),
+      this.userService.getRoles(),
+    ]);
+
+    this.setRoleDisplayNames(rolesResponse);
+    this.response = usersResponse;
     if (this.response.status == 200) {
         this.data = this.response.data;
     }
     this.dtTrigger.next(this.dtOptions);
+  }
+
+  roleDisplayName(role: string): string {
+    return this.roleDisplayNames[role] || role;
   }
 
   showModal(e: boolean) {
@@ -226,5 +237,20 @@ export class UserComponent implements OnInit {
   
   refresh() {
     this.renderer();
+  }
+
+  private setRoleDisplayNames(response: any): void {
+    const roles = Array.isArray(response) ? response : response?.data;
+    if (!Array.isArray(roles)) {
+      this.roleDisplayNames = {};
+      return;
+    }
+
+    this.roleDisplayNames = roles.reduce((acc: Record<string, string>, role: any) => {
+      if (role?.name) {
+        acc[role.name] = role.displayName || role.name;
+      }
+      return acc;
+    }, {});
   }
 }

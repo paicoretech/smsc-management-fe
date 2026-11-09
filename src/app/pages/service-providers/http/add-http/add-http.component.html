@@ -161,18 +161,36 @@
             <h5 class="fw-bold border-bottom pb-1 mb-3 mt-4">Callback</h5>
             <!-- Callback URL -->
             <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <div class="form-group row mb-2">
-                        <label class="col-sm-4 label" for="callback_url">Callback URL</label>
+                        <label class="col-sm-2 label" for="callback_url">Callback URL</label>
                         <div class="col-sm-8">
-                            <input [class.is-invalid]="validInput('callback_url')"
-                                   class="form-control"
+                            <input class="form-control"
                                    formControlName="callback_url"
                                    id="callback_url"
                                    type="text">
-                            <span *ngIf="validInput('callback_url')" class="text-danger mt-2">
-                                the field is required
-                            </span>
+                            <div *ngIf="showHttpDlrHealthCheckConfig && form.get('http_dlr_health_check_enabled')?.value"
+                                class="alert alert-primary mt-2"
+                                role="alert">
+                                Health checks are automatically executed against the callback URL base endpoint
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="showHttpDlrHealthCheckConfig" class="row mb-2">
+                <div class="col-sm-12">
+                    <div class="form-group row mb-2">
+                        <label class="col-sm-2 label" for="http_dlr_health_check_enabled">DLR Health Check</label>
+                        <div class="col-sm-8 d-flex align-items-center">
+                            <div class="form-check form-switch ps-0 d-flex align-items-center mb-0">
+                                <input class="form-check-input ms-0 me-2"
+                                    formControlName="http_dlr_health_check_enabled"
+                                    id="http_dlr_health_check_enabled"
+                                    type="checkbox">
+
+                            </div>
                         </div>
                     </div>
                 </div>

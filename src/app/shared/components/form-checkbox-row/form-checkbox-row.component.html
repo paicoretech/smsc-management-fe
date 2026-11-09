@@ -1,7 +1,17 @@
 <div class="form-group row mb-2">
-  <label [class]="labelCol + ' label'">
-    {{ label }}
-  </label>
+  <div [class]="labelCol + ' label'">
+    <label>
+      {{ label }}
+    </label>
+    <i
+      *ngIf="tooltip"
+      class="bx bx-info-circle check_form"
+      tabindex="0"
+      [title]="tooltip"
+      [checkFormTooltip]="tooltip"
+      [attr.aria-label]="tooltip"
+    ></i>
+  </div>
 
   <div [class]="inputCol">
     <input

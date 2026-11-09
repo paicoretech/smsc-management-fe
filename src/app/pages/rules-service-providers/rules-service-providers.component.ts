@@ -184,6 +184,9 @@ export class RulesServiceProvidersComponent {
     if ( origin?.protocol === 'SIP') {
       is_sri_response = '(MO)';
     }
+    if ( origin?.protocol === 'HTTP2') {
+      is_sri_response = '(MO)';
+    }
     return `${origin?.type?.toUpperCase() || ''} ${origin?.protocol || ''} ${is_sri_response} -> ${destination.join(', ')}`;
   }
 

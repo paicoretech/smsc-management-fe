@@ -1,0 +1,28 @@
+<div class="form-control d-flex flex-wrap align-items-center gap-2 p-2">
+  <span
+    class="badge bg-secondary d-flex align-items-center gap-1"
+    *ngFor="let value of values; let index = index"
+  >
+    {{ value }}
+
+    <button
+      type="button"
+      class="btn p-0 border-0 text-white"
+      [disabled]="disabled"
+      (click)="removeValue(index)"
+    >
+      <i class="bx bx-x"></i>
+    </button>
+  </span>
+
+  <input
+    #tagInput
+    type="text"
+    class="border-0 flex-grow-1"
+    style="outline: none; min-width: 180px;"
+    [disabled]="disabled"
+    [placeholder]="values.length === 0 ? placeholder : ''"
+    (keydown)="handleKeydown($event, tagInput)"
+    (blur)="handleBlur(tagInput)"
+  >
+</div>

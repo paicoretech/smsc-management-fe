@@ -9,11 +9,14 @@ import { TcapMapComponent } from './ss7/configurations/tcap-map/tcap-map.compone
 import { DiameterGatewayComponent } from './diameter/diameter-gateway.component';
 import { AddDiameterComponent } from './diameter/add/add-diameter.component';
 import { HttpComponent } from './http/http.component';
+import { Http2Component } from './http2/http2.component';
 import { AddSs7Component } from './ss7/add-ss7/add-ss7.component';
 import { HRComponent } from './ss7/configurations/hr/hr.component';
 import { ApiContext } from '@app/core/utils/types/api-context.type';
 import { AddHttpComponent } from './http/add-http/add-http.component';
 import { AddSmppComponent } from './smpp/add-smpp/add-smpp.component';
+import { AddHttp2Component } from './http2/add-http2/add-http2.component';
+import { http2EnabledGuard } from '@app/core/guards/http2-enable.guard';
 
 
 const routes: Routes = [
@@ -40,6 +43,21 @@ const routes: Routes = [
   {
     path: 'http/edit/:httpGatewayId',
     component: AddHttpComponent,
+  },
+  {
+    path: 'http2',
+    component: Http2Component,
+    canActivate: [http2EnabledGuard],
+  },
+  {
+    path: 'http2/add',
+    component: AddHttp2Component,
+    canActivate: [http2EnabledGuard],
+  },
+  {
+    path: 'http2/edit/:httpGatewayId',
+    component: AddHttp2Component,
+    canActivate: [http2EnabledGuard],
   },
 
   {

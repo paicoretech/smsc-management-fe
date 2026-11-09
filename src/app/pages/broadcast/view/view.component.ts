@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { BroadCastService, RoutingRolesService, AlertService, Statistic, DateTimeUtil, Catalog, CatalogService, Network } from '@core/index';
 import { DateTime } from 'luxon';
+import { BROADCAST_ENCODING_LIST } from '../broadcast.constants';
 
 declare var window: any;
 
@@ -15,11 +16,7 @@ export class ViewComponent implements OnInit {
 
   fileColumns: string[] = [];
   filePreview: string[] = [];
-  encodingList: Catalog[] = [
-    { id: 0, name: 'DCS-0' },
-    { id: 3, name: 'DCS-3' },
-    { id: 8, name: 'DCS-8' },
-  ];
+  encodingList: Catalog[] = BROADCAST_ENCODING_LIST;
   tonCatalog: Catalog[] = [];
   npiCatalog: Catalog[] = [];
   columnMapping: { [key: string]: string } = {};

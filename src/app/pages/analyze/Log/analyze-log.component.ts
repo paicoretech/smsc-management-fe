@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { AnalyceService } from '@app/core/services/analyze.service';
-import { AlertService, DateTimeUtil, Network, ResponseI, RoutingRolesService, SpinnerService } from '@app/core';
+import { AlertService, DateTimeUtil, getDlrStatus, Network, ResponseI, RoutingRolesService, SpinnerService } from '@app/core';
 import { Router } from '@angular/router';
 import { DateTime } from 'luxon';
 
@@ -47,6 +47,7 @@ export class AnalyzeLogComponent implements OnInit {
     registered_delivery: null,
     broadcast_filter_id: null,
     broadcast_filter_user: null,
+    dlr_status: null,
   };
 
   constructor(
@@ -159,6 +160,10 @@ export class AnalyzeLogComponent implements OnInit {
         { data: 'destination_network_name' },
         { data: 'message' },
         { data: 'status' },
+        {
+          data: 'comment',
+          render: (_data: any, _type: any, row: any) => getDlrStatus(row)
+        },
         {
           data: null,
           orderable: false,

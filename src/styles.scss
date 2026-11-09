@@ -56,6 +56,36 @@ $background-image-path: 'assets/img/background.png';
     color: #fff;
 }
 
+.plmn-search:hover .form-control,
+.plmn-search:hover .input-group-text,
+.plmn-search:focus-within .form-control,
+.plmn-search:focus-within .input-group-text {
+    border-color: $color-primary;
+}
+
+.plmn-search .form-control:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 0.25rem rgba(123, 48, 49, 0.25);
+}
+
+.plmn-search .input-group-text {
+    color: $color-primary;
+}
+
+.btn-outline-red {
+    background-color: transparent;
+    border-color: $color-primary;
+    color: $color-primary;
+}
+
+.btn-outline-red:hover,
+.btn-outline-red:focus,
+.btn-outline-red:active {
+    background-color: $color-primary;
+    border-color: $color-primary;
+    color: $color-white;
+}
+
 .btn-close-modal {
     font-weight: 700;
     font-size: 20px;

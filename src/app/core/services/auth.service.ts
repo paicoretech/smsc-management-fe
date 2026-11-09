@@ -88,7 +88,7 @@ export class AuthService {
       return this.token;
   }
 
-  async getRoles()
+  getRolesSync(): any[]
   {
     let roles = localStorage.getItem('roles');
     if(roles != "undefined") {
@@ -98,6 +98,11 @@ export class AuthService {
     }
 
     return this.roles;
+  }
+
+  async getRoles()
+  {
+    return this.getRolesSync();
   }
 
   async validateToken(): Promise<boolean>

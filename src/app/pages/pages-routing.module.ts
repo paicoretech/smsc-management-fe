@@ -2,7 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { AppLayoutComponent } from '@theme/layout/app-layout/app-layout.component';
-import { AdminGuard, AnalyzeGuard } from '@app/core';
+import { AdminGuard, AnalyzeGuard, PlmnNetworkGuard } from '@app/core';
 
 
 const routes: Routes = [
@@ -29,6 +29,11 @@ const routes: Routes = [
         canLoad: [AdminGuard]
       },
       {
+        path: 'plmn-network',
+        loadChildren: () => import('./plmn-network/plmn-network.module').then(m => m.PlmnNetworkModule),
+        canLoad: [AdminGuard, PlmnNetworkGuard]
+      },
+      {
         path: 'rules-and-routing', 
         loadChildren: () => import('./rules-service-providers/rules-service-providers.module').then(m => m.RulesServiceProvidersModule),
         canLoad: [AdminGuard]
@@ -51,6 +56,11 @@ const routes: Routes = [
       {
         path: 'settings',
         loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+        canLoad: [AdminGuard]
+      },
+      {
+        path: 'retries',
+        loadChildren: () => import('./retries/retries.module').then(m => m.RetriesModule),
         canLoad: [AdminGuard]
       },
       {

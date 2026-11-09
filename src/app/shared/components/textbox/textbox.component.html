@@ -1,0 +1,20 @@
+<label *ngIf="label" [for]="id" [class]="labelClass">{{ label }}</label>
+<input
+  [id]="id"
+  [type]="type"
+  class="form-control"
+  [ngClass]="inputClass"
+  [value]="value"
+  [placeholder]="placeholder"
+  [autocomplete]="autocomplete"
+  [disabled]="isDisabled"
+  [attr.min]="min"
+  [attr.max]="max"
+  [attr.maxlength]="maxLength"
+  [class.is-invalid]="hasError"
+  (input)="handleInput($event)"
+  (blur)="markAsTouched()"
+/>
+<div *ngIf="showValidation && hasError" class="invalid-feedback d-block">
+  {{ errorMessage }}
+</div>

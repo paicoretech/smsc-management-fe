@@ -77,14 +77,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const isAdmin = rolesSet.has('ROOT') || rolesSet.has('ADMINISTRATOR');
     const isLimited = ['CAMPAIGN_APPROVER', 'CAMPAIGN_OPERATOR', 'TECH_SUPPORT']
       .some(r => rolesSet.has(r));
+    const hasPmsVasAccess = rolesSet.has('PMS_VAS_ACCESS');
 
     let items: any[] = [];
     if (isAdmin) {
       items = [...ROUTES];
-    } else if (isLimited) {
-      items = ROUTES.filter(i => i.title === 'Broadcast SMS');
     } else {
-      items = [];
+      if (isLimited) {
+        items = [...items, ...ROUTES.filter(i => i.title === 'Broadcast SMS')];
+      }
+
+      if (hasPmsVasAccess) {
+        items = [...items, ...ROUTES.filter(i => i.moduleKey === 'pms-vas')];
+      }
     }
 
     const featureGate = (item: any) => {
@@ -109,6 +114,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   toggleDropdown(index: number): void {
     this.sidebarItems[index].show = !this.sidebarItems[index].show;
+  }
+
+  toggleSubmenu(item: RouteInfo): void {
+    item.show = !item.show;
   }
 
   @HostListener('window:resize', ['$event'])

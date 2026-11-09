@@ -9,6 +9,8 @@ import { SmppComponent } from './smpp/smpp.component';
 import { AddSmppComponent } from './smpp/add-smpp/add-smpp.component';
 import { HttpComponent } from './http/http.component';
 import { AddHttpComponent } from './http/add-http/add-http.component';
+import { Http2Component } from './http2/http2.component';
+import { AddHttp2Component } from './http2/add-http2/add-http2.component';
 import { Ss7Component } from './ss7/ss7.component';
 import { AddSs7Component } from './ss7/add-ss7/add-ss7.component';
 import { ConfigurationsComponent } from './ss7/configurations/configurations.component';
@@ -97,9 +99,11 @@ const DIAMETER_COMPONENTS = [
   declarations: [
     SmppComponent,
     HttpComponent,
+    Http2Component,
     Ss7Component,
     AddSmppComponent,
     AddHttpComponent,
+    AddHttp2Component,
     AddSs7Component,
     ConfigurationsComponent,
     ...M3UACOMPONENTS,

@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="fw-bold mb-0">Routing Retry Profiles</h5>
+
+  <div>
+    <button type="button" class="btn btn-red me-2" (click)="goToCreate()">
+      <i class="bx bx-plus"></i>
+      Create
+    </button>
+
+    <button type="button" class="btn btn-red" [disabled]="isLoading" (click)="refresh()">
+      <i class="bx bx-refresh"></i>
+    </button>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table id="retryProfileMappingsTable" class="table" style="width: 100%;" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead>
+      <tr>
+        <th>Error Code</th>
+        <th>Retry Profile</th>
+        <th>Destination Network</th>
+        <th>Destination Protocol</th>
+        <th>Property Matchers</th>
+        <th class="align-center">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let mapping of mappings">
+        <td class="align-middle">{{ mapping.error_code || '-' }}</td>
+        <td class="align-middle">{{ getProfileLabel(mapping) }}</td>
+        <td class="align-middle">{{ getNetworkLabel(mapping.destination_network_id) }}</td>
+        <td class="align-middle">{{ mapping.destination_protocol || '-' }}</td>
+        <td class="align-middle">{{ getPropertyMatchersLabel(mapping) }}</td>
+        <td class="align-center">
+          <button type="button" class="btn btn-sm btn-red me-2" title="Edit routing retry profile" (click)="goToEdit(mapping)">
+            <i class="bx bxs-pencil"></i>
+          </button>
+
+          <button type="button" class="btn btn-sm btn-secondary" title="Delete routing retry profile" [disabled]="isDeleting" (click)="confirmDelete(mapping)">
+            <i class="bx bxs-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="deleteRetryProfileMappingModal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <app-modal-delete [mensaje]="deleteMessage" [confirmButtonText]="'Delete'" [cancelButtonText]="'Cancel'" (confirmAction)="handleDeleteConfirmation($event)">
+    </app-modal-delete>
+  </div>
+</div>

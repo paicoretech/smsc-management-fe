@@ -36,6 +36,10 @@ export type GatewaySs7FormValue = {
   msc_ssn: number;
 
   map_version: number;
+  report_sm_delivery_status: boolean;
+  auto_retry_error_code: string;
+  no_retry_error_code: string;
+  retry_alternate_destination_error_code: string;
   split_message: boolean;
   home_routing: boolean;
 
@@ -76,6 +80,10 @@ function normalizeSs7Form(v: GatewaySs7FormValue): GatewaySs7FormValue {
     msc_ssn: toNum(v.msc_ssn),
 
     map_version: toNum(v.map_version),
+    report_sm_delivery_status: !!v.report_sm_delivery_status,
+    auto_retry_error_code: toStr(v.auto_retry_error_code),
+    no_retry_error_code: toStr(v.no_retry_error_code),
+    retry_alternate_destination_error_code: toStr(v.retry_alternate_destination_error_code),
 
     messages_per_second_high: toNum(v.messages_per_second_high),
     messages_per_second_medium: toNum(v.messages_per_second_medium),
@@ -303,6 +311,10 @@ export class AddSs7Component {
           Validators.pattern('^[0-9]*$'),
         ],
       ],
+      report_sm_delivery_status: [true],
+      auto_retry_error_code: [''],
+      no_retry_error_code: [''],
+      retry_alternate_destination_error_code: [''],
       split_message: [split_message, [Validators.required]],
       home_routing: [false, [Validators.required]],
       hss_update_enabled: [hss_update_enabled],
@@ -397,6 +409,22 @@ export class AddSs7Component {
       hlr_ssn: data.hlr_ssn != null ? Number(data.hlr_ssn) : '',
       msc_ssn: data.msc_ssn != null ? Number(data.msc_ssn) : '',
       map_version: data.map_version != null ? Number(data.map_version) : '',
+      report_sm_delivery_status:
+        data.report_sm_delivery_status == null || data.report_sm_delivery_status == undefined
+          ? true
+          : !!data.report_sm_delivery_status,
+      auto_retry_error_code:
+        data.auto_retry_error_code == null || data.auto_retry_error_code == undefined
+          ? ''
+          : data.auto_retry_error_code,
+      no_retry_error_code:
+        data.no_retry_error_code == null || data.no_retry_error_code == undefined
+          ? ''
+          : data.no_retry_error_code,
+      retry_alternate_destination_error_code:
+        data.retry_alternate_destination_error_code == null || data.retry_alternate_destination_error_code == undefined
+          ? ''
+          : data.retry_alternate_destination_error_code,
       split_message:
         data.split_message != null
           ? !!data.split_message
@@ -675,6 +703,10 @@ export class AddSs7Component {
         hlr_ssn: '',
         msc_ssn: '',
         map_version: '',
+        report_sm_delivery_status: true,
+        auto_retry_error_code: '',
+        no_retry_error_code: '',
+        retry_alternate_destination_error_code: '',
       });
     }
   }

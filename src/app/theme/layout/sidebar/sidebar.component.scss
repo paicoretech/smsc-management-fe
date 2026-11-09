@@ -38,6 +38,23 @@ li {
   background: none;
 }
 
+.svg-img {
+  width: 20px;
+  height: auto;
+  fill: red;
+  margin-left: 10px;
+  :not(.active){
+    display: none;
+  }
+}
+
+.sidebar-box-icon {
+  width: 20px;
+  margin-left: 10px;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
 .show {
   display: inline !important;
 }
@@ -66,7 +83,7 @@ aside {
   margin-left: 10px;
 }
 
-// ── Section headers (SMSC / IP-SM-GW) ──────────────────────────────────────
+// ── Section headers (SMSC) ──────────────────────────────────────
 .menu-section {
   list-style: none;
   margin: 10px 0 5px 0;
@@ -187,4 +204,24 @@ aside {
       padding-left: 40px;
     }
   }
+}
+
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  width: calc(100% - 35px);
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.nested-submenu .submenu-item {
+  padding-left: 18px;
+}
+
+.nested-submenu .submenu-item a.menu-link-personalized {
+  width: calc(100% - 8px);
 }

@@ -7,3 +7,8 @@ services:
       - BACKEND_IP=192.168.100.20:9087
       - NG_APP_FILTER_ONLY_SERVICE_PROVIDERS=false
       - NG_APP_BROADCAST_DEFAULT_DCS=8
+      - NG_APP_ENABLE_VAS=${NG_APP_ENABLE_VAS:-false}
+      # The PMS API URL must be absolute and reachable from the user's browser.
+      - NG_APP_PMS_VAS_API_BASE_URL=${PMS_VAS_API_BASE_URL:-}
+      # The current library exposes this value to the browser. Set it only for trusted local use.
+      - NG_APP_PMS_VAS_INTERNAL_API_KEY=${PMS_VAS_INTERNAL_API_KEY:-}

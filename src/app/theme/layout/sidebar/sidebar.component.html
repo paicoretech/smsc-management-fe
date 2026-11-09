@@ -40,8 +40,20 @@
             <img src="assets/img/crown.png" class="menu-crown">
           </a>
 
+          <!-- External leaf -->
+          <a *ngIf="!item.premium && item.externalUrl"
+             class="menu-link menu-link-normal"
+             [href]="item.externalUrl"
+             target="_blank"
+             rel="noopener noreferrer"
+             (click)="onSubmit()">
+            <img [src]="'../../../../assets/svg/' + item.icon + '.svg'" class="menu-icon">
+            <img [src]="'../../../../assets/svg/' + item.icon + '-clear.svg'" class="menu-icon hidden">
+            <span class="menu-title">{{ item.title }}</span>
+          </a>
+
           <!-- Normal leaf → routerLink -->
-          <a *ngIf="!item.premium"
+          <a *ngIf="!item.premium && !item.externalUrl"
              class="menu-link menu-link-normal"
              [routerLink]="[item.path]"
              routerLinkActive="item-selected"
@@ -96,13 +108,37 @@
 
                 <!-- Normal sub-item -->
                 <ng-template #subNormal>
-                  <a class="menu-link menu-link-normal"
+                  <a *ngIf="subitem.submenu.length === 0"
+                     class="menu-link menu-link-normal"
                      [routerLink]="[subitem.path]"
                      routerLinkActive="item-selected"
                      [routerLinkActiveOptions]="{ exact: true }"
                      (click)="onSubmit()">
                     <span class="menu-title">{{ subitem.title }}</span>
                   </a>
+
+                  <button *ngIf="subitem.submenu.length > 0"
+                          type="button"
+                          class="menu-link menu-link-normal submenu-toggle"
+                          [attr.aria-expanded]="!!subitem.show"
+                          (click)="toggleSubmenu(subitem)">
+                    <span class="menu-title">{{ subitem.title }}</span>
+                    <i class="bx bx-chevron-down" aria-hidden="true"></i>
+                  </button>
+
+                  <ul *ngIf="subitem.submenu.length > 0 && subitem.show" class="submenu nested-submenu">
+                    <li *ngFor="let child of subitem.submenu"
+                        class="submenu-item item-decoration"
+                        [routerLinkActive]="'item-selected'">
+                      <a class="menu-link menu-link-normal"
+                         [routerLink]="[child.path]"
+                         routerLinkActive="item-selected"
+                         [routerLinkActiveOptions]="{ exact: true }"
+                         (click)="onSubmit()">
+                        <span class="menu-title">{{ child.title }}</span>
+                      </a>
+                    </li>
+                  </ul>
                 </ng-template>
 
               </li>

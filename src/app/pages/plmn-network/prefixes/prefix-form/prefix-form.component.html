@@ -1,0 +1,90 @@
+<div class="modal-content">
+  <div class="modal-header" style="border: none;">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <h5 class="modal-title text-center mx-auto">{{ title }}</h5>
+      <button type="button" class="btn btn-close-modal" (click)="cancel()" aria-label="Close">X</button>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <input type="hidden" formControlName="id">
+
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="prefix" class="col-sm-4 label">Prefix</label>
+            <div class="col-sm-8">
+              <input
+                id="prefix"
+                type="text"
+                inputmode="numeric"
+                class="form-control"
+                formControlName="prefix"
+                [class.is-invalid]="isInvalid('prefix')"
+              >
+              <span class="text-danger mt-2" *ngIf="hasError('prefix', 'required')">The field is required.</span>
+              <span class="text-danger mt-2" *ngIf="hasError('prefix', 'pattern')">Enter digits only.</span>
+              <span class="text-danger mt-2" *ngIf="hasError('prefix', 'maxlength')">Enter no more than 15 digits.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="plmn_id" class="col-sm-4 label">Network (MCCMNC)</label>
+            <div class="col-sm-8">
+              <select id="plmn_id" class="form-select" formControlName="plmn_id" [class.is-invalid]="isInvalid('plmn_id')">
+                <option [ngValue]="null" disabled>Select a network</option>
+                <option *ngFor="let network of networks" [ngValue]="network.id">
+                  {{ formatNetwork(network) }}
+                </option>
+              </select>
+              <span class="text-danger mt-2" *ngIf="isInvalid('plmn_id')">Select a network.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="sn_range_start" class="col-sm-4 label">SN Range Start</label>
+            <div class="col-sm-8">
+              <input id="sn_range_start" type="text" inputmode="numeric" maxlength="15" class="form-control"
+                formControlName="sn_range_start" [class.is-invalid]="isInvalid('sn_range_start') || hasFormError('rangePair')">
+              <span class="text-danger mt-2" *ngIf="hasError('sn_range_start', 'pattern')">Enter digits only.</span>
+              <span class="text-danger mt-2" *ngIf="hasError('sn_range_start', 'maxlength')">Enter no more than 15 digits.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group row mb-2">
+            <label for="sn_range_stop" class="col-sm-4 label">SN Range Stop</label>
+            <div class="col-sm-8">
+              <input id="sn_range_stop" type="text" inputmode="numeric" maxlength="15" class="form-control"
+                formControlName="sn_range_stop" [class.is-invalid]="isInvalid('sn_range_stop') || hasFormError('rangePair')">
+              <span class="text-danger mt-2" *ngIf="hasError('sn_range_stop', 'pattern')">Enter digits only.</span>
+              <span class="text-danger mt-2" *ngIf="hasError('sn_range_stop', 'maxlength')">Enter no more than 15 digits.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="hasFormError('rangePair') || hasFormError('rangeLength') || hasFormError('rangePrefix') || hasFormError('rangeOrder')">
+        <div class="col-12">
+          <span class="text-danger" *ngIf="hasFormError('rangePair')">SN Range Start and SN Range Stop must be provided together.</span>
+          <span class="text-danger" *ngIf="hasFormError('rangeLength')">SN range values must have the same length.</span>
+          <span class="text-danger" *ngIf="hasFormError('rangePrefix')">Prefix must be the beginning of both SN range values.</span>
+          <span class="text-danger" *ngIf="hasFormError('rangeOrder')">SN Range Start must be less than or equal to SN Range Stop.</span>
+        </div>
+      </div>
+
+      <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-red">Save</button>
+      </div>
+    </form>
+  </div>
+</div>

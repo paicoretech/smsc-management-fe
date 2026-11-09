@@ -10,6 +10,7 @@ export class FormInputRowComponent {
   @Input() controlName!: string;
   @Input() label = '';
   @Input() id?: string;
+  @Input() placeholder = '';
   @Input() type: 'text' | 'number' | 'password' = 'text';
   @Input() labelCol = 'col-sm-4';
   @Input() inputCol = 'col-sm-8';
@@ -62,11 +63,34 @@ export class FormInputRowComponent {
     if (requiredPattern === '^[0-9]+$' || requiredPattern === '^[0-9]*$') {
       return 'Only numbers are allowed';
     }
+    if (requiredPattern === '^\\S+$') {
+      return 'Spaces are not allowed';
+    }
+    if (requiredPattern === '^(\\d+(\\s*,\\s*\\d+)*)?$') {
+      return 'Use numeric codes separated by commas (e.g. 404, 410, 500)';
+    }
 
     return 'Invalid format';
   }
 
   get elementId(): string {
     return this.id || this.controlName;
+  }
+
+  isPasswordVisible = false;
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  get isPasswordField(): boolean {
+    return this.type === 'password';
+  }
+
+  get displayType(): 'text' | 'number' | 'password' {
+    if (this.type === 'password' && this.isPasswordVisible) {
+      return 'text';
+    }
+    return this.type;
   }
 }

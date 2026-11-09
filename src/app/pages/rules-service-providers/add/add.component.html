@@ -367,13 +367,20 @@
                         </label>
                         <div class="col-sm-6">
                           <input type="checkbox" class="form-check-input check_form" id="diameter_charging"
-                            (change)="onChangeDiameterCharging()" formControlName="diameter_charging"
+                            formControlName="diameter_charging"
                             [class.is-invalid]="validInput('diameter_charging')">
                           <span class="text-danger mt-2" *ngIf="validInput('diameter_charging')">
                             the field is required
                           </span>
                         </div>
                       </div>
+                      <app-form-checkbox-row
+                        [form]="form"
+                        controlName="retry_all_parts"
+                        label="Retry All Parts"
+                        labelCol="col-sm-6"
+                        inputCol="col-sm-6">
+                      </app-form-checkbox-row>
 
                     </div>
 
@@ -462,7 +469,6 @@
                           </span>
                         </div>
                       </div>
-
                     </div>
                   </div>
 
@@ -491,7 +497,7 @@
                         <input type="text" id="new_gt_sccp_addr" class="form-control" formControlName="new_gt_sccp_addr"
                           (input)="cleanAndValidateNewGtSccpAddr()"
                           [class.is-invalid]="form.get('new_gt_sccp_addr')?.invalid && form.get('new_gt_sccp_addr')?.touched">
-  
+
                         <span class="text-danger mt-2" *ngIf="form.get('new_gt_sccp_addr')?.errors?.['invalidFormat']">
                           {{ form.get('new_gt_sccp_addr')?.errors?.['invalidFormat'] }}
                         </span>
@@ -596,7 +602,106 @@
                     </div>
                   </div>
 
+                </div>
+              </div>
 
+              <div class="row mt-2">
+                <div class="col-sm-12">
+                  <hr>
+                  <div class="card" style="width: 100%;">
+                    <div class="card-header">
+                      Charging
+                    </div>
+                    <div class="card-body">
+                      <div class="row mt-3 mb-2">
+                        <div class="col-sm-6">
+                          <app-form-checkbox-row
+                            [form]="form"
+                            controlName="diameter_charging"
+                            label="Diameter Charging"
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6">
+                          </app-form-checkbox-row>
+                        </div>
+                        <div class="col-sm-6">
+                          <app-form-select-row
+                            [form]="form"
+                            controlName="charging_type"
+                            label="Charging Type"
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6"
+                            [options]="chargingTypeOptions">
+                          </app-form-select-row>
+                        </div>
+                      </div>
+
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <app-form-checkbox-row
+                            [form]="form"
+                            controlName="destination_charging"
+                            label="Charge Destination"
+                            tooltip="If disabled, charging applies to the Source Address."
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6">
+                          </app-form-checkbox-row>
+                        </div>
+                        <div class="col-sm-6">
+                          <app-form-checkbox-row
+                            [form]="form"
+                            controlName="sri_for_charging"
+                            label="SRI for Charging"
+                            tooltip="Obtain the charging subscriber network information through SRI."
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6">
+                          </app-form-checkbox-row>
+                        </div>
+                      </div>
+
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <app-form-checkbox-row
+                            [form]="form"
+                            controlName="apply_for_refund"
+                            label="Apply Refund On Fail"
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6">
+                          </app-form-checkbox-row>
+                        </div>
+                        <div class="col-sm-6">
+                          <app-form-checkbox-row
+                            [form]="form"
+                            controlName="plmn_lookup_enabled"
+                            label="PLMN Mapping"
+                            tooltip="Resolve the payer's MCC/MNC using the configured PLMN prefixes."
+                            labelCol="col-sm-6"
+                            inputCol="col-sm-6">
+                          </app-form-checkbox-row>
+                        </div>
+                      </div>
+
+                      <div class="row mb-2">
+                        <div class="col-sm-6">
+                          <div class="form-group row">
+                            <label for="network_id_sri_for_charging" class="col-sm-6 label">SS7 Gateway for SRI</label>
+                            <div class="col-sm-6">
+                              <select class="form-select" id="network_id_sri_for_charging"
+                                formControlName="network_id_sri_for_charging"
+                                [class.is-invalid]="validInput('network_id_sri_for_charging')">
+                                <option [ngValue]="null">Select Gateway</option>
+                                @for (item of networksListSs7; track item.network_id) {
+                                <option [ngValue]="item.network_id">{{ item.network_id + ' | ' + item.name }}</option>
+                                }
+                              </select>
+                              <span class="text-danger mt-2" *ngIf="validInput('network_id_sri_for_charging')">
+                                the field is required
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -758,8 +863,7 @@
                                           <label for="application_context_mt" class="col-sm-6 label">Application Context MT</label>
                                           <div class="col-sm-6">
                                               <select class="form-select" id="application_context_mt"
-                                                      formControlName="application_context_mt"
-                                                      [disabled]="applicationContextOptions.length === 0">
+                                                      formControlName="application_context_mt">
                                                   <option *ngFor="let opt of applicationContextOptions" [value]="opt.value">
                                                       {{ opt.label }}
                                                   </option>
@@ -771,7 +875,7 @@
                           </form>
                       </div>
                   </div>
-                </div> 
+                </div>
               </div>
             </div>
           </div>

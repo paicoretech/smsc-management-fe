@@ -42,7 +42,7 @@
                             <td class="align-middle">{{ item.user_name }}</td>
                           <td class="align-middle">
                             <ng-container *ngFor="let role of item.roles">
-                              <span class="badge bg-secondary me-1">{{ role }}</span>
+                              <span class="badge bg-secondary me-1">{{ roleDisplayName(role) }}</span>
                             </ng-container>
                           </td>
                           <td class="align-middle">

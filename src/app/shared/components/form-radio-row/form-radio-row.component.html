@@ -1,0 +1,19 @@
+<div class="form-group row mb-2">
+  <label [class]="labelCol + ' label'">
+    {{ label }}
+  </label>
+
+  <div [class]="inputCol + ' d-flex gap-4 align-items-center pt-1'">
+    <div class="form-check" *ngFor="let opt of options">
+      <input
+        type="radio"
+        class="form-check-input"
+        [id]="controlName + '_' + opt.value"
+        [value]="opt.value"
+        [formControl]="control" />
+      <label class="form-check-label ms-1" [for]="controlName + '_' + opt.value">
+        {{ opt.label }}
+      </label>
+    </div>
+  </div>
+</div>

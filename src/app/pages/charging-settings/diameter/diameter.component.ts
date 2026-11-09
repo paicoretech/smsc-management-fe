@@ -2,13 +2,16 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
-import { priorityRequiredValidator, hasPriorityGroupError } from '@app/shared/message-validator';
+import { priorityRequiredValidator } from '@app/shared/message-validator';
 import {
   ChargingSettingsService,
   ChargingSetting,
@@ -26,6 +29,54 @@ import { FEATURE_FLAGS } from '@app/core/config/feeature-flag';
 import { ApiContext } from '@app/core/utils/types/api-context.type';
 import { isIpSmGw as isIpSmGwCtx, isSmsc as isSmscCtx } from '@core/utils/functions/apiContext.helper';
 import { LocalPeerComponent } from './local-peer/local-peer.component';
+import { DIAMETER_GATEWAY_RETRIES_SECTION } from './config/diameter-gateway-retries-section.config';
+import { buildDiameterGatewayBasicSection } from './config/diameter-gateway-basic-section.config';
+import { DIAMETER_GATEWAY_PERFORMANCE_SECTION } from './config/diameter-gateway-performance-section.config';
+import { FormDirtyTracker } from '@app/core/forms/form-dirty-tracker';
+import { FormSectionConfig } from '@app/core/forms/form-section.model';
+
+type DiameterGatewayFormValue = {
+  name: string;
+  connection_type: string;
+  type: string;
+  mno_id: number | string | null;
+  global_title: string;
+  messages_per_second_high: number | string | null;
+  messages_per_second_medium: number | string | null;
+  messages_per_second_low: number | string | null;
+  split_message: boolean;
+  hss_update_enabled: boolean;
+  allowed_traffic: boolean;
+  auto_retry_error_code: string;
+  no_retry_error_code: string;
+  retry_alternate_destination_error_code: string;
+};
+
+function normalizeDiameterGatewayForm(value: DiameterGatewayFormValue): DiameterGatewayFormValue {
+  const toString = (v: any) => (v ?? '').toString();
+  const toNullableNumber = (v: any) => {
+    if (v === null || v === undefined || v === '') return null;
+    const number = Number(v);
+    return Number.isFinite(number) ? number : null;
+  };
+
+  return {
+    name: toString(value.name),
+    connection_type: toString(value.connection_type),
+    type: toString(value.type),
+    mno_id: toNullableNumber(value.mno_id),
+    global_title: toString(value.global_title),
+    messages_per_second_high: toNullableNumber(value.messages_per_second_high),
+    messages_per_second_medium: toNullableNumber(value.messages_per_second_medium),
+    messages_per_second_low: toNullableNumber(value.messages_per_second_low),
+    split_message: !!value.split_message,
+    hss_update_enabled: !!value.hss_update_enabled,
+    allowed_traffic: !!value.allowed_traffic,
+    auto_retry_error_code: toString(value.auto_retry_error_code),
+    no_retry_error_code: toString(value.no_retry_error_code),
+    retry_alternate_destination_error_code: toString(value.retry_alternate_destination_error_code),
+  };
+}
 
 declare var window: any;
 
@@ -33,7 +84,7 @@ declare var window: any;
   selector: 'app-diameter',
   templateUrl: './diameter.component.html',
 })
-export class DiameterComponent implements OnInit {
+export class DiameterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() diameterGatewayId: number | null = null;
   @Input() isCrudComponent: boolean = false;
   @ViewChild(LocalPeerComponent) localPeerRef!: LocalPeerComponent;
@@ -47,13 +98,16 @@ export class DiameterComponent implements OnInit {
     mno_id: null,
     global_title: '',
     local_peer: {} as LocalPeer,
-    parameters: {} as any,
+    parameters: {} as Parameters,
     peers: [],
     realms: [],
     started: true,
     split_message: false,
     hss_update_enabled: false,
     allowed_traffic:false,
+    auto_retry_error_code: null,
+    no_retry_error_code: null,
+    retry_alternate_destination_error_code: null,
   };
   private backupChargingSetting!: ChargingSetting;
   private readonly priorityValidator = priorityRequiredValidator(
@@ -68,13 +122,25 @@ export class DiameterComponent implements OnInit {
   realms: Realm[] = [];
   mnoList: Mno[] = [];
   form!: FormGroup;
-  isModified: boolean = false;
+  private mainFormModified: boolean = false;
+  private localPeerModified: boolean = false;
+  private parametersModified: boolean = false;
+  private readonly dirtyTracker = new FormDirtyTracker<DiameterGatewayFormValue>(normalizeDiameterGatewayForm);
+  private dirtySub?: Subscription;
+  private readonly formSubscriptions = new Subscription();
   isDataLoaded: boolean = false;
   itemToToggle: any = null;
   toggleType: string = '';
   formModalConfirm: any;
   messageShow: string = '';
   ctx: ApiContext = ApiContext.SMSC;
+  retriesSection = DIAMETER_GATEWAY_RETRIES_SECTION;
+  performanceSection = DIAMETER_GATEWAY_PERFORMANCE_SECTION;
+  basicSection!: FormSectionConfig;
+
+  get isModified(): boolean {
+    return this.mainFormModified || this.localPeerModified || this.parametersModified;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -102,9 +168,13 @@ export class DiameterComponent implements OnInit {
 
    ngOnInit(): void {
     this.ctx = (this.route.snapshot.data['apiContext'] as ApiContext) || 'SMSC';
-    console.log('API Context Diameter Component:', this.ctx);
+    this.refreshBasicSection();
     this.initializeForm();
+    this.dirtySub = this.dirtyTracker.isModified$.subscribe((isModified) => {
+      this.mainFormModified = isModified;
+    });
     this.applyCtxRulesToForm();
+    this.dirtyTracker.attach(this.form);
     this.loadChargingSettings();
 
     if (
@@ -127,6 +197,7 @@ export class DiameterComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isCrudComponent']) {
+      this.refreshBasicSection();
       this.applyCrudValidators();
 
       if (
@@ -141,13 +212,29 @@ export class DiameterComponent implements OnInit {
     this.toggleFormState();
   }
 
+  ngOnDestroy(): void {
+    this.dirtySub?.unsubscribe();
+    this.formSubscriptions.unsubscribe();
+    this.dirtyTracker.destroy();
+  }
+
 
 
   async getMnos() {
     let response: ResponseI = await this.mnoService.getMnos();
     if (response.status == 200) {
       this.mnoList = response.data;
+      this.refreshBasicSection();
     }
+  }
+
+  private refreshBasicSection(): void {
+    this.basicSection = buildDiameterGatewayBasicSection(
+      this.isCrudComponent,
+      this.mnoList,
+      this.flagsUi.showHssUpdate,
+      this.flagsUi.showAllowedTraffic,
+    );
   }
 
   toggleFormState(): void {
@@ -179,13 +266,17 @@ export class DiameterComponent implements OnInit {
       split_message: [false],
       hss_update_enabled: [false],
       allowed_traffic:[false],
+      auto_retry_error_code: [''],
+      no_retry_error_code: [''],
+      retry_alternate_destination_error_code: [''],
     });
 
     // Subscribe to priority field changes to calculate total tps
     ['messages_per_second_high', 'messages_per_second_medium', 'messages_per_second_low'].forEach(field => {
-      this.form.get(field)?.valueChanges.subscribe(() => {
-        this.calculateTotalTps();
-      });
+      const subscription = this.form.get(field)?.valueChanges.subscribe(() => {
+          this.calculateTotalTps();
+        });
+      if (subscription) this.formSubscriptions.add(subscription);
     });
 
     // Initial calculation
@@ -195,52 +286,12 @@ export class DiameterComponent implements OnInit {
       this.calculateTotalTps();
     });
 
-    this.form.valueChanges.subscribe(() => {
-      if (this.chargingSetting.id === 0) {
-        this.isModified = true;
-        return;
-      }
-      if (this.isFormChanged()) {
-        this.isModified = true;
-      }
-    });
-  }
-
-  private isFormChanged(): boolean {
-    const v = this.form.getRawValue();
-
-    const prevName = this.backupChargingSetting?.name ?? '';
-    const prevConnectionType = this.backupChargingSetting?.connection_type ?? '';
-    const prevMnoId = this.backupChargingSetting?.mno_id ? Number(this.backupChargingSetting.mno_id) : null;
-    const prevGlobalTitle = this.backupChargingSetting?.global_title ?? '';
-    const prevSplitMessage = this.backupChargingSetting?.split_message ?? false;
-    const prevHssUpdateEnabled = this.backupChargingSetting?.hss_update_enabled ?? false;
-    const prevAllowedTraffic = this.backupChargingSetting?.allowed_traffic ?? false;
-
-    const curName = v.name ?? '';
-    const curConnectionType = v.connection_type ?? '';
-    const curMnoId = v.mno_id ? Number(v.mno_id) : null;
-    const curGlobalTitle = v.global_title ?? '';
-    const curSplitMessage = v.split_message ?? false;
-    const curHssUpdateEnabled = v.hss_update_enabled ?? false;
-    const curAllowedTraffic = v.allowed_traffic ?? false;
-
-
-    return (
-      curName !== prevName ||
-      curConnectionType !== prevConnectionType ||
-      curMnoId !== prevMnoId ||
-      curGlobalTitle !== prevGlobalTitle ||
-      curSplitMessage !== prevSplitMessage ||
-      curHssUpdateEnabled !== prevHssUpdateEnabled
-      || curAllowedTraffic !== prevAllowedTraffic
-    );
   }
 
   calculateTotalTps(): void {
-    const high = this.form.get('messages_per_second_high')?.value || 0;
-    const medium = this.form.get('messages_per_second_medium')?.value || 0;
-    const low = this.form.get('messages_per_second_low')?.value || 0;
+    const high = Number(this.form.get('messages_per_second_high')?.value ?? 0);
+    const medium = Number(this.form.get('messages_per_second_medium')?.value ?? 0);
+    const low = Number(this.form.get('messages_per_second_low')?.value ?? 0);
     const total = high + medium + low;
     this.form.get('tps')?.setValue(total, { emitEvent: false });
   }
@@ -330,8 +381,18 @@ export class DiameterComponent implements OnInit {
         if (data) {
           this.backupChargingSetting = { ...data };
           this.chargingSetting = data;
-          this.form.patchValue(this.chargingSetting);
+          this.form.patchValue({
+            ...this.chargingSetting,
+            auto_retry_error_code: data.auto_retry_error_code ?? '',
+            no_retry_error_code: data.no_retry_error_code ?? '',
+            retry_alternate_destination_error_code:
+              data.retry_alternate_destination_error_code ?? '',
+          });
           this.applyCtxRulesToForm();
+          this.calculateTotalTps();
+          this.dirtyTracker.captureSnapshot(this.form);
+          this.localPeerModified = false;
+          this.parametersModified = false;
           this.applications =
             this.chargingSetting?.local_peer?.applications || [];
           this.peers = this.chargingSetting?.peers || [];
@@ -344,7 +405,6 @@ export class DiameterComponent implements OnInit {
         this.resetChargingSetting();
       }
 
-      this.isModified = !!(this.isCrudComponent && this.diameterGatewayId && this.diameterGatewayId > 0);
     } catch (error) {
       this.resetChargingSetting();
     }
@@ -367,11 +427,16 @@ export class DiameterComponent implements OnInit {
       split_message: false,
       hss_update_enabled: false,
       allowed_traffic:false,
+      auto_retry_error_code: null,
+      no_retry_error_code: null,
+      retry_alternate_destination_error_code: null,
     };
     this.applications = [];
     this.peers = [];
     this.realms = [];
-    this.isModified = false;
+    this.mainFormModified = false;
+    this.localPeerModified = false;
+    this.parametersModified = false;
     if (this.form) {
         this.form.reset({
             id: null,
@@ -388,8 +453,12 @@ export class DiameterComponent implements OnInit {
             split_message: false,
             hss_update_enabled: false,
             allowed_traffic: false,
+            auto_retry_error_code: '',
+            no_retry_error_code: '',
+            retry_alternate_destination_error_code: '',
         });
         this.calculateTotalTps();
+        this.dirtyTracker.captureSnapshot(this.form);
     }
   }
 
@@ -409,12 +478,12 @@ export class DiameterComponent implements OnInit {
     this.applications = data?.applications ?? [];
 
     if (this.chargingSetting.id === 0) {
-      this.isModified = true;
+      this.localPeerModified = true;
       return;
     }
 
-    if (data?.source === 'form' && previousLocalPeer !== updatedLocalPeer) {
-      this.isModified = true;
+    if (data?.source === 'form') {
+      this.localPeerModified = previousLocalPeer !== updatedLocalPeer;
       return;
     }
 
@@ -432,9 +501,7 @@ export class DiameterComponent implements OnInit {
 
     this.chargingSetting.parameters = updatedParameters ?? {};
 
-    if (this.chargingSetting.id !== 0 && previousParameters !== newParameters) {
-      this.isModified = true;
-    }
+    this.parametersModified = this.chargingSetting.id !== 0 && previousParameters !== newParameters;
   }
 
   updatePeers(updatedPeers: Peer[]) {
@@ -600,14 +667,18 @@ export class DiameterComponent implements OnInit {
     };
 
     if (this.isCrudComponent) {
-        payload.messages_per_second_high = v.messages_per_second_high;
-        payload.messages_per_second_medium = v.messages_per_second_medium;
-        payload.messages_per_second_low = v.messages_per_second_low;
+        payload.auto_retry_error_code = v.auto_retry_error_code;
+        payload.no_retry_error_code = v.no_retry_error_code;
+        payload.retry_alternate_destination_error_code =
+          v.retry_alternate_destination_error_code;
     } else {
         delete payload.messages_per_second_high;
         delete payload.messages_per_second_medium;
         delete payload.messages_per_second_low;
         delete payload.tps;
+        delete payload.auto_retry_error_code;
+        delete payload.no_retry_error_code;
+        delete payload.retry_alternate_destination_error_code;
     }
 
 
@@ -656,7 +727,9 @@ export class DiameterComponent implements OnInit {
         return;
       }
 
-      this.isModified = false;
+      this.mainFormModified = false;
+      this.localPeerModified = false;
+      this.parametersModified = false;
       this.peers = [];
       this.realms = [];
       this.loadChargingSettings();
@@ -776,41 +849,6 @@ export class DiameterComponent implements OnInit {
     return id !== undefined && id >= 1_000_000_000_000;
   }
 
-  validInput(name: string) {
-    return (
-      this.form.get(name)?.touched && this.form.get(name)?.errors?.['required']
-    );
-  }
-
-  validMin(name: string) {
-    return this.form.get(name)?.touched && this.form.get(name)?.errors?.['min'];
-  }
-
-  getMin(name: string) {
-    return this.form.get(name)?.errors?.['min']?.min;
-  }
-
-  validPattern(name: string) {
-    return (
-      this.form.get(name)?.touched && this.form.get(name)?.errors?.['pattern']
-    );
-  }
-
-  getPatternMessage(name: string) {
-    if (
-      this.form.get(name)?.errors?.['pattern']?.requiredPattern ==
-      '^[A-Za-z0-9]*$'
-    ) {
-      return 'Only alphanumeric characters are allowed';
-    } else if (
-      this.form.get(name)?.errors?.['pattern']?.requiredPattern == '^[^\\s]+$'
-    ) {
-      return 'No spaces allowed';
-    } else {
-      return 'Only numbers are allowed';
-    }
-  }
-
   get isIpSmGw(): boolean { return this.ctx === 'IP_SM_GW'; }
   get isSMSC(): boolean { return this.ctx === 'SMSC'; }
 
@@ -838,15 +876,4 @@ export class DiameterComponent implements OnInit {
       hssCtrl?.enable({ emitEvent: false });
     }
   }
-  hasPriorityValidationError(): boolean {
-    return hasPriorityGroupError(
-      this.form,
-      'atLeastOnePriorityActive',
-      [
-        'messages_per_second_high',
-        'messages_per_second_medium',
-        'messages_per_second_low'
-      ]
-      );
-    }
 }

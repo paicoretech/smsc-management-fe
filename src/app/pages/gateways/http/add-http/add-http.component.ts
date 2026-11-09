@@ -468,6 +468,10 @@ export class AddHttpComponent implements OnInit, OnDestroy {
 
     const formValue = this.form.getRawValue();
     let obj = mergeWithBackup(formValue, this.originalData);
+    obj.auto_retry_error_code = (formValue.auto_retry_error_code ?? '').toString().trim();
+    obj.no_retry_error_code = (formValue.no_retry_error_code ?? '').toString().trim();
+    obj.retry_alternate_destination_error_code =
+      (formValue.retry_alternate_destination_error_code ?? '').toString().trim();
 
     let resp;
     if (this.isEdit) {

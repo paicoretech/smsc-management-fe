@@ -17,6 +17,7 @@ import { environment } from '@env/environment';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { DateTime } from 'luxon';
+import { BROADCAST_ENCODING_LIST } from '../broadcast.constants';
 
 @Component({
   selector: 'app-add',
@@ -45,11 +46,7 @@ export class AddComponent implements OnInit, OnDestroy {
   private readonly ADVANCED_MAPPING_KEYS = ['sourceAddrTon', 'sourceAddrNpi', 'destAddrTon', 'destAddrNpi', 'dataCoding'];
   fileColumns: string[] = [];
   filePreview: string[] = [];
-  encodingList: Catalog[] = [
-    { id: 0, name: 'DCS-0' },
-    { id: 3, name: 'DCS-3' },
-    { id: 8, name: 'DCS-8' },
-  ];
+  encodingList: Catalog[] = BROADCAST_ENCODING_LIST;
   tonCatalog: Catalog[] = [];
   npiCatalog: Catalog[] = [];
   columnMapping: { [key: string]: string } = {};

@@ -42,6 +42,7 @@ export class AddHttpSpComponent implements OnInit {
     smppServerId: number = 0;
     isEdit = false;
     defaultValues = environment.ServiceProviderDefaults;
+    showHttpDlrHealthCheckConfig = environment.showHttpDlrHealthCheckConfig;
     network_id: number = 0;
     patternEmail = environment.PatternEmail;
     saveDisabled = false;
@@ -136,6 +137,7 @@ export class AddHttpSpComponent implements OnInit {
             phone_number: [ '', [Validators.pattern('^[0-9]*$')]],
             protocol: ['HTTP', [Validators.required]],
             callback_url: [''],
+            http_dlr_health_check_enabled: [false],
             authentication_types: ['Undefined', [Validators.required]],
             header_security_name: [''],
             token: [''],
@@ -183,6 +185,8 @@ export class AddHttpSpComponent implements OnInit {
             return;
         }
 
+        // Take callback_url straight from the form since mergeWithBackup drops empty values and it is optional
+        obj.callback_url = formValue.callback_url ?? '';
         obj.address_range = obj.address_range == '' ? this.defaultValues.address_range : obj.address_range;
         obj.password = '';
         obj.callback_headers_http = [];
@@ -427,6 +431,7 @@ export class AddHttpSpComponent implements OnInit {
                 phone_number: (data.phone_number == null || data.phone_number == undefined) ? this.defaultValues.phone_number : data.phone_number,
                 protocol: (data.protocol == null || data.protocol == undefined) ? this.defaultValues.protocol : data.protocol,
                 callback_url: (data.callback_url == null || data.callback_url == undefined) ? '' : data.callback_url,
+                http_dlr_health_check_enabled: (data.http_dlr_health_check_enabled == null || data.http_dlr_health_check_enabled == undefined) ? false : data.http_dlr_health_check_enabled,
                 authentication_types: (data.authentication_types == null || data.authentication_types == undefined) ? '' : data.authentication_types,
                 header_security_name: (data.header_security_name == null || data.header_security_name == undefined) ? '' : data.header_security_name,
                 token: (data.token == null || data.token == undefined) ? '' : data.token,
@@ -565,7 +570,6 @@ export class AddHttpSpComponent implements OnInit {
         obj.security_authentication_type = securityType;
 
         if (securityType === this.SECURITY_AUTH_TYPE_UNDEFINED) {
-            obj.token = '';
             obj.basic_security_password = null;
             obj.bearer_token_expiration_seconds = null;
 

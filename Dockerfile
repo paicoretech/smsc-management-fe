@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM node:lts-bullseye as build
 
 WORKDIR /app
@@ -9,7 +10,12 @@ RUN if [ -f .env ]; then rm -f .env; fi
 COPY .env.example .env
 
 COPY package*.json ./
-RUN npm ci
+
+RUN --mount=type=secret,id=bitbucket_credentials \
+    git config --global credential.helper '!f() { cat /run/secrets/bitbucket_credentials; }; f' && \
+    git config --global url."https://bitbucket.org/".insteadOf "ssh://git@bitbucket.org/" && \
+    npm ci; \
+    status=$?; rm -f /root/.gitconfig; exit $status
 COPY . .
 RUN npm run build
 

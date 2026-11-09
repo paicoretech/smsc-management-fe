@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ConnectionService } from '../utils/connection.service';
 import { ResponseI } from '../interfaces/Response';
 import { convertToSmscSetting } from '../utils/functions/smscConverter';
+import { Retries, RetryConfiguration } from '../interfaces/Retry';
 
 @Injectable({
     providedIn: 'root'
@@ -46,12 +47,24 @@ export class SettingServices {
         return this.connectionService.send('general-settings/update', 'put', setting);
     }
 
-    async getRetriesSetting(): Promise<ResponseI> {
+    // async getRetriesSetting(): Promise<ResponseI> {
+    //     return this.connectionService.send('general-settings/smsc-retry', 'get');
+    // }
+
+    // async updateRetriesSetting(setting: any): Promise<ResponseI> {
+    //     return this.connectionService.send('general-settings/smsc-retry/update', 'put', setting);
+    // }
+
+    async getRetriesSetting(): Promise<ResponseI<Retries | null>> {
         return this.connectionService.send('general-settings/smsc-retry', 'get');
     }
 
-    async updateRetriesSetting(setting: any): Promise<ResponseI> {
-        return this.connectionService.send('general-settings/smsc-retry/update', 'put', setting);
+    async updateRetriesSetting(setting: RetryConfiguration): Promise<ResponseI<Retries | null>> {
+        return this.connectionService.send(
+            'general-settings/smsc-retry/update',
+            'put',
+            setting
+        );
     }
 
     async getSmscSetting(): Promise<ResponseI> {

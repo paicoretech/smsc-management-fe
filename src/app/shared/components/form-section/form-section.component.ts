@@ -17,7 +17,7 @@ export class FormSectionComponent {
   }
 
   isInputField(field: FormFieldConfig): boolean {
-    return field.type === 'text' || field.type === 'number';
+    return field.type === 'text' || field.type === 'number' || field.type === 'password';
   }
 
   isSelectField(field: FormFieldConfig): boolean {
@@ -27,9 +27,14 @@ export class FormSectionComponent {
   isCheckboxField(field: FormFieldConfig): boolean {
     return field.type === 'checkbox';
   }
-  
-  getInputType(field: FormFieldConfig): 'text' | 'number' {
-    return field.type === 'number' ? 'number' : 'text';
+
+  isRadioField(field: FormFieldConfig): boolean {
+    return field.type === 'radio';
   }
-  
+
+  getInputType(field: FormFieldConfig): 'text' | 'number' | 'password' {
+    if (field.type === 'number') return 'number';
+    if (field.type === 'password') return 'password';
+    return 'text';
+  }
 }

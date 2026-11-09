@@ -1,17 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Parameters } from '@app/core/interfaces/ChargingSetting';
+import { Subscription } from 'rxjs';
+import { DIAMETER_PARAMETERS_SECTION } from '../config/diameter-parameters-section.config';
 
 @Component({
     selector: 'app-parameters',
     templateUrl: './parameters.component.html',
 })
-export class ParameterComponent implements OnInit {
+export class ParameterComponent implements OnInit, OnChanges, OnDestroy {
 
     @Input() parameters!: Parameters;
     @Output() parametersChange = new EventEmitter<Parameters>();
     @Input() isDisabled: boolean = false;
     parameterForm!: FormGroup;
+    parametersSection = DIAMETER_PARAMETERS_SECTION;
+    private formSub?: Subscription;
+    private requestTableSizeSub?: Subscription;
 
     constructor(
         private fb: FormBuilder,
@@ -25,8 +30,12 @@ export class ParameterComponent implements OnInit {
 
         setTimeout(() => this.emitChanges(), 100);
 
-        this.parameterForm.valueChanges.subscribe(value => {
+        this.formSub = this.parameterForm.valueChanges.subscribe(() => {
             this.emitChanges();
+        });
+
+        this.requestTableSizeSub = this.parameterForm.get('request_table_size')?.valueChanges.subscribe(() => {
+            this.onRequestTableSizeChange();
         });
 
         this.toggleFormState();
@@ -36,6 +45,11 @@ export class ParameterComponent implements OnInit {
         if (changes['isDisabled']) {
             this.toggleFormState();
         }
+    }
+
+    ngOnDestroy(): void {
+        this.formSub?.unsubscribe();
+        this.requestTableSizeSub?.unsubscribe();
     }
 
     initializeForm(): void {
@@ -98,55 +112,9 @@ export class ParameterComponent implements OnInit {
 
         if (clearSizeControl.value >= requestSize) {
             clearSizeControl.setValue(requestSize - 1, { emitEvent: false });
-        }
-    }
-
-    validClearSize(): boolean {
-        const requestSize = this.parameterForm.get('request_table_size')?.value;
-        const clearSize = this.parameterForm.get('request_table_clear_size')?.value;
-
-        return clearSize >= requestSize;
-    }
-
-    validInput(name: string) {
-        return this.parameterForm.get(name)?.touched && this.parameterForm.get(name)?.errors?.['required'];
-    }
-
-    validMin(name: string) {
-        return this.parameterForm.get(name)?.touched && this.parameterForm.get(name)?.errors?.['min'];
-    }
-
-    validMinLength(name: string) {
-        return this.parameterForm.get(name)?.touched && this.parameterForm.get(name)?.errors?.['minlength'];
-    }
-
-    validMaxLength(name: string) {
-        return this.parameterForm.get(name)?.touched && this.parameterForm.get(name)?.errors?.['maxlength'];
-    }
-
-    validPattern(name: string) {
-        return this.parameterForm.get(name)?.touched && this.parameterForm.get(name)?.errors?.['pattern'];
-    }
-
-    getMin(name: string) {
-        return this.parameterForm.get(name)?.errors?.['min']?.min;
-    }
-
-    getMinLength(name: string) {
-        return this.parameterForm.get(name)?.errors?.['minlength']?.requiredLength;
-    }
-
-    getMaxLength(name: string) {
-        return this.parameterForm.get(name)?.errors?.['maxlength']?.requiredLength;
-    }
-
-    getPatternMessage(name: string) {
-        if (this.parameterForm.get(name)?.errors?.['pattern']?.requiredPattern == '^[A-Za-z0-9]*$') {
-            return 'Only alphanumeric characters are allowed';
-        } else if (this.parameterForm.get(name)?.errors?.['pattern']?.requiredPattern == '^[^\\s]+$') {
-            return 'No spaces allowed';
-        } else {
-            return 'Only numbers are allowed';
+            clearSizeControl.updateValueAndValidity({ emitEvent: false });
+            this.parameterForm.updateValueAndValidity({ emitEvent: false });
+            this.emitChanges();
         }
     }
 }

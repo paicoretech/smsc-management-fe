@@ -22,6 +22,7 @@ interface ImportMetaEnv {
   readonly NG_APP_FILTER_ONLY_SERVICE_PROVIDERS: boolean;
   // Set to true to show only Gateways in Destination Gateway filter (excludes Service Providers)
   readonly NG_APP_FILTER_ONLY_GATEWAYS: boolean;
+  readonly NG_APP_SHOW_HTTP_DLR_HEALTH_CHECK_CONFIG: boolean;
 
   // # Variables for ServiceProviderDefaults
   readonly NG_APP_SP_BIND_TYPE: string;
@@ -180,6 +181,14 @@ interface ImportMetaEnv {
   readonly NG_APP_ENABLE_IP_SM_GW: boolean;
   readonly NG_APP_PREMIUM_REDIRECT: string;
 
+  //plmn-network
+  readonly NG_APP_ENABLE_PLMN_NETWORK: boolean;
+
+  //pms-vas
+  readonly NG_APP_ENABLE_VAS: boolean;
+  readonly NG_APP_PMS_VAS_API_BASE_URL: string;
+  readonly NG_APP_PMS_VAS_INTERNAL_API_KEY: string;
+
   // # Variables for SIP Settings Defaults
   readonly NG_APP_SIP_STATUS: string;
   readonly NG_APP_SIP_PROTOCOL: string;
@@ -229,6 +238,22 @@ interface ImportMetaEnv {
   readonly NG_APP_SIP_GLOBAL_TITLE: number;
   readonly NG_APP_SIP_USSI_DEFAULT_DATACODING_ID: number;
 
+  // # Variables for HTTP/2 Gateway Defaults
+  readonly NG_APP_ENABLE_HTTP2: boolean;
+  readonly NG_APP_GA_HTTP2_TLS_ENABLED: boolean;
+  readonly NG_APP_GA_HTTP2_OAUTH2_ENABLED: boolean;
+  readonly NG_APP_GA_HTTP2_REQUIRE_BEARER_TOKEN: boolean;
+  readonly NG_APP_GA_HTTP2_MAX_MESSAGE_SIZE: number;
+  readonly NG_APP_GA_HTTP2_REQUEST_TIMEOUT_MS: number;
+  readonly NG_APP_GA_HTTP2_CONNECTION_TIMEOUT_MS: number;
+  readonly NG_APP_GA_HTTP2_IDLE_TIMEOUT_MS: number;
+  readonly NG_APP_GA_HTTP2_MAX_RESPONSE_TIME_MS: number;
+  readonly NG_APP_GA_HTTP2_THREAD_POOL_SIZE: number;
+  readonly NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_HIGH: number;
+  readonly NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_MEDIUM: number;
+  readonly NG_APP_GA_HTTP2_MESSAGES_PER_SECOND_LOW: number;
+  readonly NG_APP_GA_HTTP2_RATE_LIMITING_ENABLED: boolean;
+  readonly NG_APP_GA_HTTP2_DEFAULT_DATA_CODING: number;
 
   [key: string]: any;
 }

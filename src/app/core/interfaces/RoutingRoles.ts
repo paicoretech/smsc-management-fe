@@ -42,7 +42,13 @@ export interface RoutingRules {
     new_short_message: string;
     check_sri_response: boolean;
     custom_params_matcher: CustomParams[];
+    retry_all_parts: boolean;
     diameter_charging: boolean;
+    charging_type: 'ECUR' | 'IEC';
+    destination_charging: boolean;
+    sri_for_charging: boolean;
+    network_id_sri_for_charging?: number | null;
+    plmn_lookup_enabled: boolean;
     apply_for_refund: boolean;
     action_advanced: ActionAdvanced;
 }

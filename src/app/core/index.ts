@@ -13,6 +13,7 @@ export * from './interfaces/RoutingRoles';
 export * from './interfaces/ServiceProvider';
 export * from './interfaces/GatewaySmpp';
 export * from './interfaces/GatewayHttp';
+export * from './interfaces/GatewayHttp2';
 export * from './interfaces/User';
 export * from './interfaces/Setting';
 export * from './interfaces/CreditBalance';
@@ -24,6 +25,8 @@ export * from './interfaces/Interpreter';
 export * from './interfaces/ChargingSetting';
 export * from './interfaces/Dashboard';
 export * from './interfaces/Dnd';
+export * from './interfaces/Retry';
+export * from './interfaces/PlmnNetwork';
 
 // export services 
 export * from './services/catalog.service';
@@ -31,6 +34,7 @@ export * from './services/deliveryErrorCode.service';
 export * from './services/errorCode.service';
 export * from './services/errorCodeMapping.service';
 export * from './services/gateway-smpp.service';
+export * from './services/http2-gateways.service';
 export * from './services/handle-status.service';
 export * from './services/mnos.service';
 export * from './services/routingRoles.service';
@@ -49,6 +53,7 @@ export * from './services/interpreter.service';
 export * from './services/charging-settings.service';
 export * from './services/dnd.service';
 export * from './services/home-routing.service';
+export * from './services/plmn-network.service';
 
 // export utils
 export * from './utils/alert.service';
@@ -58,6 +63,7 @@ export * from './utils/functions/cleanObject';
 export * from './utils/functions/smscConverter';
 export * from './utils/functions/DateTimeUtils';
 export * from './utils/functions/formMergeUtils';
+export * from './utils/functions/cdrStatus';
 
 // export types
 export * from './utils/types/report-types.util';
@@ -65,6 +71,8 @@ export * from './utils/types/report-types.util';
 // export guard
 export * from './guards/auth.guard';
 export * from './guards/login.guard';
+export * from './guards/pms-vas.guard';
 export * from './guards/admin.guard';
 export * from './guards/broadcast-operator.guard';
 export * from './guards/analyze.guard';
+export * from './guards/plmn-network.guard';

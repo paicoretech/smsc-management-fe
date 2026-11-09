@@ -1,0 +1,105 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="fw-bold mb-0">Retry Profiles</h5>
+
+  <div>
+    <button
+      type="button"
+      class="btn btn-red me-2"
+      (click)="goToCreate()"
+    >
+      <i class="bx bx-plus"></i>
+      Create
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-red"
+      title="Refresh retry profiles"
+      [disabled]="isLoading"
+      (click)="refresh()"
+    >
+      <i class="bx bx-refresh"></i>
+    </button>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table
+    id="retryProfilesTable"
+    class="table"
+    style="width: 100%;"
+    datatable
+    [dtOptions]="dtOptions"
+    [dtTrigger]="dtTrigger"
+  >
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Total Steps</th>
+        <th>Total Retries</th>
+        <th>Priority Override</th>
+        <th class="align-center">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let profile of profiles">
+        <td class="align-middle">
+          {{ profile.name }}
+        </td>
+
+        <td class="align-middle">
+          {{ getTotalSteps(profile) }}
+        </td>
+
+        <td class="align-middle">
+          {{ getTotalRetries(profile) }}
+        </td>
+
+        <td class="align-middle">
+          {{ getPriorityOverride(profile) }}
+        </td>
+
+        <td class="align-center">
+          <button
+            type="button"
+            class="btn btn-sm btn-red me-2"
+            title="Edit retry profile"
+            (click)="goToEdit(profile)"
+          >
+            <i class="bx bxs-pencil"></i>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary"
+            title="Delete retry profile"
+            [disabled]="isDeleting"
+            (click)="confirmDelete(profile)"
+          >
+            <i class="bx bxs-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  id="deleteRetryProfileModal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  data-bs-backdrop="static"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <app-modal-delete
+      [mensaje]="deleteMessage"
+      [confirmButtonText]="'Delete'"
+      [cancelButtonText]="'Cancel'"
+      (confirmAction)="handleDeleteConfirmation($event)"
+    >
+    </app-modal-delete>
+  </div>
+</div>
